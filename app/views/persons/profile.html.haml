@@ -1,0 +1,19 @@
+%h1
+ Persons#profile
+%p
+ Find me in app/views/persons/profile.html.erb
+%p
+
+%p=current_user.userinfo.login
+%p=current_user.userinfo.zip
+%p=current_user.userinfo.address
+%p=current_user.userinfo.city
+%p=current_user.userinfo.state
+%p=current_user.userinfo.country
+%p=current_user.userinfo.bday
+%p=current_user.userinfo.full_name
+%p=current_user.userinfo.latitude
+%p=current_user.userinfo.longitude
+
+= image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{current_user.userinfo.latitude}%2C#{current_user.userinfo.longitude}"
+= link_to( "sign out", destroy_user_session_path, :method=> :delete)
