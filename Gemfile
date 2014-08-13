@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.2'
 gem 'devise', '3.2.2'
 gem "haml"
+gem 'omniauth-facebook'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 gem "geocoder"

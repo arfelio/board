@@ -1,0 +1,59 @@
+%h2 Edit
+=resource_name.to_s.humanize
+= image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@user.latitude}%2C#{@user.longitude}"
+
+= form_for(resource,
+	:as => resource_name,
+	:url => registration_path(resource_name),
+	:html => { :method => :put }) do |f|
+
+	= devise_error_messages!
+
+	%p= f.label :email
+	= f.email_field :email, :autofocus => true
+
+	-if devise_mapping.confirmable? && resource.pending_reconfirmation?
+		%pCurrently waiting confirmation for:= resource.unconfirmed_email
+
+	%p= f.label :password
+	%i Leave blank if you don't want to change it
+	%br
+	= f.password_field :password, :autocomplete => "off"
+
+	%p= f.label :password_confirmation
+	= f.password_field :password_confirmation
+
+	%p= f.label :current_password
+	%i (we need your current password to confirm your changes)
+	%br
+	= f.password_field :current_password
+
+	%p= f.label :address
+	= f.text_field :address
+	%P= f.label :city
+	= f.text_field :city
+	%p= f.label :state
+	= f.text_field :state
+	%p= f.label :country
+	= f.text_field :country
+	%p= f.label :birthday
+	= f.text_field :bday
+	%p= f.label :full_name
+	= f.text_field :full_name
+	%p= f.label :zipcode
+	= f.text_field :zip
+	%p= f.label :login
+	= f.text_field :login
+	%br
+	= f.submit "Update"
+
+
+%h3 Cancel my account
+
+%p Unhappy?
+= button_to "Cancel my account",
+	registration_path(resource_name),
+	:data => { :confirm => "Are you sure?" },
+	:method => :delete
+%br
+= link_to "Back", :back

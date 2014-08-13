@@ -1,0 +1,29 @@
+%h1
+  Persons#profile
+%p
+  Find me in app/views/persons/profile.html.erb
+%div#error_explanation=render 'error_messages'
+%p
+  =current_user.email
+
+=form_for(@user, url: person_path(current_user), html: { method: :put }) do |f|
+  %p=f.label :email
+  =f.email_field :email
+  =f.fields_for :userinfo_attributes do |u|
+    %p= u.label :address
+    = u.text_field :address
+    %p= u.label :city
+    = u.text_field :city
+    %p= u.label :state
+    = u.text_field :state
+    %p= u.label :country
+    = u.text_field :country
+    %p= u.label :birthday
+    = u.text_field :bday
+    %p= u.label :full_name
+    = u.text_field :full_name
+    %p= u.label :zipcode
+    = u.text_field :zip
+    %p= u.label :login
+    = u.text_field :login
+  = f.submit "Create"

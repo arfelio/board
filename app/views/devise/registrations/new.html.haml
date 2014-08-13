@@ -8,24 +8,23 @@
   = f.password_field :password
   %p= f.label :password_confirmation
   = f.password_field :password_confirmation
-  = f.fields_for(:userinfo_attributes) do |u|
-    %p= u.label :address
-    = u.text_field :address
-    %p= u.label :city
-    = u.text_field :city
-    %p= u.label :state
-    = u.text_field :state
-    %p= u.label :country
-    = u.text_field :country
-    %p= u.label :birthday
-    = u.text_field :bday
-    %p= u.label :full_name
-    = u.text_field :full_name
-    %p= u.label :zipcode
-    = u.text_field :zip
-    %p= u.label :login
-    = u.text_field :login
+  %p= f.label :address
+  = f.text_field :address
+  %p= f.label :city
+  = f.text_field :city
+  %p= f.label :state
+  = f.text_field :state
+  %p= f.label :country
+  = f.text_field :country
+  %p= f.label :birthday
+  = f.text_field :bday
+  %p= f.label :full_name
+  = f.text_field :full_name
+  %p= f.label :zipcode
+  = f.text_field :zip
+  %p= f.label :login
+  = f.text_field :login
   %br=f.submit "Sign up"
 
 
-
+= link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook)
