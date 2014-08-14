@@ -8,9 +8,10 @@ gem 'omniauth-facebook'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 gem "geocoder"
+gem 'carrierwave'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
-
+gem 'RedCloth'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 

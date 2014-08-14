@@ -1,4 +1,5 @@
 Board::Application.routes.draw do
+  resources :advertisements
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
     :registrations => "registrations" }
   get "persons/profile"

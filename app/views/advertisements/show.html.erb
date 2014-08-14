@@ -1,0 +1,9 @@
+<h1>Advertisements#show</h1>
+<p>Find me in app/views/advertisements/show.html.erb</p>
+<p><%= @advertisement.author %></p>
+
+
+<%= raw RedCloth.new(html_escape(@advertisement.content)).to_html %>
+<%= image_tag @advertisement.image.url %>
+</br>
+<%= link_to "Delete advertisement", advertisement_path, :method=>:delete %>
