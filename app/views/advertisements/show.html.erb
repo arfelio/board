@@ -7,3 +7,13 @@
 <%= image_tag @advertisement.image.url %>
 </br>
 <%= link_to "Delete advertisement", advertisement_path, :method=>:delete %>
+<br />
+<%= render "comment_form" %>
+
+<% @comments.each do |comment| %>
+<%= comment.content %>
+
+<%= link_to "edit", edit_comment_path(comment) %>
+<%= link_to "destroy", comment_path(comment), method: :delete%>
+<br />
+<%end%>

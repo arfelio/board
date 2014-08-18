@@ -4,7 +4,9 @@ class AdvertisementsController < ApplicationController
   end
 
   def show
+    @comment = Comment.new
     @advertisement = Advertisement.find(params[:id])
+    @comments = Comment.all
   end
 
   def create

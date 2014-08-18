@@ -1,2 +1,7 @@
 <h1>Advertisements#index</h1>
 <p>Find me in app/views/advertisements/index.html.erb</p>
+<% @advertisements.each do |advertisement| %>
+<p><%= advertisement.author %></p>
+<p><%= advertisement.content %></p>
+<%= image_tag advertisement.image.thumb.url %>
+<% end %>

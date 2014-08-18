@@ -11,13 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140814115618) do
+ActiveRecord::Schema.define(version: 20140815124040) do
 
   create_table "advertisements", force: true do |t|
     t.integer  "user_id"
     t.string   "image"
     t.text     "content"
     t.string   "author"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "comments", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "advertisement_id"
+    t.text     "content"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

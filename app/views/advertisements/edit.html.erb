@@ -6,16 +6,8 @@
 			Fill the form to add your hotel
 		</h3>
 	</p>
-
-	<%= form_for @advertisement, :html => { :multipart => true } do |f| %>
-
-	<p><%= f.label :image %></p>
-	<%= f.file_field :image %>
-   <p> <%= f.label :author %></p>
-    <%= f.text_field :author %>
-  <p>  <%= f.label :content %></p>
-    <%= f.text_area :content %>
-
-<br />
- 	<%= f.submit "Update advertisement"%>
-	<% end %>
+<%= form_for @advertisement, :html => { :multipart => true } do |f| %>
+	<%= render "fields", f: f %>
+	<br />
+ <%= f.submit "Save changes" %>
+ <% end %>

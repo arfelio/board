@@ -4,7 +4,8 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,:recoverable, :rememberable,
   :trackable, :validatable, :omniauthable, :omniauth_providers => [:facebook]
-  has_many :advertisement
+  has_many :advertisement, dependent: :destroy
+  has_many :comment, dependent: :destroy
 #logging from facebook
   def self.from_omniauth(auth)
     where(auth.slice(:provider, :uid)).first_or_create do |user|
@@ -28,4 +29,8 @@ class User < ActiveRecord::Base
   def full_address
     [address, city, state, country].compact.join(', ')
   end
+
+  #validations
+  validates :address, presence: true
+  validates :login, presence: true
 end
