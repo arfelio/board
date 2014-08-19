@@ -31,6 +31,6 @@ class User < ActiveRecord::Base
   end
 
   #validations
-  validates :address, presence: true
-  validates :login, presence: true
+  #validates :address, presence: true
+ # validates :login, presence: true
 end

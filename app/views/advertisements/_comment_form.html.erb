@@ -1,4 +1,4 @@
-<%= form_for(@comment) do |f| %>
+<%= form_for [@advertisement, @advertisement.comment.build], :remote=> true do |f| %>
 
 <p><%=f.label :content %></p>
 <%=f.text_area :content %>

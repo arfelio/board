@@ -10,10 +10,8 @@
 <br />
 <%= render "comment_form" %>
 
-<% @comments.each do |comment| %>
-<%= comment.content %>
+<div id="comments">
+<%= render "comments/comment" %>
 
-<%= link_to "edit", edit_comment_path(comment) %>
-<%= link_to "destroy", comment_path(comment), method: :delete%>
-<br />
-<%end%>
+</div>
+

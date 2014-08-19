@@ -1,5 +1,7 @@
 Board::Application.routes.draw do
-  resources :advertisements
+  resources :advertisements do
+    resources :comments
+  end
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
     :registrations => "registrations" }
   get "persons/profile"
@@ -13,7 +15,6 @@ Board::Application.routes.draw do
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
   resources :persons
-  resources :comments
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 

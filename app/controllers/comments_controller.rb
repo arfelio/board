@@ -4,15 +4,19 @@ class CommentsController < ApplicationController
     @comment = current_user.comment.build(comment_params)
     if @comment.save
       flash[:notice] = "You add a comment"
-      redirect_to @advertisement
+      respond_to do |format|
+        format.html { redirect_to @advertisement }
+        format.js
+      end
     else
       flash[:alert] = "Comment not added"
       redirect_to @advertisement
     end
   end
 
-  def edit
+  def show
     @comment = Comment.find(params[:id])
+    @advertisement = Advertisement.find(params[:advertisement_id])
   end
 
   def update
@@ -27,9 +31,14 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    Comment.find(params[:id]).destroy
-    flash[:notice] = "Comment deleted."
-    redirect_to :back
+    @comment = Comment.find(params[:id])
+    respond_to do |format|
+      if @comment.destroy
+        flash[:notice] = "Comment deleted."
+        format.html { redirect_to :back }
+        format.js
+      end
+    end
   end
 
   private
