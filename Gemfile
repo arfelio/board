@@ -6,10 +6,13 @@ gem 'devise', '3.2.2'
 gem "haml"
 gem 'omniauth-facebook'
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+group :development do
+  gem 'pg', '0.15.1'
+end
 gem "geocoder"
 gem 'carrierwave'
 gem "rmagick"
+gem 'pg_search'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 gem 'RedCloth'

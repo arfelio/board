@@ -1,6 +1,11 @@
 class AdvertisementsController < ApplicationController
   def index
-    @advertisements = Advertisement.all
+    if params[:query].present?
+      @advertisements = Advertisement.text_search(params[:query])
+    else
+      @advertisements = Advertisement.all
+    end
+    #@advertisements = Advertisement.all
   end
 
   def show

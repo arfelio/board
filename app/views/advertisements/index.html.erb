@@ -1,4 +1,9 @@
 <h1>Advertisements#index</h1>
+<%= form_tag(advertisements_path, method: "get") do %>
+  <%= label_tag(:query, "Search for:") %>
+  <%= text_field_tag(:query) %>
+  <%= submit_tag("Search") %>
+<% end %>
 <p>Find me in app/views/advertisements/index.html.erb</p>
 <%= link_to "new advertisement", new_advertisement_path %>
 <% @advertisements.each do |advertisement| %>

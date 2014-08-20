@@ -11,3 +11,7 @@
 = image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@user.latitude}%2C#{@user.longitude}"
 
 = link_to( "sign out", destroy_user_session_path, :method=> :delete)
+= form_tag(advertisements_path, method: "get") do
+  = label_tag(:query, "Search for:")
+  = text_field_tag(:query)
+  = submit_tag("Search")
