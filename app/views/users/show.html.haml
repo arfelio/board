@@ -9,5 +9,7 @@
 %p=@user.longitude
 %p=@user.latitude
 = image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@user.latitude}%2C#{@user.longitude}"
-
+%br
 = link_to( "sign out", destroy_user_session_path, :method=> :delete)
+%br
+= link_to "edit my profile", edit_user_registration_path

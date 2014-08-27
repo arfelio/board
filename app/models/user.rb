@@ -1,11 +1,15 @@
 class User < ActiveRecord::Base
+  rolify
   #before_save :set_provider
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,:recoverable, :rememberable,
   :trackable, :validatable, :omniauthable, :omniauth_providers => [:facebook]
+  #associations
   has_many :advertisement, dependent: :destroy
   has_many :comment, dependent: :destroy
+  #has_and_belongs_to_many :roles
+  belongs_to :role
 #logging from facebook
   def self.from_omniauth(auth)
     where(auth.slice(:provider, :uid)).first_or_create do |user|
@@ -33,4 +37,11 @@ class User < ActiveRecord::Base
   #validations
   #validates :address, presence: true
  # validates :login, presence: true
+ after_create :assign_user_role
+ rolify
+ private
+
+  def assign_user_role
+    self.add_role "user"
+  end
 end

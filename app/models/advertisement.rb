@@ -6,7 +6,7 @@ class Advertisement < ActiveRecord::Base
   mount_uploader :image, ImageUploader
   validates :content, presence: true
   validates :image, presence: true
-
+  resourcify
   def self.text_search(query)
   if query.present?
      search_by_content(query)

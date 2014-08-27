@@ -11,8 +11,12 @@
 <p><%= advertisement.author %></p>
 <p><%= advertisement.content %></p>
 <%= image_tag advertisement.image.thumb.url %>
+<% if can? :destroy, advertisement %>
 <%= link_to "Delete", advertisement_path(advertisement),:method=>:delete%>
+<% end %>
+<% if can? :update, advertisement %>
 <%= link_to "Edit", edit_advertisement_path(advertisement)%>
+<% end %>
 <%= link_to "Show", advertisement_path(advertisement)%>
 </div>
 <% end %>

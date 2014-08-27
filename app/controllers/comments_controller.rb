@@ -1,4 +1,5 @@
 class CommentsController < ApplicationController
+  load_and_authorize_resource
   def create
     @advertisement = Advertisement.find(params[:comment][:advertisement_id])
     @comment = current_user.comment.build(comment_params)

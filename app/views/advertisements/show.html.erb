@@ -9,8 +9,9 @@
 </br>
 <%= link_to "Delete advertisement", advertisement_path, :method=>:delete %>
 <br />
+<% if can? :create, @comment %>
 <%= render "comment_form" %>
-
+<% end %>
 <div id="comments">
 <%= render "comments/comment" %>
 

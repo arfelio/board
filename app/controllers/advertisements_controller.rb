@@ -1,4 +1,5 @@
 class AdvertisementsController < ApplicationController
+  load_and_authorize_resource
   def index
     if params[:query].present?
       @advertisements = Advertisement.text_search(params[:query])

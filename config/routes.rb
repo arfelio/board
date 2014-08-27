@@ -3,18 +3,22 @@ Board::Application.routes.draw do
     resources :comments
   end
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
-    :registrations => "registrations" }
-  get "persons/profile"
+    :registrations => "registrations" }, :path_prefix => 'my'
+  #get "users/profile"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-  get 'persons/profile', as: 'user_root'
+  get 'users/show', as: 'user_root'
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
-  get "persons/index"
-  get "persons/edit"
+   root 'advertisements#index'
+ # get "persons/index"
+  #get "persons/edit"
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
-  resources :persons
+  #get "admin/users/index"
+#scope '/admin' do
+  resources :users
+#end
+  #resources :persons
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 

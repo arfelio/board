@@ -5,6 +5,7 @@ gem 'rails', '4.0.2'
 gem 'devise', '3.2.2'
 gem "haml"
 gem 'omniauth-facebook'
+gem 'bootstrap-sass', '2.3.2.0'
 # Use sqlite3 as the database for Active Record
 group :development do
   gem 'pg', '0.15.1'
@@ -13,6 +14,8 @@ gem "geocoder"
 gem 'carrierwave'
 gem "rmagick"
 gem 'pg_search'
+gem 'cancancan', '~> 1.9'
+gem "rolify"
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 gem 'RedCloth'
