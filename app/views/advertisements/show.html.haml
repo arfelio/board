@@ -1,0 +1,16 @@
+%div.container
+  %h3 Advertisement
+  =link_to "Back", :back
+  %p= @advertisement.author
+  = raw RedCloth.new(html_escape(@advertisement.content)).to_html
+  = image_tag @advertisement.image.url
+  %br
+  = link_to "Delete advertisement", advertisement_path, :method=>:delete
+  %br
+  - if can? :create, @comment
+    = render "comment_form"
+  %div#comments
+  = render "comments/comment"
+
+
+

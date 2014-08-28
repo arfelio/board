@@ -1,0 +1,10 @@
+%div.container
+	%h2 Edit advertisement
+
+	= link_to "Back", :back
+	%p
+		%h3 Fill the form to add your advertisement
+	= form_for @advertisement, :html => { :multipart => true } do |f|
+		= render "fields",f: f
+		%br
+		= f.submit "Update ",:class=>"btn-primary btn-small"

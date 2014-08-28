@@ -1,0 +1,16 @@
+%div.container
+  %h1 Advertisements
+
+  = link_to "Create new advertisement", new_advertisement_path
+  - @advertisements.each do |advertisement|
+
+    %p= advertisement.author
+    %p= advertisement.content
+    = image_tag advertisement.image.thumb.url
+    - if can? :destroy, advertisement
+      = link_to "Delete", advertisement_path(advertisement),:method=>:delete
+    - if can? :update, advertisement
+      = link_to "Edit", edit_advertisement_path(advertisement)
+    = link_to "Show", advertisement_path(advertisement)
+
+

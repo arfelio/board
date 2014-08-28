@@ -1,0 +1,6 @@
+= form_for [@advertisement, @advertisement.comment.build], :remote=> true do |f|
+  %p=f.label :content
+  =f.text_area :content
+  = f.hidden_field :advertisement_id, :value => @advertisement.id
+  %br
+  = f.submit 'Leave comment',:class=>"btn btn-primary"
