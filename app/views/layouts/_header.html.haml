@@ -1,0 +1,32 @@
+%div.navbar-fixed-top.navbar
+  .navbar-inner
+    =link_to "Board", advertisements_path, :class=>"brand"
+    %ul.nav
+      %li=link_to "Advertiements", advertisements_path
+      %li=link_to "Users", users_path
+    -if current_user
+      %p.navbar-text.pull-right=current_user.login
+    = form_tag(advertisements_path, method: "get",:class=>"navbar-search pull-right") do
+      = text_field_tag :query,nil,class: 'search-query',placeholder: 'Search'
+    %ul.nav.pull-right
+      %li.dropdown
+        -if current_user
+          =link_to(raw("Profile" +("<b class= 'caret'></b>")), "#", :class => "dropdown-toggle", :data => {:toggle=>"dropdown"})
+          %ul.dropdown-menu
+            %li=link_to "Sign_out", destroy_user_session_path,:method=> :delete
+            %li=link_to "Edit profile", edit_user_registration_path
+            %li=link_to "View my profile", user_path(current_user)
+        -else
+          =link_to(raw("Login" +("<b class= 'caret'></b>")), "#", :class => "dropdown-toggle", :data => {:toggle=>"dropdown"})
+          %ul.dropdown-menu
+            %li=link_to "Sign_in", new_user_session_path
+            %li=link_to "Sign_up", new_user_registration_path
+            %li=link_to "Sign with Facebook",user_omniauth_authorize_path(:facebook)
+
+
+
+
+
+
+
+

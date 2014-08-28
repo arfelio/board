@@ -1,15 +1,22 @@
-%p=@user.login
-%p=@user.zip
-%p=@user.address
-%p=@user.city
-%p=@user.state
-%p=@user.country
-%p=@user.bday
-%p=@user.full_name
-%p=@user.longitude
-%p=@user.latitude
-= image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@user.latitude}%2C#{@user.longitude}"
-%br
-= link_to( "sign out", destroy_user_session_path, :method=> :delete)
-%br
-= link_to "edit my profile", edit_user_registration_path
+%div.container
+
+  %p=@user.login
+  %p=@user.zip
+  %p=@user.address
+  %p=@user.city
+  %p=@user.state
+  %p=@user.country
+  %p=@user.bday
+  %p=@user.full_name
+
+  = image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@user.latitude}%2C#{@user.longitude}"
+  %br
+  = link_to "new advertisement", new_advertisement_path
+  %p=@user.advertisement.count
+  -@user.advertisement.each do |advert|
+    %p=advert.content
+    %p=advert.author
+    =image_tag advert.image.thumb.url
+    =link_to "Show", advertisement_path(advert)
+    =link_to "Edit", edit_advertisement_path(advert)
+    =link_to "Delete", advertisement_path(advert),:method=>:delete

@@ -1,28 +1,30 @@
-=form_for(@user, html: { method: :post }) do |f|
-  %p=f.label :email
-  =f.email_field :email
-  %p=f.label :password
-  =f.password_field :password
-  %p=f.label :password_confirmation
-  =f.password_field :password_confirmation
-  %p= f.label :address
-  = f.text_field :address
-  %p= f.label :city
-  = f.text_field :city
-  %p= f.label :state
-  = f.text_field :state
-  %p= f.label :country
-  = f.text_field :country
-  %p= f.label :birthday
-  = f.text_field :bday
-  %p= f.label :full_name
-  = f.text_field :full_name
-  %p= f.label :zipcode
-  = f.text_field :zip
-  %p= f.label :login
-  = f.text_field :login
-  = hidden_field_tag "user[role_ids][]", nil
-  - Role.all.each do |r|
-    = label_tag dom_id(r), r.name, :class=> "checkbox"
-    = check_box_tag "user[role_ids][]", r.id, @user.role_ids.include?(r.id), id: dom_id(r)
-  = f.submit "Create"
+%div.container
+  =form_for(@user, html: { method: :post }) do |f|
+    %p=f.label :email
+    =f.email_field :email
+    %p=f.label :password
+    =f.password_field :password
+    %p=f.label :password_confirmation
+    =f.password_field :password_confirmation
+    %p= f.label :address
+    = f.text_field :address
+    %p= f.label :city
+    = f.text_field :city
+    %p= f.label :state
+    = f.text_field :state
+    %p= f.label :country
+    = f.text_field :country
+    %p= f.label :birthday
+    = f.text_field :bday
+    %p= f.label :full_name
+    = f.text_field :full_name
+    %p= f.label :zipcode
+    = f.text_field :zip
+    %p= f.label :login
+    = f.text_field :login
+    = hidden_field_tag "user[role_ids][]", nil
+    - Role.all.each do |r|
+      = label_tag dom_id(r), r.name, :class=> "checkbox"
+      = check_box_tag "user[role_ids][]", r.id, @user.role_ids.include?(r.id), id: dom_id(r)
+    %br
+    = f.submit "Create"

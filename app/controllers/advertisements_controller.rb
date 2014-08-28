@@ -45,7 +45,7 @@ class AdvertisementsController < ApplicationController
   def destroy
     Advertisement.find(params[:id]).destroy
     flash[:success] = "Advertisement deleted."
-    redirect_to advertisements_url
+    redirect_to :back
   end
 
   private
