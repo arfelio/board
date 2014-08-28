@@ -4,7 +4,7 @@ class AdvertisementsController < ApplicationController
     if params[:query].present?
       @advertisements = Advertisement.text_search(params[:query])
     else
-      @advertisements = Advertisement.all
+      @advertisements = Advertisement.paginate(:page => params[:page], :per_page => 3)
     end
     #@advertisements = Advertisement.all
   end

@@ -2,6 +2,7 @@
   %h1 Advertisements
 
   = link_to "Create new advertisement", new_advertisement_path
+  = will_paginate @advertisements
   - @advertisements.each do |advertisement|
 
     %p= advertisement.author
