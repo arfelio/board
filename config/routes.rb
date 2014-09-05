@@ -1,7 +1,7 @@
 Board::Application.routes.draw do
-  resources :advertisements do
-    resources :comments
-  end
+  resources :advertisements
+  resources :comments
+
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
     :registrations => "registrations" }, :path_prefix => 'my'
   #get "users/profile"

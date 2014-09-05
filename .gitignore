@@ -19,3 +19,4 @@ doc/
 .idea
 .secret
 /public/uploads
+coverage

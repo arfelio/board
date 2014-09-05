@@ -1,10 +1,12 @@
-- @advertisement.comment.each do |comment|
-	%div{ :class => "comment#{comment.id}" }
-		%p= comment.content
-		-if can? :update, comment
-			= link_to "edit", [@advertisement,comment]
-		- if can? :destroy, comment
-			= link_to "delete",[@advertisement,comment],:method=>:delete,:remote=> true
+- for comment in @advertisement.comment
+  %div{ :class => "comment#{comment.id}" }
+    .content
+      = comment.content
+    %p
+      - if can? :update, comment
+        = link_to "Edit", edit_comment_path(comment)
+      - if can? :destroy, comment
+        | #{link_to "Destroy", comment_path(comment), :method => :delete, :confirm => "Are you sure?", :remote => true}
 
 
 

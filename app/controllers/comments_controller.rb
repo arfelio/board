@@ -15,9 +15,8 @@ class CommentsController < ApplicationController
     end
   end
 
-  def show
+  def edit
     @comment = Comment.find(params[:id])
-    @advertisement = Advertisement.find(params[:advertisement_id])
   end
 
   def update

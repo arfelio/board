@@ -15,6 +15,6 @@
 //= require bootstrap
 //= require turbolinks
 //= require_tree .
-$( document ).ready(function() {
-$(".comment").remove();
-});
+//$( document ).ready(function() {
+//$(".comment").remove();
+//});
