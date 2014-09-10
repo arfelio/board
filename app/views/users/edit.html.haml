@@ -1,7 +1,8 @@
 %div.container
-  %h2Edit
+  %h2 Edit
 
   = form_for(@user, html: { method: :put }) do |f|
+    = render 'shared/error_messages', object: f.object
     %p= f.label :address
     = f.text_field :address
     %p= f.label :city

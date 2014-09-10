@@ -2,11 +2,10 @@ class AdvertisementsController < ApplicationController
   load_and_authorize_resource
   def index
     if params[:query].present?
-      @advertisements = Advertisement.text_search(params[:query])
+      @advertisements = Advertisement.text_search(params[:query]).paginate(:page => params[:page], :per_page => 3)
     else
       @advertisements = Advertisement.paginate(:page => params[:page], :per_page => 3)
     end
-    #@advertisements = Advertisement.all
   end
 
   def show
@@ -45,7 +44,7 @@ class AdvertisementsController < ApplicationController
   def destroy
     Advertisement.find(params[:id]).destroy
     flash[:success] = "Advertisement deleted."
-    redirect_to :back
+    redirect_to advertisements_path
   end
 
   private

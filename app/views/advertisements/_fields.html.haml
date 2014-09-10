@@ -2,8 +2,7 @@
 
 %p= f.label :image
 = f.file_field :image
-%p= f.label :author
-= f.text_field :author
+= f.hidden_field :author, :value => current_user.login
 %p= f.label :content
 = f.text_area :content
 

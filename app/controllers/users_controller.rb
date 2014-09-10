@@ -1,10 +1,5 @@
 class UsersController < ApplicationController
   load_and_authorize_resource
-  def profile
-    #@userinfo = Userinfo.new(user_params)
-    @user = current_user
-    #User.find(params[:id])
-  end
 
   def new
     @user=User.new
@@ -14,20 +9,22 @@ class UsersController < ApplicationController
     if params[:id].blank?
       @user = current_user
     else
-    @user = User.find(params[:id])
+      @user = User.find(params[:id])
     end
   end
+
   def index
-    @users = User.all
+    @users = User.paginate(:page => params[:page], :per_page => 3)
   end
 
   def create
     @user = User.new(user_params)
-   # @userinfo = Userinfo.new(user_params)
-     @user.save
-      flash[:notice]="success"
+    if  @user.save
+      flash[:notice]="Success user created"
       redirect_to user_path(@user)
-
+     else
+       render "new"
+    end
   end
 
   def update
@@ -35,8 +32,8 @@ class UsersController < ApplicationController
     if @user.update_attributes(user_params)
       flash[:notice] = "Profile updated"
       redirect_to user_path(@user)
-    #else
-   #   render 'edit'
+    else
+      render 'edit'
     end
   end
 

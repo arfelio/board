@@ -1,5 +1,9 @@
 %div.container
-
+  -if can? :destroy, @user
+    =link_to "Delete user", user_path(@user),:method=>:delete
+  %br
+  -if can? :update, @user
+    = link_to "Edit user", edit_user_path(@user)
   %p=@user.login
   %p=@user.zip
   %p=@user.address

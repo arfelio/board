@@ -1,6 +1,10 @@
 %div.container
+  %h3 All users
+  -if can? :create, @user
+    = link_to "Create new user", new_user_path
+  = will_paginate @users
   -@users.each do |user|
-    %p=user.email
+    %p=user.login
     -if can? :destroy, user
       =link_to "delete", user_path(user),:method=>:delete
     -if can? :update, user
@@ -9,4 +13,4 @@
 
   %p You signed as
   -if current_user
-    =current_user.email
+    =current_user.login

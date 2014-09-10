@@ -1,5 +1,8 @@
 %div.container
+
+  %h3 Fill form to create new user
   =form_for(@user, html: { method: :post }) do |f|
+    = render 'shared/error_messages', object: f.object
     %p=f.label :email
     =f.email_field :email
     %p=f.label :password
@@ -14,11 +17,11 @@
     = f.text_field :state
     %p= f.label :country
     = f.text_field :country
-    %p= f.label :birthday
+    %p= f.label :bday
     = f.text_field :bday
     %p= f.label :full_name
     = f.text_field :full_name
-    %p= f.label :zipcode
+    %p= f.label :zip
     = f.text_field :zip
     %p= f.label :login
     = f.text_field :login

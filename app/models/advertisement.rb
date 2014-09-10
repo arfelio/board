@@ -4,14 +4,16 @@ class Advertisement < ActiveRecord::Base
   has_many :comment, dependent: :destroy
   belongs_to :user
   mount_uploader :image, ImageUploader
-  validates :content, presence: true
+  validates :content, presence: true, length: { maximum: 1000 }
+  validates :author, presence: true
   validates :image, presence: true
   resourcify
+
   def self.text_search(query)
-  if query.present?
-     search_by_content(query)
-  else
-    scoped
+    if query.present?
+      search_by_content(query)
+    else
+      scoped
+    end
   end
-end
 end
