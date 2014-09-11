@@ -4,6 +4,11 @@ rvm:
 - 2.0.0
 env:
 - DB=postgresql
+before_script:
+#- "psql -c 'CREATE ROLE postgres;'"
+#- "psql -c 'create database project_test;' -U postgres"
+- "rake db:create:all"
+- "rake db:migrate"
 script:
 - "bundle exec rake db:test:prepare"
 - "rake"
