@@ -6,8 +6,9 @@
   - @advertisements.each do |advertisement|
 
     %p= advertisement.author
-    %p= advertisement.content
+    %div.thumbtext= advertisement.content.slice(0,160)
     = image_tag advertisement.image.thumb.url
+    %br
     - if can? :destroy, advertisement
       = link_to "Delete", advertisement_path(advertisement),:method=>:delete
     - if can? :update, advertisement
