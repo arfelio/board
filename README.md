@@ -35,6 +35,6 @@ Test Task Ruby
 - Регистрация.
 - Профиль.
 
-ссылка на хероку http://guarded-meadow-1008.herokuapp.com/
-что бы войти как администратор: почта для входа admin@gmail.com  пароль: password
-что бы войти как модератор: почта для входа moderator@gmail.com пароль: password
+ссылка на хероку https://sleepy-springs-1794.herokuapp.com/
+что бы войти как администратор: почта для входа admin@mail.com  пароль: password
+что бы войти как модератор: почта для входа moderator@mail.com пароль: password
