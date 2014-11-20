@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
 
   #validations
   validates :address, :city, :country, :state, :bday, :full_name, :login,
-            presence: true, length: { maximum: 50 }
+            presence: true, length: { maximum: 150 }
   validates :zip, presence: true, length: { maximum: 10 }, format: { with: /[-\d]/ }
 
   after_create :assign_user_role
