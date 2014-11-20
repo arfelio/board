@@ -29,7 +29,7 @@ categories = 7.times do
 end
 advertisements = 25.times do
 	Advertisement.create(user_id: (1..15).to_a.sample,
-		                   remote_image_url: "http://res.cloudinary.com/arfelio1702274/image/upload/v1416248283/sample.jpg",
+		                   remote_image_url: "http://res.cloudinary.com/arfelio1702274/image/upload/v1416515306/adverts/ruby-on-rails-for-beginners-1-638.jpg",
 		                   content: Faker::Lorem.paragraph(12),
 		                   title: Faker::Lorem.word,
 		                   category_id:(1..7).to_a.sample).save!
