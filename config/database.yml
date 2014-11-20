@@ -21,7 +21,7 @@ test:
   database: board_test
   pool: 5
   timeout: 5000
-  username: artem
+  username: postgres
   password:
 
 production:
@@ -30,5 +30,5 @@ production:
   database: board_production
   pool: 5
   timeout: 5000
-  username: artem
+  username: postgres
   password:
