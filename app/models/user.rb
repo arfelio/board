@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
       end
     end
   end
-#geocoding
+
   geocoded_by :full_address
   after_validation :geocode
 
