@@ -1,16 +1,16 @@
 %div.container
   %h3 All users
+  .row
+    -@users.each do |user|
+      .span6
+        %p=user.full_name
+      .span4.pull-right
+        -if can? :destroy, user
+          =link_to "delete", user_path(user),:method=>:delete,:class=>"btn btn-danger"
+        -if can? :update, user
+          =link_to "edit", edit_user_path(user),:class=>"btn"
+        =link_to "show", user_path(user),:class=>"btn"
   -if can? :create, @user
-    = link_to "Create new user", new_user_path
-  = will_paginate @users
-  -@users.each do |user|
-    %p=user.login
-    -if can? :destroy, user
-      =link_to "delete", user_path(user),:method=>:delete
-    -if can? :update, user
-      =link_to "edit", edit_user_path(user)
-    =link_to "show", user_path(user)
-
-  %p You signed as
-  -if current_user
-    =current_user.login
+    = link_to "Create new user", new_user_path, :class=> "btn btn-primary"
+  .row
+= will_paginate @users

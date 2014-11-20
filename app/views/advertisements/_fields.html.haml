@@ -2,7 +2,12 @@
 
 %p= f.label :image
 = f.file_field :image
-= f.hidden_field :author, :value => current_user.login
+%p= f.label :remote_image_url
+= f.text_field :remote_image_url
+%p= f.label :title
+= f.text_field :title
 %p= f.label :content
 = f.text_area :content
+%p= f.label :category_id
+= f.select(:category_id, options_from_collection_for_select(Category.all, :id, :title))
 

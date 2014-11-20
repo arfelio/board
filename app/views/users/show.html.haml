@@ -1,27 +1,50 @@
+%script{:type => "text/javascript",
+        :src  => "//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=geometry"}
+%script{:type => "text/javascript",
+        :src  => "//google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.0.14/src/markerclusterer_packed.js"}
 %div.container
-  %h4 userinfo
-  -if can? :destroy, @user
-    =link_to "Delete user", user_path(@user),:method=>:delete
-  %br
-  -if can? :update, @user
-    = link_to "Edit user", edit_user_path(@user)
-  %p=@user.login
-  %p=@user.zip
-  %p=@user.address
-  %p=@user.city
-  %p=@user.state
-  %p=@user.country
-  %p=@user.bday
-  %p=@user.full_name
+  .row
+    .span8
+      %h4 Userinfo
+      %table.table.table-condensed
+        %tbody
+          %tr
+            %th Login
+            %td= @user.login
+          %tr
+            %th Full name
+            %td= @user.full_name
+          %tr
+            %th Zip Code
+            %td= @user.zip
+          %tr
+            %th Birthday
+            %td= @user.bday
+          %tr
+            %th Address
+            %td=@user.full_address
+    .span4
+      = link_to "New advertisement", new_advertisement_path, :class=>"btn btn-primary btn-large pull-right"
+  %div{:class=>"mapcontainer",:style=>'width: 800px;'}
+    %div#map{:style=>'width: 800px; height: 400px;'}
 
-  = image_tag "http://maps.google.com/maps/api/staticmap?size=450x300&sensor=false&zoom=16&markers=#{@user.latitude}%2C#{@user.longitude}"
-  %br
-  = link_to "new advertisement", new_advertisement_path
-  %p=@user.advertisement.count
-  -@user.advertisement.each do |advert|
-    %p=advert.content
-    %p=advert.author
-    =image_tag advert.image.thumb.url
-    =link_to "Show", advertisement_path(advert)
-    =link_to "Edit", edit_advertisement_path(advert)
-    =link_to "Delete", advertisement_path(advert),:method=>:delete
+
+  :javascript
+    handler = Gmaps.build('Google');
+    handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+      markers = handler.addMarkers([
+        {
+          "lat": #{@user.latitude},
+          "lng": #{@user.longitude},
+          "picture": {
+            "url": "https://addons.cdn.mozilla.net/img/uploads/addon_icons/13/13028-64.png",
+            "width":  36,
+            "height": 36
+          },
+          "infowindow": "hello!"
+        }
+      ]);
+      handler.bounds.extendWith(markers);
+      handler.fitMapToBounds();
+    });
+= link_to "All advertisements of this user", advertisements_path(:user_id => @user.id), :class=>"btn btn-info pull-left"

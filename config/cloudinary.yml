@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: arfelio1702274
+  api_key: '125971418547198'
+  api_secret: nKfe28kgSCxq6fYuR-L4_WUxsQY
+  enhance_image_tag: true
+  static_image_support: false
+production:
+  cloud_name: arfelio1702274
+  api_key: '125971418547198'
+  api_secret: nKfe28kgSCxq6fYuR-L4_WUxsQY
+  enhance_image_tag: true
+  static_image_support: true
+test:
+  cloud_name: arfelio1702274
+  api_key: '125971418547198'
+  api_secret: nKfe28kgSCxq6fYuR-L4_WUxsQY
+  enhance_image_tag: true
+  static_image_support: false

@@ -1,0 +1,17 @@
+%h1 Listing categories
+= link_to 'New Category', new_category_path, :class=>"btn btn-primary"
+%ul.nav.nav-stacked
+  - @categories.each do |category|
+    %li
+      .thumbnail
+        = category.title
+        .span2.pull-right
+          = link_to 'Show', category, :class=>"btn btn-mini"
+          = link_to 'Edit', edit_category_path(category), :class=>"btn btn-mini"
+          = link_to 'Destroy', category, method: :delete, data: { confirm: 'Are you sure?' },:class=>"btn btn-mini btn-danger"
+
+
+
+
+
+

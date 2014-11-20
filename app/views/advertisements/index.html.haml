@@ -1,18 +1,23 @@
-%div.container
-  %h1 Advertisements
-
-  = link_to "Create new advertisement", new_advertisement_path
-  = will_paginate @advertisements
-  - @advertisements.each do |advertisement|
-
-    %p= advertisement.author
-    %div.thumbtext= advertisement.content.slice(0,160)
-    = image_tag advertisement.image.thumb.url
-    %br
-    - if can? :destroy, advertisement
-      = link_to "Delete", advertisement_path(advertisement),:method=>:delete
-    - if can? :update, advertisement
-      = link_to "Edit", edit_advertisement_path(advertisement)
-    = link_to "Show", advertisement_path(advertisement)
-
+.row
+  .span2
+    = render "categories"
+  .span8
+    %h4 Advertisements
+    %ul.thumbnails
+      - @advertisements.each do |advertisement|
+        %li.span4
+          .thumbnail
+            %p
+              %strong Title:
+              = advertisement.title
+            = image_tag( advertisement.image.url(:thumb))
+            %div= advertisement.content.slice(0,160)
+            %p= link_to advertisement.user.login, user_path(advertisement.user)
+            %br
+            - if can? :destroy, advertisement
+              = link_to "Delete", advertisement_path(advertisement),:method=>:delete, data: { confirm: 'Are you sure?' }, :class=> "btn btn-mini btn-danger"
+            - if can? :update, advertisement
+              = link_to "Edit", edit_advertisement_path(advertisement), :class=> "btn btn-mini"
+            = link_to "Show", advertisement_path(advertisement), :class=> "btn btn-mini"
+    = will_paginate @advertisements
 

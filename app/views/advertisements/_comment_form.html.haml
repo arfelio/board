@@ -1,6 +1,5 @@
-= form_for @comment, :remote=> true do |f|
-  %p=f.label :content
-  =f.text_area :content
+= form_for @comment, :remote=> true,:style=>"margin-top:15px;" do |f|
+  =f.text_area :content, :style=>"margin-top:15px;"
   = f.hidden_field :advertisement_id, :value => @advertisement.id
   %br
   = f.submit 'Leave comment',:class=>"btn btn-primary"

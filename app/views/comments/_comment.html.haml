@@ -1,12 +1,12 @@
 - for comment in @advertisement.comment
-  %div{ :class => "comment#{comment.id}" }
+  %div{ :class => "comment#{comment.id}", class:"thumbnail" }
     .content
       = comment.content
     %p
       - if can? :update, comment
-        = link_to "Edit", edit_comment_path(comment)
+        = link_to "Edit", edit_comment_path(comment), class: "btn-mini btn-primary"
       - if can? :destroy, comment
-        | #{link_to "Destroy", comment_path(comment), :method => :delete, :confirm => "Are you sure?", :remote => true}
+        | #{link_to "Destroy", comment_path(comment), :method => :delete, :confirm => "Are you sure?", :remote => true, :class=>"btn-mini btn-danger"}
 
 
 

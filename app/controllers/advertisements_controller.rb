@@ -1,10 +1,17 @@
 class AdvertisementsController < ApplicationController
   load_and_authorize_resource
   def index
+    @categories = Category.all
     if params[:query].present?
-      @advertisements = Advertisement.text_search(params[:query]).paginate(:page => params[:page], :per_page => 3)
+      @advertisements = Advertisement.text_search(params[:query]).
+        paginate(:page => params[:page], :per_page => 10)
+    elsif params[:user_id]
+      @advertisements = Advertisement.where(user_id: params[:user_id]).
+        paginate(:page => params[:page], :per_page => 10)
     else
-      @advertisements = Advertisement.paginate(:page => params[:page], :per_page => 3)
+      @advertisements = params[:category_id] ? Advertisement.where(category_id: params[:category_id]).
+        paginate(:page => params[:page], :per_page => 10) : Advertisement.
+        paginate(:page => params[:page], :per_page => 10)
     end
   end
 
@@ -50,6 +57,6 @@ class AdvertisementsController < ApplicationController
   private
 
   def advertisement_params
-    params.require(:advertisement).permit(:user_id,:image,:author,:content)
+    params.require(:advertisement).permit(:user_id,:image,:title,:content,:category_id,:remote_image_url)
   end
 end
