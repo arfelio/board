@@ -5,12 +5,13 @@ class Advertisement < ActiveRecord::Base
   belongs_to :category
   belongs_to :user
   mount_uploader :image, ImageUploader
-  validates :content, presence: true, length: { maximum: 1000 }
-  validates :title, presence: true
-  validates :image, presence: true, if: "remote_image_url.blank?"
-  validates :remote_image_url, presence: true, if: "image.blank?"
+  #validates :content, presence: true, length: { maximum: 1000 }
+  #validates :title, presence: true
+  #validates :image, presence: true, if: "remote_image_url.blank?"
+  #validates :remote_image_url, presence: true, if: "image.blank?"
   resourcify
-
+  #mount_uploader :content, ContentUploader
+  #serialize :content, JSON
   def self.text_search(query)
     if query.present?
       search_by_content(query)

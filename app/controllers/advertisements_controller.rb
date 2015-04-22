@@ -57,6 +57,6 @@ class AdvertisementsController < ApplicationController
   private
 
   def advertisement_params
-    params.require(:advertisement).permit(:user_id,:image,:title,:content,:category_id,:remote_image_url)
+    params.require(:advertisement).permit(:user_id,:image,:title,:category_id,:remote_image_url,:content=>[])
   end
 end

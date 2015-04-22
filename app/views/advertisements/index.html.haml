@@ -11,8 +11,8 @@
               %strong Title:
               = advertisement.title
             = image_tag( advertisement.image.url(:thumb))
-            %div= advertisement.content.slice(0,160)
-            %p= link_to advertisement.user.login, user_path(advertisement.user)
+            %div= advertisement.content
+            %p= link_to "svsv", user_path(advertisement.user.id)
             %br
             - if can? :destroy, advertisement
               = link_to "Delete", advertisement_path(advertisement),:method=>:delete, data: { confirm: 'Are you sure?' }, :class=> "btn btn-mini btn-danger"
