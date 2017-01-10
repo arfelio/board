@@ -38,3 +38,94 @@ Test Task Ruby
 ссылка на хероку https://sleepy-springs-1794.herokuapp.com/
 что бы войти как администратор: почта для входа admin@mail.com  пароль: password
 что бы войти как модератор: почта для входа moderator@mail.com пароль: password
+
+
+
+
+
+
+
+# Card Rent API - Sample Application
+
+## Install
+
+##### Ruby version
+```
+ruby 2.2.0p0
+```
+
+##### Install gems
+```
+cd card_rent__api
+```
+```
+bundle install
+```
+ ##### Database creation
+ ```
+rake db:create
+```
+```
+rake db:migrate
+```
+###### Test database prepare
+```
+rake db:test:prepare
+```
+##### **Uncomment all in file schedule.rb in config/initializers folder**
+
+##### Run all tests
+```
+rspec spec/
+```
+##### Run server
+```
+rails s
+```
+##### Run delayed job service
+```
+RAILS_ENV=development bin/delayed_job run
+```
+## API documentation
+
+### Sign Up
+```
+curl -H 'Accept: application/json' \
+     -d 'user[email]=john@mcclane.com&user[password]=superhero&user[password_confirmation]=superhero' \
+ localhost:3000//api/users
+```
+### Sign In
+```
+curl -H 'Accept: application/json' \
+     -d 'session[email]=john@mcclane.com&session[password]=superhero' \
+     localhost:3000/api/session
+```
+### Get card
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="ddeb8941-bbce-4c6d-9287-d62b7990357d"' \
+     localhost:3000/api/card
+```
+**token you recieved when signed up or signed in**
+### Put card back
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="dced1e53-7f95-47b3-a9d1-98827717201f"'\
+     -X PUT \
+     -d 'card[suit]="spade&card[card]=10' \
+      localhost:3000/api/card
+````
+**You must be admin to call this actions**
+to make user admin you need in rails console update your user column named "admin" to true
+### Get information about cards
+```
+curl  -H 'Accept: application/json' \
+      -H 'Authorization: Token \ token="ddeb8941-bbce-4c6d-9287-d62b7990357d"'\
+      localhost:3000/api/admin/stock
+```
+### Get information about balance and transactions
+```
+curl  -H 'Accept: application/json' \
+      -H 'Authorization: Token \ token="ddeb8941-bbce-4c6d-9287-d62b7990357d"'\
+      localhost:3000/api/admin/finances
+```
