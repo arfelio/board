@@ -1,4 +1,5 @@
-what is going on
+what is going on 
+[![Build Status](https://travis-ci.org/arfelio/board.svg?branch=master)](https://travis-ci.org/arfelio/board)
 
 
 Test Task Ruby
