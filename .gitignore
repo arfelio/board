@@ -20,4 +20,4 @@ doc/
 .secret
 /public/uploads
 coverage
-config/cloudinary.yml
+
