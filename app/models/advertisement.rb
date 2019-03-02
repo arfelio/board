@@ -1,6 +1,6 @@
 class Advertisement < ActiveRecord::Base
-  include PgSearch
-  pg_search_scope :search_by_content, :against => [:content, :author]
+  # include PgSearch
+  # pg_search_scope :search_by_content, :against => [:content, :author]
   has_many :comment, dependent: :destroy
   belongs_to :category
   belongs_to :user

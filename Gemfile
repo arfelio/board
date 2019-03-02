@@ -10,7 +10,7 @@ gem 'will_paginate', '3.0.4'
 gem 'bootstrap-will_paginate', '0.0.9'
 # Use sqlite3 as the database for Active Record
 group :development, :test do
- # gem 'pg', '0.15.1'
+  gem 'pry-rails'
   gem 'rspec-rails', '2.13.1'
 end
 gem "geocoder"
@@ -18,7 +18,7 @@ gem 'gmaps4rails'
 gem 'carrierwave'
 gem 'cloudinary'
 gem "rmagick"
-gem 'pg_search'
+gem 'sqlite3', '~> 1.3.13'
 gem 'cancancan', '~> 1.9'
 gem "rolify"
 # Use SCSS for stylesheets
@@ -38,10 +38,10 @@ gem 'jquery-rails'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
-gem 'pg', '0.15.1'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
-gem 'pry-rails', :group => :development
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -55,7 +55,6 @@ group :test do
   gem 'shoulda-matchers'
 end
 group :production do
- # gem 'pg', '0.15.1'
   gem 'rails_12factor', '0.0.2'
 end
 # Use ActiveModel has_secure_password

@@ -5,10 +5,10 @@ FactoryGirl.define do
     sequence(:email) { |n| "person_#{n}@example.com"}
     password "password"
     password_confirmation "password"
-    address "market street"
-    city "San Francisco"
+    address "New York, NY, USA"
+    city "New York"
     country "United States"
-    state "California"
+    state "New York"
     zip "94101"
     bday "10.01.2014"
     full_name "Ivan ivanov"

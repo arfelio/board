@@ -41,31 +41,31 @@ describe User do
     it { should validate_presence_of(:zip) }
 
     describe "when login is too long" do
-      before { @user.login = "a"*51 }
+      before { @user.login = "a"*1151 }
       it { should_not be_valid }
     end
     describe "when address is too long" do
-      before { @user.address = "a"*51 }
+      before { @user.address = "a"*151 }
       it { should_not be_valid }
     end
     describe "when city is too long" do
-      before { @user.city = "a"*51 }
+      before { @user.city = "a"*151 }
       it { should_not be_valid }
     end
     describe "when state is too long" do
-      before { @user.state = "a"*51 }
+      before { @user.state = "a"*151 }
       it { should_not be_valid }
     end
     describe "when country is too long" do
-      before { @user.country = "a"*51 }
+      before { @user.country = "a"*151 }
       it { should_not be_valid }
     end
     describe "when full_name is too long" do
-      before { @user.full_name = "a"*51 }
+      before { @user.full_name = "a"*151 }
       it { should_not be_valid }
     end
     describe "when birthday is too long" do
-      before { @user.bday = "a"*51 }
+      before { @user.bday = "a"*151 }
       it { should_not be_valid }
     end
     describe "when zipcode is too long" do
