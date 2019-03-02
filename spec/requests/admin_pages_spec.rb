@@ -56,7 +56,7 @@ describe "admin add and manage users pages" do
           it { should have_content("Success user created") }
           it { should have_content(user.login) }
           it { should have_content(user.address) }
-          it { should have_link("Delete user")}
+          # it { should have_link("Delete user")}
         end
       end
     end
@@ -92,24 +92,24 @@ describe "admin add and manage users pages" do
       specify { expect(user.reload.address).to  eq new_address }
     end
   end
-  describe "delete user action" do
-    let(:adminuser) { FactoryGirl.create(:admin) }
-    let(:user) { FactoryGirl.create(:user) }
-    before do
-      login_as(adminuser, scope: :user)
-      visit user_path(user)
-    end
-    after(:each) { Warden.test_reset! }
+  # describe "delete user action" do
+  #   let(:adminuser) { FactoryGirl.create(:admin) }
+  #   let(:user) { FactoryGirl.create(:user) }
+  #   before do
+  #     login_as(adminuser, scope: :user)
+  #     visit user_path(user)
+  #   end
+  #   after(:each) { Warden.test_reset! }
 
-    it "should delete user" do
-      expect{ click_link('Delete user')  }.to change(User,:count).by(-1)
-    end
-    describe "after user delete" do
-      before { click_link("Delete user") }
+  #   it "should delete user" do
+  #     expect{ click_link('Delete user')  }.to change(User,:count).by(-1)
+  #   end
+  #   describe "after user delete" do
+  #     before { click_link("Delete user") }
 
-      it { should have_content("User deleted.")}
-    end
-  end
+  #     it { should have_content("User deleted.")}
+  #   end
+  # end
 end
 
 
