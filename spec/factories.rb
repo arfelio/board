@@ -21,7 +21,7 @@ FactoryGirl.define do
     end
   end
   factory :advertisement do
-    author "Ivan ivanov"
+    user 
     content "lorem ipsum"
     image {fixture_file_upload('spec/fixtures/files/image.jpg', 'image/jpg')}
   end
