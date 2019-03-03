@@ -11,7 +11,7 @@ FactoryGirl.define do
     state "New York"
     zip "94101"
     bday "10.01.2014"
-    full_name "Ivan ivanov"
+    sequence(:full_name)  { |n| "Person #{n}" }
 
     factory :admin do
       after(:create) {|user| user.add_role(:admin)}
