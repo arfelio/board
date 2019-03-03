@@ -10,7 +10,7 @@
             %p
               %strong Title:
               = advertisement.title
-            = image_tag( advertisement.image.url(:thumb))
+            = image_tag( advertisement.image.url)
             %div= advertisement.content
             %p= link_to "svsv", user_path(advertisement.user.id)
             %br
