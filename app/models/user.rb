@@ -12,17 +12,18 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :role, :join_table => :users_roles
 #logging from facebook
   def self.from_omniauth(auth)
-    where(auth.slice(:provider, :uid)).first_or_create do |user|
-    user.email = auth.info.email
-    user.password = Devise.friendly_token[0,20]
-    user.login = auth.info.name
-    user.address = "1 Hacker Way"
-    user.city = "Menlo Park"
-    user.state = "California"
-    user.country = "United States"
-    user.zip = "94025"
-    user.bday = "February 4, 2004"
-    user.full_name = auth.info.name
+    where(provider: auth.slice(:provider).provider, uid: auth.slice(:uid).uid)
+      .first_or_create do |user|    
+        user.email = auth.info.email
+        user.password = Devise.friendly_token[0,20]
+        user.login = auth.info.name
+        user.address = "1 Hacker Way"
+        user.city = "Menlo Park"
+        user.state = "California"
+        user.country = "United States"
+        user.zip = "94025"
+        user.bday = "February 4, 2004"
+        user.full_name = auth.info.name
     end
   end
 
