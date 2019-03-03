@@ -30,7 +30,7 @@ gem "geocoder"
 gem 'gmaps4rails'
 gem 'carrierwave', '0.10.0'
 # gem 'cloudinary'
-gem "rmagick"
+gem "rmagick", '2.16.0'
 gem 'sqlite3', '~> 1.3.13'
 gem 'cancancan', '~> 1.9'
 gem "rolify"
