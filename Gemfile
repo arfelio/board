@@ -12,7 +12,7 @@ gem 'bootstrap-will_paginate', '0.0.9'
 
 group :test do
   gem 'simplecov-rcov'
-  gem 'simplecov', '~> 0.9.0',:require => false
+  gem 'simplecov', '~> 0.16.1',:require => false
   gem 'selenium-webdriver', '2.35.1'
   gem 'capybara', '2.1.0'
   gem 'factory_girl_rails', '4.2.1'
