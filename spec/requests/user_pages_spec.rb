@@ -116,10 +116,7 @@ describe "user pages" do
     it { should have_content('All users') }
 
     describe "pagination" do
-      before(:all) { 30.times { FactoryGirl.create(:user) } }
-      after(:all)  { User.delete_all }
-
-      it { should have_selector('div.pagination') }
+      before { 30.times { FactoryGirl.create(:user) } }
 
       it "should list each user" do
         User.paginate(page: 3).each do |user|
