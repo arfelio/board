@@ -3,12 +3,17 @@ include Warden::Test::Helpers
 Warden.test_mode!
 describe "advertisement pages" do
   subject{ page }
+  
   describe "page new" do
+    
     describe "when user is not logged" do
-      before { visit new_advertisement_path}
+      before do 
+        visit new_advertisement_path
+      end
       it { should have_content("You are not authorized to access this page.") }
       it { should have_content("Advertisements") }
     end
+    
     describe "when user logged in"  do
       let(:user) { FactoryGirl.create(:user) }
 
@@ -52,6 +57,8 @@ describe "advertisement pages" do
       end
     end
   end
+
+
   describe "page edit" do
     # let(:user) { FactoryGirl.create(:user) }
     # let(:advertisement) { FactoryGirl.create(:advertisement,user: user) }
@@ -82,9 +89,11 @@ describe "advertisement pages" do
     end
   end
   describe "destroy action in show page" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:advertisement) { FactoryGirl.create(:advertisement,user: user) }
+    # let(:user) { FactoryGirl.create(:user) }
+    # let(:advertisement) { FactoryGirl.create(:advertisement,user: user) }
     before do
+      user = FactoryGirl.create(:user) 
+      advertisement =FactoryGirl.create(:advertisement,user: user) 
       login_as(user, scope: :user)
       visit advertisement_path(advertisement)
     end
