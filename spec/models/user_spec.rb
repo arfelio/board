@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe User do
+describe User, type: :model do
   subject { @user }
 
   before(:each) do

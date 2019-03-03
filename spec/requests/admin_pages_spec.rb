@@ -3,9 +3,14 @@ include Warden::Test::Helpers
 Warden.test_mode!
 describe "admin add and manage users pages" do
   subject { page }
+  let!(:mode) { Role.create(name:"moderator").save }
+  let!(:adm) { Role.create(name:"admin").save }
   describe "create new user page " do
     describe "non logged user or simple user try visit this page " do
-      before { visit new_user_path }
+      before { 
+        DatabaseCleaner.clean
+        visit new_user_path 
+      }
 
       it { should have_content("You are not authorized to access this page") }
       it { should have_content("Advertisements") }

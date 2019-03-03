@@ -1,9 +1,10 @@
 require 'spec_helper'
 describe "Advertisement" do
   subject { @advertisement }
-
-  before(:each) do
-    @advertisement = FactoryGirl.create(:advertisement)
+  let(:user) {  FactoryGirl.create(:user)}
+  
+  before(:all) do
+    @advertisement = FactoryGirl.create(:advertisement, user: user)
   end
 
   context "fields" do

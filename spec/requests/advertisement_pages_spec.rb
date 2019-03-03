@@ -53,9 +53,11 @@ describe "advertisement pages" do
     end
   end
   describe "page edit" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:advertisement) { FactoryGirl.create(:advertisement,user: user, id: 1) }
+    # let(:user) { FactoryGirl.create(:user) }
+    # let(:advertisement) { FactoryGirl.create(:advertisement,user: user) }
     before do
+      user = FactoryGirl.create(:user) 
+      advertisement =FactoryGirl.create(:advertisement,user: user) 
       login_as(user, scope: :user)
       visit edit_advertisement_path(advertisement)
     end
@@ -81,7 +83,7 @@ describe "advertisement pages" do
   end
   describe "destroy action in show page" do
     let(:user) { FactoryGirl.create(:user) }
-    let(:advertisement) { FactoryGirl.create(:advertisement,user: user, id:1) }
+    let(:advertisement) { FactoryGirl.create(:advertisement,user: user) }
     before do
       login_as(user, scope: :user)
       visit advertisement_path(advertisement)
