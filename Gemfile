@@ -57,7 +57,7 @@ gem 'jbuilder', '~> 1.2'
 
 
 
-gem 'rake', '< 11.0'
+gem 'rake', '<= 13.0.1'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
