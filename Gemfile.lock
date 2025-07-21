@@ -210,7 +210,7 @@ GEM
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
-    thor (0.20.3)
+    thor (1.4.0)
     thread_safe (0.3.6)
     tilt (1.4.1)
     treetop (1.4.15)
