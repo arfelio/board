@@ -31,7 +31,7 @@ gem 'gmaps4rails'
 gem 'carrierwave', '0.10.0'
 # gem 'cloudinary'
 gem "rmagick", '2.16.0'
-gem 'sqlite3', '~> 1.3.13'
+gem 'sqlite3', '~> 2.9.5'
 gem 'cancancan', '~> 1.9'
 gem "rolify"
 # Use SCSS for stylesheets
