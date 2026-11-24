@@ -1,4 +1,4 @@
-class AddDetailsToUsers < ActiveRecord::Migration
+class AddDetailsToUsers < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :login, :string
     add_column :users, :full_name, :string

@@ -1,4 +1,4 @@
-class Advertisement < ActiveRecord::Base
+class Advertisement < ApplicationRecord
   has_many :comment, dependent: :destroy
   belongs_to :category
   belongs_to :user
