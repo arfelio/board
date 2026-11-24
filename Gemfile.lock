@@ -1,7 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    RedCloth (4.3.2)
+    RedCloth (4.3.4)
     action_text-trix (2.1.19)
       railties
     actioncable (8.1.4.1)
@@ -215,7 +215,7 @@ GEM
     pry-rails (0.3.11)
       pry (>= 0.13.0)
     public_suffix (7.0.5)
-    puma (6.6.1)
+    puma (8.1.2)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.9)
@@ -372,7 +372,7 @@ DEPENDENCIES
   jquery-rails
   mini_magick (~> 5.0)
   pry-rails
-  puma (~> 6.4)
+  puma (>= 7.2.1)
   rails (~> 8.1.4)
   rails-controller-testing
   rake (>= 12.3.3)

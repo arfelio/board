@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 8.1.4'
 gem 'sprockets-rails' # Rails 7 no longer adds the asset pipeline by default
-gem 'puma', '~> 6.4' # Ruby 3 no longer ships WEBrick
+gem 'puma', '>= 7.2.1' # web server; 7.2.1 fixes the PROXY protocol advisories
 gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 5.0'
