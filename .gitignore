@@ -21,3 +21,6 @@ doc/
 /public/uploads
 coverage
 
+
+# Local environment variables (secrets)
+/.env
