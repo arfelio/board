@@ -5,21 +5,21 @@ Warden.test_mode!
 describe "comment pages" do
   subject { page }
 
-  let(:author)         { FactoryGirl.create(:user) }
-  let(:other_user)     { FactoryGirl.create(:user) }
-  let(:advertisement)  { FactoryGirl.create(:advertisement, user: other_user) }
+  let(:author)         { FactoryBot.create(:user) }
+  let(:other_user)     { FactoryBot.create(:user) }
+  let(:advertisement)  { FactoryBot.create(:advertisement, user: other_user) }
 
   after(:each) { Warden.test_reset! }
 
   describe "as a guest" do
-    let!(:comment) { FactoryGirl.create(:comment, user: other_user, advertisement: advertisement, content: "Visible comment") }
+    let!(:comment) { FactoryBot.create(:comment, user: other_user, advertisement: advertisement, content: "Visible comment") }
 
     before { visit advertisement_path(advertisement) }
 
-    it { should have_content("Visible comment") }
-    it { should_not have_button("Leave comment") }
-    it { should_not have_link("Edit", href: edit_comment_path(comment)) }
-    it { should_not have_link("Destroy") }
+    it { is_expected.to have_content("Visible comment") }
+    it { is_expected.not_to have_button("Leave comment") }
+    it { is_expected.not_to have_link("Edit", href: edit_comment_path(comment)) }
+    it { is_expected.not_to have_link("Destroy") }
   end
 
   describe "adding a comment" do
@@ -38,8 +38,8 @@ describe "comment pages" do
       describe "after saving" do
         before { click_button "Leave comment" }
 
-        it { should have_content("Nice bike!") }
-        it { should have_selector("div.alert.alert-notice", text: "You add a comment") }
+        it { is_expected.to have_content("Nice bike!") }
+        it { is_expected.to have_selector("div.alert.alert-notice", text: "You add a comment") }
         specify { expect(Comment.last.user).to eq author }
         specify { expect(Comment.last.advertisement).to eq advertisement }
       end
@@ -53,21 +53,21 @@ describe "comment pages" do
       describe "after submitting" do
         before { click_button "Leave comment" }
 
-        it { should have_selector("div.alert.alert-alert", text: "Comment not added") }
+        it { is_expected.to have_selector("div.alert.alert-alert", text: "Comment not added") }
       end
     end
   end
 
   describe "own comment" do
-    let!(:comment) { FactoryGirl.create(:comment, user: author, advertisement: advertisement, content: "Original text") }
+    let!(:comment) { FactoryBot.create(:comment, user: author, advertisement: advertisement, content: "Original text") }
 
     before do
       login_as(author, scope: :user)
       visit advertisement_path(advertisement)
     end
 
-    it { should have_link("Edit", href: edit_comment_path(comment)) }
-    it { should have_link("Destroy", href: comment_path(comment)) }
+    it { is_expected.to have_link("Edit", href: edit_comment_path(comment)) }
+    it { is_expected.to have_link("Destroy", href: comment_path(comment)) }
 
     describe "editing" do
       before do
@@ -76,8 +76,8 @@ describe "comment pages" do
         click_button "Update comment"
       end
 
-      it { should have_content("Comment updated") }
-      it { should have_content("Updated text") }
+      it { is_expected.to have_content("Comment updated") }
+      it { is_expected.to have_content("Updated text") }
       specify { expect(comment.reload.content).to eq "Updated text" }
     end
 
@@ -97,7 +97,7 @@ describe "comment pages" do
   end
 
   describe "someone else's comment" do
-    let!(:comment) { FactoryGirl.create(:comment, user: other_user, advertisement: advertisement, content: "Not yours") }
+    let!(:comment) { FactoryBot.create(:comment, user: other_user, advertisement: advertisement, content: "Not yours") }
 
     describe "as a regular user" do
       before do
@@ -105,25 +105,25 @@ describe "comment pages" do
         visit advertisement_path(advertisement)
       end
 
-      it { should_not have_link("Edit", href: edit_comment_path(comment)) }
-      it { should_not have_link("Destroy", href: comment_path(comment)) }
+      it { is_expected.not_to have_link("Edit", href: edit_comment_path(comment)) }
+      it { is_expected.not_to have_link("Destroy", href: comment_path(comment)) }
 
       describe "opening the edit page directly" do
         before { visit edit_comment_path(comment) }
 
-        it { should have_content("You are not authorized to access this page.") }
+        it { is_expected.to have_content("You are not authorized to access this page.") }
       end
     end
 
     describe "as a moderator" do
-      let(:moderator) { FactoryGirl.create(:moderator) }
+      let(:moderator) { FactoryBot.create(:moderator) }
 
       before do
         login_as(moderator, scope: :user)
         visit advertisement_path(advertisement)
       end
 
-      it { should have_link("Edit", href: edit_comment_path(comment)) }
+      it { is_expected.to have_link("Edit", href: edit_comment_path(comment)) }
 
       it "can delete it" do
         expect { click_link "Destroy", href: comment_path(comment) }.to change(Comment, :count).by(-1)

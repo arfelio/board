@@ -3,12 +3,8 @@ require 'spec_helper'
 describe "categories/index" do
   before(:each) do
     assign(:categories, [
-      stub_model(Category,
-        :title => "Title"
-      ),
-      stub_model(Category,
-        :title => "Title"
-      )
+      Category.create!(title: "Title"),
+      Category.create!(title: "Title")
     ])
   end
 

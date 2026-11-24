@@ -6,8 +6,8 @@ describe "user pages" do
   describe "sign up page" do
     before { visit new_user_registration_path }
 
-    it { should have_content("Sign up") }
-    it { should have_button("Sign up") }
+    it { is_expected.to have_content("Sign up") }
+    it { is_expected.to have_button("Sign up") }
 
     describe "sign up action" do
       before { visit new_user_registration_path }
@@ -17,11 +17,11 @@ describe "user pages" do
         it "should not create a user" do
           expect { click_button "Sign up" }.not_to change(User, :count)
         end
-        it { should have_content("Sign up") }
-        it { should have_selector('div.field_with_errors') }
+        it { is_expected.to have_content("Sign up") }
+        it { is_expected.to have_selector('div.field_with_errors') }
       end
       describe "with valid information" do
-        let(:user) { FactoryGirl.create(:user) }
+        let(:user) { FactoryBot.create(:user) }
 
         before do
           fill_in "Email", with: "user@example.com"
@@ -45,28 +45,28 @@ describe "user pages" do
           before { click_button "Sign up" }
           let(:user) { User.find_by(email: 'user@example.com') }
 
-          it { should have_content("Welcome! You have signed up successfully") }
-          it { should have_content(user.login) }
-          it { should have_link("Profile")}
+          it { is_expected.to have_content("Welcome! You have signed up successfully") }
+          it { is_expected.to have_content(user.login) }
+          it { is_expected.to have_link("Profile")}
         end
       end
     end
   end
   describe "edit page" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before do
       login_as(user, scope: :user)
       visit edit_user_registration_path(user)
     end
     after(:each) { Warden.test_reset! }
 
-    it { should have_content("Edit")}
+    it { is_expected.to have_content("Edit")}
 
     describe "with invalid information" do
       before { fill_in "Address", with:"" }
       before { click_button "Update" }
 
-      it { should have_selector("div.field_with_errors") }
+      it { is_expected.to have_selector("div.field_with_errors") }
     end
     describe "with valid information" do
       let(:new_address)  { "New Address" }
@@ -78,7 +78,7 @@ describe "user pages" do
         click_button "Update"
       end
 
-      it { should have_content("You updated your account successfully.") }
+      it { is_expected.to have_content("You updated your account successfully.") }
       specify { expect(user.reload.login).to  eq new_login }
       specify { expect(user.reload.address).to  eq new_address }
     end
@@ -88,11 +88,11 @@ describe "user pages" do
     describe "with invalid information" do
       before { click_button "Sign in" }
 
-      it { should have_button('Sign in') }
-      it { should have_selector('div.alert.alert-alert') }
+      it { is_expected.to have_button('Sign in') }
+      it { is_expected.to have_selector('div.alert.alert-alert') }
     end
     describe "with valid information" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       before { visit new_user_session_path }
 
       before do
@@ -101,22 +101,22 @@ describe "user pages" do
         click_button "Sign in"
       end
 
-      it { should have_link("Profile") }
-      it { should have_content(user.login) }
-      it { should have_content("Signed in successfully") }
+      it { is_expected.to have_link("Profile") }
+      it { is_expected.to have_content(user.login) }
+      it { is_expected.to have_content("Signed in successfully") }
     end
   end
   describe "index page for all users" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before(:each) do
       login_as(user, scope: :user)
       visit users_path
     end
 
-    it { should have_content('All users') }
+    it { is_expected.to have_content('All users') }
 
     describe "pagination" do
-      before { 30.times { FactoryGirl.create(:user) } }
+      before { 30.times { FactoryBot.create(:user) } }
 
       it "should list each user" do
         User.paginate(page: 3).each do |user|
