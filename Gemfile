@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.8'
+gem 'rails', '~> 6.0.6'
 gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 4.7'
@@ -9,6 +9,7 @@ gem 'haml', '~> 5.2'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'will_paginate', '~> 3.3'
 gem 'mail', '~> 2.7.1' # 2.8+ adds net-* gems that clash with the stdlib before Ruby 3.1; lift at Ruby 3.1
+gem 'concurrent-ruby', '1.3.4' # 1.3.5+ no longer requires logger, which breaks Rails < 7.1 at boot
 gem 'bootstrap-will_paginate', '0.0.9'
 # Use sqlite3 as the database for Active Record
 
@@ -16,7 +17,7 @@ group :test do
   gem 'simplecov-rcov'
   gem 'simplecov', '~> 0.16.1',:require => false
   gem 'capybara', '~> 2.18'
-  gem 'factory_bot_rails', '~> 6.2.0' # factory_bot 6.4+ uses Ruby 2.7 syntax despite claiming 2.5 support
+  gem 'factory_bot_rails', '~> 6.2'
   gem 'shoulda-matchers', '~> 4.5'
   gem 'database_cleaner', '~> 1.8' # 1.8+ keeps ar_internal_metadata when truncating
   gem 'rails-controller-testing' # assigns / assert_template, extracted in Rails 5
@@ -25,16 +26,16 @@ end
 
 group :development, :test do
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 3.9'
+  gem 'rspec-rails', '~> 4.1'
 end
 gem "geocoder"
 gem 'gmaps4rails'
-gem 'carrierwave', '0.10.0'
+gem 'carrierwave', '~> 2.2'
 # gem 'cloudinary'
 gem 'mini_magick', '~> 4.9'
-gem 'sqlite3', '~> 1.3.13'
-gem 'cancancan', '~> 1.9'
-gem "rolify"
+gem 'sqlite3', '~> 1.4'
+gem 'cancancan', '~> 3.5'
+gem 'rolify', '~> 6.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 gem 'RedCloth'
@@ -42,7 +43,7 @@ gem 'RedCloth'
 gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.2'
+gem 'coffee-rails', '~> 5.0'
 gem "faker"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # therubyracer removed: libv8 3.16 does not build on arm64; ExecJS uses Node.js instead

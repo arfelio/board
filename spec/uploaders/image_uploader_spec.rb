@@ -30,6 +30,6 @@ describe ImageUploader do
   end
 
   it "only accepts image extensions" do
-    expect(uploader.extension_white_list).to match_array %w(jpg jpeg gif png)
+    expect(uploader.extension_allowlist).to match_array %w(jpg jpeg gif png)
   end
 end
