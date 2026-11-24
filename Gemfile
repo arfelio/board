@@ -56,7 +56,7 @@ gem 'jbuilder', '~> 1.2'
 
 
 
-gem 'rake', '< 11.0'
+gem 'rake', '<= 13.0.1'
 
 # group :test do
 #   gem 'simplecov-rcov'
