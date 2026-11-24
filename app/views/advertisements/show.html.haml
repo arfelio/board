@@ -7,7 +7,7 @@
         %strong Title:
         = @advertisement.title
       = raw RedCloth.new(html_escape(@advertisement.content)).to_html
-      = image_tag @advertisement.image.url
+      = image_tag(@advertisement.image.url) if @advertisement.image.present?
       %br
     .span3
       -if can? :update, @advertisement

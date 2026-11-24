@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.7'
+gem 'rails', '~> 5.1.7'
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 4.7'
-gem "haml"
+gem 'haml', '~> 5.2'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'will_paginate', '3.1.6'
 gem 'bootstrap-will_paginate', '0.0.9'
@@ -14,9 +14,9 @@ group :test do
   gem 'simplecov-rcov'
   gem 'simplecov', '~> 0.16.1',:require => false
   gem 'capybara', '~> 2.18'
-  gem 'factory_bot_rails', '~> 5.2'
-  gem 'shoulda-matchers', '~> 3.1'
-  gem 'database_cleaner'
+  gem 'factory_bot_rails', '~> 6.2.0' # factory_bot 6.4+ uses Ruby 2.7 syntax despite claiming 2.5 support
+  gem 'shoulda-matchers', '~> 4.5'
+  gem 'database_cleaner', '~> 1.8' # 1.8+ keeps ar_internal_metadata when truncating
   gem 'rails-controller-testing' # assigns / assert_template, extracted in Rails 5
 end
 
@@ -79,8 +79,3 @@ gem 'rake', '>= 12.3.3'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-# Ruby 2.4 caps nokogiri at 1.10.x; newer sanitizer/loofah releases need Nokogiri::HTML4 (nokogiri >= 1.12)
-gem 'nokogiri', '~> 1.10.10'
-gem 'loofah', '< 2.19'
-gem 'rails-html-sanitizer', '< 1.5'
-gem 'tilt', '~> 2.0.11' # haml 5.0 needs Tilt::ErubisTemplate, removed in later tilt
