@@ -1,90 +1,82 @@
 require 'spec_helper'
-require "cancan/matchers"
 
-describe "Ability", type: :model do
-  # context "guest ability" do
-  #   user = User.new
-  #   # ability = Ability.new(user)
-  #   subject(:ability) { Ability.new(user) }
-    
-  #   it "should can read all" do
-  #     should be_able_to(:read,:all)
-  #   end
-  # end
-  # context "logged user ability" do
-  #   user1 = FactoryGirl.create(:user,email:"example@mail.com")
-  #   ability = Ability.new(user1)
-  #   after(:all)  { User.delete_all }
+describe Ability, type: :model do
+  let(:owner)          { FactoryGirl.create(:user) }
+  let(:other_user)     { FactoryGirl.create(:user) }
+  let(:category)       { Category.create!(title: "Cars") }
+  let(:advertisement)  { FactoryGirl.create(:advertisement, user: owner) }
+  let(:comment)        { FactoryGirl.create(:comment, user: owner, advertisement: advertisement) }
 
-  #   it "should be able to manage his advertisements" do
-  #     ability.should be_able_to(:manage, Advertisement.new(:user => user1))
-  #   end
-  #   it "should be able to create advertisement" do
-  #     ability.should be_able_to(:create, Advertisement)
-  #   end
-  #   it "should be able to read another advertisements" do
-  #     ability.should be_able_to(:read, Advertisement)
-  #   end
-  #   it "should be able to manage his comments" do
-  #     ability.should be_able_to(:manage, Comment)
-  #   end
-  #   it "should be able to create comments" do
-  #     ability.should be_able_to(:create, Comment)
-  #   end
-  #   it "should be able to read another comments" do
-  #     ability.should be_able_to(:read, Comment)
-  #   end
+  describe "guest" do
+    subject { Ability.new(nil) }
 
-  #   it "should be able to read  user profiles" do
-  #     ability.should be_able_to(:read, User)
-  #   end
-  #   it "should not be able to manage  user roles" do
-  #     ability.should_not be_able_to(:manage, Role)
-  #   end
-  # end
-  # context "moderator ability" do
-  #   user2 = FactoryGirl.create(:moderator,email:"moderator@mail.com")
-  #   ability = Ability.new(user2)
-  #   after(:all)  { User.delete_all }
+    it { should be_able_to(:read, Advertisement) }
+    it { should be_able_to(:read, Comment) }
+    it { should be_able_to(:read, User) }
+    it { should_not be_able_to(:read, Category) }
 
-  #   it "should be able to manage all advertisements" do
-  #     ability.should be_able_to(:manage, Advertisement)
-  #   end
-  #   it "should be able to manage all comments" do
-  #     ability.should be_able_to(:manage, Comment)
-  #   end
-  #   it "should  be able to read all users" do
-  #     ability.should be_able_to(:read, User)
-  #   end
-  #   it "should not be able to manage users role" do
-  #     ability.should_not be_able_to(:manage, Role)
-  #   end
-  # end
-  # context "admin ability" do
-  #   user3 = FactoryGirl.create(:admin, email:"admin@mail.com")
-  #   ability = Ability.new(user3)
-  #   after(:all) { User.delete_all}
+    it { should_not be_able_to(:create, Advertisement) }
+    it { should_not be_able_to(:update, advertisement) }
+    it { should_not be_able_to(:destroy, advertisement) }
+    it { should_not be_able_to(:create, Comment) }
+    it { should_not be_able_to(:update, comment) }
+    it { should_not be_able_to(:create, User) }
+  end
 
-  #   it "should be able to manage all" do
-  #     ability.should be_able_to(:manage,:all)
-  #   end
-  # end
+  describe "user" do
+    subject { Ability.new(owner) }
+
+    it { should be_able_to(:read, Advertisement) }
+    it { should be_able_to(:create, Advertisement) }
+    it { should be_able_to(:update, advertisement) }
+    it { should be_able_to(:destroy, advertisement) }
+
+    it { should be_able_to(:create, Comment) }
+    it { should be_able_to(:update, comment) }
+    it { should be_able_to(:destroy, comment) }
+
+    it { should be_able_to(:read, other_user) }
+    it { should_not be_able_to(:update, other_user) }
+    it { should_not be_able_to(:destroy, other_user) }
+    it { should_not be_able_to(:create, User) }
+
+    it { should_not be_able_to(:read, Category) }
+    it { should_not be_able_to(:create, Category) }
+
+    context "with someone else's records" do
+      subject { Ability.new(other_user) }
+
+      it { should be_able_to(:read, advertisement) }
+      it { should_not be_able_to(:update, advertisement) }
+      it { should_not be_able_to(:destroy, advertisement) }
+      it { should be_able_to(:read, comment) }
+      it { should_not be_able_to(:update, comment) }
+      it { should_not be_able_to(:destroy, comment) }
+    end
+  end
+
+  describe "moderator" do
+    subject { Ability.new(FactoryGirl.create(:moderator)) }
+
+    it { should be_able_to(:update, advertisement) }
+    it { should be_able_to(:destroy, advertisement) }
+    it { should be_able_to(:update, comment) }
+    it { should be_able_to(:destroy, comment) }
+    it { should be_able_to(:manage, category) }
+
+    it { should be_able_to(:read, other_user) }
+    it { should_not be_able_to(:update, other_user) }
+    it { should_not be_able_to(:destroy, other_user) }
+    it { should_not be_able_to(:create, User) }
+  end
+
+  describe "admin" do
+    subject { Ability.new(FactoryGirl.create(:admin)) }
+
+    it { should be_able_to(:manage, advertisement) }
+    it { should be_able_to(:manage, comment) }
+    it { should be_able_to(:manage, category) }
+    it { should be_able_to(:manage, other_user) }
+    it { should be_able_to(:create, User) }
+  end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

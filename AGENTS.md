@@ -31,7 +31,7 @@ rmagick ignores `--with-cflags`; it only reads the `CFLAGS` env var.
 
 ```sh
 RAILS_ENV=test bundle exec rake db:create db:schema:load   # prepare test DB
-bundle exec rspec                                          # full suite (123 examples, 2 pending placeholders)
+bundle exec rspec                                          # full suite (207 examples, 2 pending placeholders)
 bundle exec rake db:seed                                   # dev data
 bundle exec rails s
 ```

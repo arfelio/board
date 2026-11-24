@@ -97,24 +97,41 @@ describe "admin add and manage users pages" do
       specify { expect(user.reload.address).to  eq new_address }
     end
   end
-  # describe "delete user action" do
-  #   let(:adminuser) { FactoryGirl.create(:admin) }
-  #   let(:user) { FactoryGirl.create(:user) }
-  #   before do
-  #     login_as(adminuser, scope: :user)
-  #     visit user_path(user)
-  #   end
-  #   after(:each) { Warden.test_reset! }
+  describe "deleting a user from the users list" do
+    let(:adminuser) { FactoryGirl.create(:admin) }
+    let!(:user) { FactoryGirl.create(:user) }
+    let!(:advertisement) { FactoryGirl.create(:advertisement, user: user) }
+    let(:delete_link) { "a[href='#{user_path(user)}'][data-method='delete']" }
+    after(:each) { Warden.test_reset! }
 
-  #   it "should delete user" do
-  #     expect{ click_link('Delete user')  }.to change(User,:count).by(-1)
-  #   end
-  #   describe "after user delete" do
-  #     before { click_link("Delete user") }
+    describe "as admin" do
+      before do
+        login_as(adminuser, scope: :user)
+        visit users_path
+      end
 
-  #     it { should have_content("User deleted.")}
-  #   end
-  # end
+      it "deletes the user and their advertisements" do
+        expect { find(delete_link).click }.to change(User, :count).by(-1)
+        expect(Advertisement.where(user_id: user.id)).to be_empty
+      end
+
+      describe "after deleting" do
+        before { find(delete_link).click }
+
+        it { should have_content("User deleted.") }
+        it { should_not have_content(user.full_name) }
+      end
+    end
+
+    describe "as a regular user" do
+      before do
+        login_as(FactoryGirl.create(:user), scope: :user)
+        visit users_path
+      end
+
+      it { should_not have_selector(delete_link) }
+    end
+  end
 end
 
 
