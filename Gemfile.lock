@@ -148,8 +148,10 @@ GEM
     globalid (1.4.0)
       activesupport (>= 6.1)
     gmaps4rails (2.1.2)
-    haml (5.2.2)
-      temple (>= 0.8.0)
+    haml (7.5.2)
+      prism (>= 1.1.0)
+      temple (>= 0.8.2)
+      thor
       tilt
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
@@ -367,7 +369,7 @@ DEPENDENCIES
   faker
   geocoder (~> 1.8)
   gmaps4rails
-  haml (~> 5.2)
+  haml (~> 7.5)
   jbuilder (~> 2.5)
   jquery-rails
   mini_magick (~> 5.0)
