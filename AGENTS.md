@@ -4,7 +4,7 @@ Message board app: users post advertisements (with images) in categories, others
 
 ## Stack
 
-- Ruby **2.4.10** (`.ruby-version`), Rails **4.2.11.3**, Bundler **1.17.3**
+- Ruby **2.4.10** (`.ruby-version`), Rails **5.0.7.2**, Bundler **1.17.3**
 - SQLite everywhere, production included (decided: no PostgreSQL)
 - Views: Haml + Bootstrap 2 (`bootstrap-sass`), CoffeeScript, Sprockets
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan (`app/models/ability.rb`) + rolify
@@ -27,9 +27,9 @@ bundle _1.17.3_ install
 ## Commands
 
 ```sh
-RAILS_ENV=test bundle exec rake db:create db:schema:load   # prepare test DB
+RAILS_ENV=test bin/rails db:create db:schema:load          # prepare test DB
 bundle exec rspec                                          # full suite (207 examples, 2 pending placeholders)
-bundle exec rake db:seed                                   # dev data
+bin/rails db:seed                                          # dev data
 bundle exec rails s
 ```
 
@@ -44,8 +44,10 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 
 ## Gotchas
 
-- **Gem pins in the Gemfile are deliberate** (`nokogiri ~> 1.10.10`, `rails-html-sanitizer < 1.5`, `loofah < 2.19`, `tilt ~> 2.0.11`, `rake < 11`). They are the last versions that work with Ruby 2.4 / haml 5 / rspec-rails 2.99. Lift them only together with the Ruby/Rails bump that allows it.
-- Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` in Rails 4.2.
+- **Gem pins in the Gemfile are deliberate** (`nokogiri ~> 1.10.10`, `rails-html-sanitizer < 1.5`, `loofah < 2.19`, `tilt ~> 2.0.11`). They are the last versions that work with Ruby 2.4 / haml 5. Lift them only together with the Ruby/Rails bump that allows it.
+- Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` (join rows get saved twice).
+- `config/initializers/new_framework_defaults.rb` keeps Rails 4.2 behaviour for the new Rails 5.0 settings (e.g. `belongs_to` is not required). Flip them one at a time, each with a green CI run.
+- A database created under Rails 4.2 needs `bin/rails db:environment:set RAILS_ENV=<env>` once before `db:schema:load` works.
 - `db/schema.rb` is generated; don't hand-edit or lint it.
 - `therubyracer` was removed on purpose; ExecJS uses Node.js.
 - Secrets live in environment variables: `.env` locally (git-ignored, loaded by dotenv-rails), see `.env.example`. `SECRET_KEY_BASE` is read via `config/secrets.yml` (test has a fixed non-secret value, so CI needs no `.env`); Devise falls back to it. Never commit real secrets.

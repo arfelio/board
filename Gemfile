@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.2.11.3'
+gem 'rails', '~> 5.0.7'
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
-gem 'devise', '~> 3.5'
+gem 'devise', '~> 4.7'
 gem "haml"
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'will_paginate', '3.1.6'
@@ -17,6 +17,7 @@ group :test do
   gem 'factory_bot_rails', '~> 5.2'
   gem 'shoulda-matchers', '~> 3.1'
   gem 'database_cleaner'
+  gem 'rails-controller-testing' # assigns / assert_template, extracted in Rails 5
 end
 
 
@@ -39,7 +40,7 @@ gem 'RedCloth'
 gem 'uglifier', '>= 1.3.0'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.1'
+gem 'coffee-rails', '~> 4.2'
 gem "faker"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # therubyracer removed: libv8 3.16 does not build on arm64; ExecJS uses Node.js instead
@@ -51,11 +52,11 @@ gem 'jquery-rails'
 gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder', '~> 2.5'
 
 
 
-gem 'rake', '< 11.0'
+gem 'rake', '>= 12.3.3'
 
 # group :test do
 #   gem 'simplecov-rcov'
@@ -66,9 +67,6 @@ gem 'rake', '< 11.0'
 #   gem 'shoulda-matchers'
 #   gem 'test-unit'
 # end
-group :production do
-  gem 'rails_12factor', '0.0.2'
-end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 

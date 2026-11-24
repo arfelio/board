@@ -22,7 +22,7 @@ class CommentsController < ApplicationController
   def update
     @comment = Comment.find(params[:id])
     @advertisement = Advertisement.find(@comment.advertisement_id)
-    if @comment.update_attributes(comment_params)
+    if @comment.update(comment_params)
       flash[:notice] = "Comment updated"
       redirect_to @advertisement
     else
@@ -35,7 +35,7 @@ class CommentsController < ApplicationController
     respond_to do |format|
       if @comment.destroy
         flash[:notice] = "Comment deleted."
-        format.html { redirect_to :back }
+        format.html { redirect_back fallback_location: advertisements_path }
         format.js
       end
     end

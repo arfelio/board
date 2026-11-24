@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** Stage 0 done. Next: Stage 1 (Rails 4.2 → 5.0). Current versions: Rails 4.2.11.3, Ruby 2.4.10.
+**Status:** Stage 1 done (Rails 5.0.7.2, Ruby 2.4.10). Next: the Stage 1 follow-ups below, then Stage 2 (Rails 5.1, Ruby 2.5).
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -28,8 +28,8 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 
 | # | Rails | Ruby | Main work |
 |---|---|---|---|
-| 1 | 4.2 → 5.0 | 2.4 | `ApplicationRecord` base class; `before_filter` → `before_action` and `update_attributes` → `update` (advertisements, comments, users and registrations controllers); `belongs_to` required by default; `params` is no longer a Hash; Devise 4.x; `rake` 12.3.3+, which fixes the rake advisory, so drop the `rake < 11` pin; `bin/rails` replaces `rake` for app commands |
-| 2 | 5.0 → 5.1 | 2.5 | Drop the `nokogiri` / `rails-html-sanitizer` / `loofah` / `tilt` pins; Bundler 2 |
+| 1 ✅ | 4.2 → 5.0 | 2.4 | `ApplicationRecord` base class; `before_filter` → `before_action` and `update_attributes` → `update` (advertisements, comments, users and registrations controllers); `belongs_to` required by default; `params` is no longer a Hash; Devise 4.x; `rake` 12.3.3+, which fixes the rake advisory, so drop the `rake < 11` pin; `bin/rails` replaces `rake` for app commands |
+| 2 | 5.0 → 5.1 | 2.5 | Drop the `nokogiri` / `rails-html-sanitizer` / `loofah` / `tilt` pins; Bundler 2; `shoulda-matchers` 4 (removes the `#tables` deprecation) |
 | 3 | 5.1 → 5.2 | 2.6 | Encrypted credentials (`config/credentials.yml.enc`) replace `secret_token.rb`; `bootsnap` |
 | 4 | 5.2 → 6.0 | 2.7 | **Zeitwerk autoloader**: file and constant names must match (check `app/controllers/users/`, `concerns`); fix the Ruby 2.7 keyword-argument warnings now |
 | 5 | 6.0 → 6.1 | **3.0** | **Ruby 3 keyword arguments** (the warnings from stage 4 become errors); gem updates that require Ruby 3 |
@@ -38,6 +38,12 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 | 8 | 7.1 → 7.2 | 3.3 | Rails 7.2 requires Ruby 3.1+ |
 | 9 | 7.2 → 8.0 | 3.4 | Rails 8 requires Ruby 3.2+; Solid Queue / Solid Cache / Propshaft are optional |
 | 10 | 8.0 → 8.1 | **4.0** | Final target. Check Ruby 4.0 support across all gems; stay on 3.4 if anything blocks |
+
+### Stage 1 follow-ups
+
+- [ ] Flip each setting in `config/initializers/new_framework_defaults.rb` to the Rails 5.0 value, one per PR or commit (`belongs_to_required_by_default` needs every `belongs_to` checked), then delete the file.
+- [ ] Remove the precompiled assets committed in 2014 (`public/assets/`, Sprockets 2 format) and add `/public/assets` to `.gitignore`; production should precompile on deploy.
+- [ ] Set `config.action_mailer.default_url_options` in `production.rb` once the domain is known (password reset emails need it).
 
 ## Gem replacements
 
