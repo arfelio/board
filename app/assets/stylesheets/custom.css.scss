@@ -1,21 +1,44 @@
 @import "bootstrap";
+
 .thumbtext {
   max-width: 200px;
-  word-break:  break-all;
+  word-break: break-all;
 }
+
+// Forms keep roughly the width Bootstrap 2's fixed-size inputs had
+.form-narrow {
+  max-width: 32rem;
+}
+
+// Rails wraps invalid fields in div.field_with_errors; style them like Bootstrap's invalid inputs
+.field_with_errors {
+  display: contents;
+
+  .form-control,
+  .form-select {
+    @extend .is-invalid;
+  }
+
+  label {
+    color: $danger;
+  }
+}
+
+// Sticky footer
 html {
   position: relative;
   min-height: 100%;
 }
+
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
 #footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */
   height: 60px;
-  background-color: #f5f5f5;
 }

@@ -1,9 +1,8 @@
--if object.errors.any?
-  %div#error_explanation
-    %div.alert.alert-error
-      %p The form contains
+- if object.errors.any?
+  #error_explanation.alert.alert-danger
+    %p.mb-1
+      The form contains
       = pluralize(object.errors.count, "error")
-      %ul
-        -object.errors.full_messages.each do |msg|
-          %li= msg
-
+    %ul.mb-0
+      - object.errors.full_messages.each do |msg|
+        %li= msg

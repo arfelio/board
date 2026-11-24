@@ -1,18 +1,15 @@
 !!!
-%html
-	%head
-		%title Board
-		= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
-		= javascript_include_tag "application", "data-turbolinks-track" => true
-		= csrf_meta_tags
-	%body
-		=render "layouts/header"
-		.container
-			=render "layouts/alertdiv"
-			= yield
-		= render "layouts/footer"
-
-
-
-
-
+%html{lang: "en"}
+  %head
+    %meta{charset: "utf-8"}
+    %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
+    %title Board
+    = stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
+  %body
+    = render "layouts/header"
+    .container
+      = render "layouts/alertdiv"
+      = yield
+    = render "layouts/footer"

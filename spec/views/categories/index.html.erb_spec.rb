@@ -11,6 +11,6 @@ describe "categories/index" do
   it "renders a list of categories" do
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "ul li .thumbnail", 2
+    assert_select "ul.list-group li.list-group-item", 2
   end
 end

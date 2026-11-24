@@ -47,13 +47,13 @@ describe "advertisement index" do
     describe "with no matches" do
       before { visit advertisements_path(query: "piano") }
 
-      it { is_expected.not_to have_selector("li.span4") }
+      it { is_expected.not_to have_selector(".advertisement") }
     end
 
     describe "with LIKE wildcards in the query" do
       before { visit advertisements_path(query: "%") }
 
-      it { is_expected.not_to have_selector("li.span4") }
+      it { is_expected.not_to have_selector(".advertisement") }
     end
   end
 
@@ -63,13 +63,14 @@ describe "advertisement index" do
       visit advertisements_path
     end
 
-    it { is_expected.to have_selector("li.span4", count: 10) }
-    it { is_expected.to have_selector("div.pagination") }
+    it { is_expected.to have_selector(".advertisement", count: 10) }
+    it { is_expected.to have_selector("nav ul.pagination li.page-item.active", text: "1") }
+    it { is_expected.to have_link("2", href: advertisements_path(page: 2)) }
 
     describe "second page" do
       before { visit advertisements_path(page: 2) }
 
-      it { is_expected.to have_selector("li.span4", count: 1) }
+      it { is_expected.to have_selector(".advertisement", count: 1) }
     end
   end
 

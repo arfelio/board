@@ -1,7 +1,7 @@
-%div.container
-	= form_for @comment do |f|
-		= render 'shared/error_messages', object: f.object
-		%p=f.label :content
-		=f.text_area :content
-		%br
-		= f.submit 'Update comment',:class=>"btn btn-primary"
+.form-narrow
+  = form_for @comment do |f|
+    = render 'shared/error_messages', object: f.object
+    .mb-3
+      = f.label :content, class: "form-label"
+      = f.text_area :content, class: "form-control", rows: 4
+    = f.submit 'Update comment', class: "btn btn-primary"
