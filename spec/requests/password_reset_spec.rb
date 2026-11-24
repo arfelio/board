@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "password reset" do
   subject { page }
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
 
   before do
     ActionMailer::Base.deliveries.clear

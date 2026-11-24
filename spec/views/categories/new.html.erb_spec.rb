@@ -2,9 +2,7 @@ require 'spec_helper'
 
 describe "categories/new" do
   before(:each) do
-    assign(:category, stub_model(Category,
-      :title => "MyString"
-    ).as_new_record)
+    assign(:category, Category.new(title: "MyString"))
   end
 
   it "renders new category form" do

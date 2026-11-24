@@ -2,9 +2,7 @@ require 'spec_helper'
 
 describe "categories/edit" do
   before(:each) do
-    @category = assign(:category, stub_model(Category,
-      :title => "MyString"
-    ))
+    @category = assign(:category, Category.create!(title: "MyString"))
   end
 
   it "renders the edit category form" do

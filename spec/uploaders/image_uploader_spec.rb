@@ -7,7 +7,7 @@ require 'carrierwave/test/matchers'
 describe ImageUploader do
   include CarrierWave::Test::Matchers
 
-  let(:advertisement) { FactoryGirl.create(:advertisement) }
+  let(:advertisement) { FactoryBot.create(:advertisement) }
   let(:uploader)      { ImageUploader.new(advertisement, :image) }
   let(:fixture)       { Rails.root.join('spec/fixtures/files/image.jpg') } # 800x531
 

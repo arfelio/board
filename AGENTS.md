@@ -9,7 +9,7 @@ Message board app: users post advertisements (with images) in categories, others
 - Views: Haml + Bootstrap 2 (`bootstrap-sass`), CoffeeScript, Sprockets
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan (`app/models/ability.rb`) + rolify
 - Uploads: CarrierWave + MiniMagick (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
-- Tests: RSpec **2.99** (old `should` syntax), Capybara 2.1 (rack_test, no JS driver), FactoryGirl
+- Tests: RSpec **3.9** (`expect` / `is_expected` syntax), Capybara 2.18 (rack_test, no JS driver), FactoryBot 5, shoulda-matchers 3.1
 
 An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and update its status line when a stage lands.
 

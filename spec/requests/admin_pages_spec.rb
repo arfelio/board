@@ -12,11 +12,11 @@ describe "admin add and manage users pages" do
         visit new_user_path 
       }
 
-      it { should have_content("You are not authorized to access this page") }
-      it { should have_content("Advertisements") }
+      it { is_expected.to have_content("You are not authorized to access this page") }
+      it { is_expected.to have_content("Advertisements") }
     end
     describe "when admin visit new page" do
-      let(:adminuser) { FactoryGirl.create(:admin) }
+      let(:adminuser) { FactoryBot.create(:admin) }
 
       before do
         login_as(adminuser, scope: :user)
@@ -24,7 +24,7 @@ describe "admin add and manage users pages" do
       end
       after(:each) { Warden.test_reset! }
 
-      it { should have_content("Fill form to create new user") }
+      it { is_expected.to have_content("Fill form to create new user") }
 
       describe "with invalid info" do
         before { click_button "Create" }
@@ -33,7 +33,7 @@ describe "admin add and manage users pages" do
           expect { click_button "Create" }.not_to change(User, :count)
         end
 
-        it { should have_selector("div.field_with_errors") }
+        it { is_expected.to have_selector("div.field_with_errors") }
       end
       describe "with valid info" do
         before do
@@ -58,29 +58,29 @@ describe "admin add and manage users pages" do
           before { click_button "Create" }
           let(:user) { User.find_by(email: 'user@example.com') }
 
-          it { should have_content("Success user created") }
-          it { should have_content(user.login) }
-          it { should have_content(user.address) }
+          it { is_expected.to have_content("Success user created") }
+          it { is_expected.to have_content(user.login) }
+          it { is_expected.to have_content(user.address) }
           # it { should have_link("Delete user")}
         end
       end
     end
   end
   describe "edit page" do
-    let(:adminuser) { FactoryGirl.create(:admin) }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:adminuser) { FactoryBot.create(:admin) }
+    let(:user) { FactoryBot.create(:user) }
     before do
       login_as(adminuser, scope: :user)
       visit edit_user_path(user)
     end
     after(:each) { Warden.test_reset! }
 
-    it { should have_content("Edit")}
+    it { is_expected.to have_content("Edit")}
     describe "with invalid information" do
       before { fill_in "Address", with:"" }
       before { click_button "Update" }
 
-      it { should have_selector("div.field_with_errors") }
+      it { is_expected.to have_selector("div.field_with_errors") }
     end
     describe "with valid information" do
       let(:new_address)  { "New Address" }
@@ -92,15 +92,15 @@ describe "admin add and manage users pages" do
         click_button "Update"
       end
 
-      it { should have_content("Profile updated") }
+      it { is_expected.to have_content("Profile updated") }
       specify { expect(user.reload.login).to  eq new_login }
       specify { expect(user.reload.address).to  eq new_address }
     end
   end
   describe "deleting a user from the users list" do
-    let(:adminuser) { FactoryGirl.create(:admin) }
-    let!(:user) { FactoryGirl.create(:user) }
-    let!(:advertisement) { FactoryGirl.create(:advertisement, user: user) }
+    let(:adminuser) { FactoryBot.create(:admin) }
+    let!(:user) { FactoryBot.create(:user) }
+    let!(:advertisement) { FactoryBot.create(:advertisement, user: user) }
     let(:delete_link) { "a[href='#{user_path(user)}'][data-method='delete']" }
     after(:each) { Warden.test_reset! }
 
@@ -118,18 +118,18 @@ describe "admin add and manage users pages" do
       describe "after deleting" do
         before { find(delete_link).click }
 
-        it { should have_content("User deleted.") }
-        it { should_not have_content(user.full_name) }
+        it { is_expected.to have_content("User deleted.") }
+        it { is_expected.not_to have_content(user.full_name) }
       end
     end
 
     describe "as a regular user" do
       before do
-        login_as(FactoryGirl.create(:user), scope: :user)
+        login_as(FactoryBot.create(:user), scope: :user)
         visit users_path
       end
 
-      it { should_not have_selector(delete_link) }
+      it { is_expected.not_to have_selector(delete_link) }
     end
   end
 end

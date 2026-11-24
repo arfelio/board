@@ -13,17 +13,16 @@ gem 'bootstrap-will_paginate', '0.0.9'
 group :test do
   gem 'simplecov-rcov'
   gem 'simplecov', '~> 0.16.1',:require => false
-  gem 'capybara', '2.1.0'
-  gem 'factory_girl_rails', '4.2.1'
-  gem 'shoulda-matchers'
-  gem 'test-unit'
+  gem 'capybara', '~> 2.18'
+  gem 'factory_bot_rails', '~> 5.2'
+  gem 'shoulda-matchers', '~> 3.1'
   gem 'database_cleaner'
 end
 
 
 group :development, :test do
   gem 'pry-rails'
-  gem 'rspec-rails', '2.99'
+  gem 'rspec-rails', '~> 3.9'
 end
 gem "geocoder"
 gem 'gmaps4rails'

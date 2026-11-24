@@ -10,12 +10,12 @@ describe "advertisement pages" do
       before do 
         visit new_advertisement_path
       end
-      it { should have_content("You are not authorized to access this page.") }
-      it { should have_content("Advertisements") }
+      it { is_expected.to have_content("You are not authorized to access this page.") }
+      it { is_expected.to have_content("Advertisements") }
     end
     
     describe "when user logged in"  do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
 
       before do
         login_as(user, scope: :user)
@@ -23,7 +23,7 @@ describe "advertisement pages" do
       end
       after(:each) { Warden.test_reset! }
 
-      it { should have_content("Fill the form to add your advertisement")}
+      it { is_expected.to have_content("Fill the form to add your advertisement")}
 
       describe "with invalid info" do
         before { click_button "Create" }
@@ -32,7 +32,7 @@ describe "advertisement pages" do
           expect { click_button "Create" }.not_to change(Advertisement, :count)
         end
 
-        it { should have_selector("div.field_with_errors") }
+        it { is_expected.to have_selector("div.field_with_errors") }
       end
 
       describe "with valid information" do
@@ -50,9 +50,9 @@ describe "advertisement pages" do
           before { click_button "Create" }
           let(:advertisement) { Advertisement.where(content: 'Lorem ipsum') }
 
-          it { should have_content("Lorem ipsum") }
-          it { should have_selector('div.alert.alert-success', text: 'Success!') }
-          it { should have_selector("img") }
+          it { is_expected.to have_content("Lorem ipsum") }
+          it { is_expected.to have_selector('div.alert.alert-success', text: 'Success!') }
+          it { is_expected.to have_selector("img") }
         end
       end
     end
@@ -60,23 +60,23 @@ describe "advertisement pages" do
 
 
   describe "page edit" do
-    # let(:user) { FactoryGirl.create(:user) }
-    # let(:advertisement) { FactoryGirl.create(:advertisement,user: user) }
+    # let(:user) { FactoryBot.create(:user) }
+    # let(:advertisement) { FactoryBot.create(:advertisement,user: user) }
     before do
-      user = FactoryGirl.create(:user) 
-      advertisement =FactoryGirl.create(:advertisement,user: user) 
+      user = FactoryBot.create(:user) 
+      advertisement =FactoryBot.create(:advertisement,user: user) 
       login_as(user, scope: :user)
       visit edit_advertisement_path(advertisement)
     end
 
-    it { should have_button("Update") }
-    it { should have_content("Edit advertisement")}
+    it { is_expected.to have_button("Update") }
+    it { is_expected.to have_content("Edit advertisement")}
     describe "with invalid info" do
       before do
         fill_in "Content", with: ""
         click_button "Update"
       end
-      it { should have_selector("div.field_with_errors") }
+      it { is_expected.to have_selector("div.field_with_errors") }
     end
     describe "with valid info" do
       before do
@@ -85,15 +85,15 @@ describe "advertisement pages" do
         click_button "Update"
       end
 
-      it { should have_content("Lorem ipsum new")}
+      it { is_expected.to have_content("Lorem ipsum new")}
     end
   end
   describe "destroy action in show page" do
-    # let(:user) { FactoryGirl.create(:user) }
-    # let(:advertisement) { FactoryGirl.create(:advertisement,user: user) }
+    # let(:user) { FactoryBot.create(:user) }
+    # let(:advertisement) { FactoryBot.create(:advertisement,user: user) }
     before do
-      user = FactoryGirl.create(:user) 
-      advertisement =FactoryGirl.create(:advertisement,user: user) 
+      user = FactoryBot.create(:user) 
+      advertisement =FactoryBot.create(:advertisement,user: user) 
       login_as(user, scope: :user)
       visit advertisement_path(advertisement)
     end
@@ -104,7 +104,7 @@ describe "advertisement pages" do
     describe "after deleting advertisement" do
       before { click_link("Delete advertisement") }
 
-      it { should have_content("Advertisement deleted")}
+      it { is_expected.to have_content("Advertisement deleted")}
     end
   end
 end

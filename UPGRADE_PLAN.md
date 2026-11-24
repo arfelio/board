@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** Stage 0 not started. Current versions: Rails 4.2.11.3, Ruby 2.4.10.
+**Status:** Stage 0 done. Next: Stage 1 (Rails 4.2 → 5.0). Current versions: Rails 4.2.11.3, Ruby 2.4.10.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -20,11 +20,7 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 
 - [x] **Remove hardcoded secrets.** `secret_key_base` now comes from `SECRET_KEY_BASE` (`.env` locally), and a new value was generated. The Facebook app was deactivated by Facebook, so Facebook login was removed instead of resetting its secret.
 - [x] **Add tests for the main flows** before changing anything else: sign up and log in, creating, editing and deleting ads with an image upload, comments, pagination, and the permissions of each role (admin / moderator / user / guest, per `app/models/ability.rb`).
-- [ ] Update the test tools:
-  - `rspec-rails` 2.99 → 3.9 (use `transpec` to convert `should` to `expect`); then replace `spec/support/ability_matchers.rb` with `require "cancan/matchers"`
-  - `factory_girl_rails` → `factory_bot_rails`
-  - `capybara` 2.1 → 2.18
-  - `shoulda-matchers`: pin a version that works with Rails 4.2
+- [x] Update the test tools: `rspec-rails` 3.9 (specs converted with `transpec`), `factory_bot_rails` 5.2, `capybara` 2.18, `shoulda-matchers` pinned to `~> 3.1`.
 - [x] Production database: **SQLite** (decided). `config/database.yml` production now uses SQLite; deploying it needs a persistent disk for `db/` and `public/uploads`. Rails 8 (stage 9) adds the tooling for SQLite in production.
 - [x] Replace `rmagick` with `mini_magick`. Only the ImageMagick CLI is needed now (6 or 7), with no native gem build.
 
@@ -50,7 +46,7 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | Current | Replace with | Deadline | Notes |
 |---|---|---|---|
 | ~~`rmagick` 2.16~~ | `mini_magick` | Stage 0 | **Done** |
-| `rspec-rails` 2.99, `factory_girl_rails` | `rspec-rails` 3.9 → latest, `factory_bot_rails` | Stage 0 | |
+| ~~`rspec-rails` 2.99, `factory_girl_rails`~~ | `rspec-rails` 3.9, `factory_bot_rails` 5.2 | Stage 0 | **Done.** Move on to `rspec-rails` 4+ / FactoryBot 6 once on Rails 5+ / Ruby 2.5+ |
 | `devise` 3.5 | 4.x, then the latest | Stage 1 | |
 | `carrierwave` 0.10 | CarrierWave 3.x, or Active Storage | Stage 4 | Active Storage needs a data migration for existing uploads |
 | `sass` / `sass-rails` (Ruby Sass is discontinued) | `dartsass-rails` or `sassc-rails` | Stage 6 | |
