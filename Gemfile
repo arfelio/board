@@ -7,7 +7,7 @@ gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 4.7'
 gem 'haml', '~> 5.2'
-gem 'bootstrap-sass', '2.3.2.0'
+gem 'bootstrap-sass', '3.4.1'
 gem 'will_paginate', '~> 3.3'
 gem 'mail', '~> 2.7.1' # 2.8+ adds net-* gems that clash with the stdlib before Ruby 3.1; lift at Ruby 3.1
 gem 'concurrent-ruby', '1.3.4' # 1.3.5+ no longer requires logger, which breaks Rails < 7.1 at boot
