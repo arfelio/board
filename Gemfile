@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.2.3'
+gem 'rails', '~> 8.0.3'
 gem 'sprockets-rails' # Rails 7 no longer adds the asset pipeline by default
 gem 'puma', '~> 6.4' # Ruby 3 no longer ships WEBrick
 gem 'bootsnap', '~> 1.4', require: false
@@ -9,7 +9,7 @@ gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 4.7'
 gem 'haml', '~> 5.2'
 gem 'bootstrap', '~> 5.3'
-gem 'will_paginate', '~> 3.3'
+gem 'will_paginate', '~> 4.0'
 # Use sqlite3 as the database for Active Record
 
 group :test do
@@ -33,7 +33,7 @@ gem 'coffee-script' # compiles gmaps4rails's CoffeeScript assets; remove togethe
 gem 'carrierwave', '~> 2.2'
 # gem 'cloudinary'
 gem 'mini_magick', '~> 4.9'
-gem 'sqlite3', '~> 1.4'
+gem 'sqlite3', '~> 2.1'
 gem 'cancancan', '~> 3.5'
 gem 'rolify', '~> 6.0'
 # Use SCSS for stylesheets
