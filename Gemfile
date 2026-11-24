@@ -29,7 +29,7 @@ group :development, :test do
 end
 gem "geocoder"
 gem 'gmaps4rails'
-gem 'carrierwave', '0.10.0'
+gem 'carrierwave', '1.3.2'
 # gem 'cloudinary'
 gem 'mini_magick', '~> 4.9'
 gem 'sqlite3', '~> 1.3.13'
