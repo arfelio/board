@@ -13,7 +13,6 @@ gem 'bootstrap-will_paginate', '0.0.9'
 group :test do
   gem 'simplecov-rcov'
   gem 'simplecov', '~> 0.16.1',:require => false
-  gem 'selenium-webdriver', '2.35.1'
   gem 'capybara', '2.1.0'
   gem 'factory_girl_rails', '4.2.1'
   gem 'shoulda-matchers'
@@ -59,10 +58,6 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'rake', '< 11.0'
 
-group :doc do
-  # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
-end
 # group :test do
 #   gem 'simplecov-rcov'
 #   gem 'simplecov', '~> 0.9.0',:require => false
@@ -89,6 +84,6 @@ end
 
 # Ruby 2.4 caps nokogiri at 1.10.x; newer sanitizer/loofah releases need Nokogiri::HTML4 (nokogiri >= 1.12)
 gem 'nokogiri', '~> 1.10.10'
-gem 'rails-html-sanitizer', '< 1.5'
 gem 'loofah', '< 2.19'
-gem 'tilt', '~> 2.0.11'  # haml 5.0 needs Tilt::ErubisTemplate, removed in later tilt
+gem 'rails-html-sanitizer', '< 1.5'
+gem 'tilt', '~> 2.0.11' # haml 5.0 needs Tilt::ErubisTemplate, removed in later tilt
