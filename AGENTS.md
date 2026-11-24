@@ -4,7 +4,7 @@ Message board app: users post advertisements (with images) in categories, others
 
 ## Stack
 
-- Ruby **2.5.9** (`.ruby-version`), Rails **5.1.7**, Bundler **2.3.27** (the last Bundler that supports Ruby 2.5)
+- Ruby **2.6.10** (`.ruby-version`), Rails **5.2.8.1**, Bundler **2.3.27**
 - SQLite everywhere, production included (decided: no PostgreSQL)
 - Views: Haml + Bootstrap 2 (`bootstrap-sass`), CoffeeScript, Sprockets
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan (`app/models/ability.rb`) + rolify
@@ -16,7 +16,7 @@ An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and
 ## Setup (Apple Silicon)
 
 ```sh
-CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 2.5.9
+CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 2.6.10
 gem install bundler -v 2.3.27
 brew install imagemagick                                  # CLI used by mini_magick (ImageMagick 6 or 7)
 cp .env.example .env               # then fill in values (see Gotchas)
@@ -44,7 +44,7 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 
 ## Gotchas
 
-- **Gem pins in the Gemfile are deliberate**: `factory_bot_rails ~> 6.2.0` (factory_bot 6.4+ uses Ruby 2.7 syntax although its gemspec claims 2.5) and `database_cleaner ~> 1.8` (older versions truncate `ar_internal_metadata`, which breaks `db:schema:load` after a spec run). Some gems declare a lower `required_ruby_version` than they really need, so after a `bundle update` always run the suite.
+- **Gem pins in the Gemfile are deliberate**: `factory_bot_rails ~> 6.2.0` (factory_bot 6.4+ uses Ruby 2.7 syntax although its gemspec claims 2.5), `database_cleaner ~> 1.8` (older versions truncate `ar_internal_metadata`, which breaks `db:schema:load` after a spec run) and `mail ~> 2.7.1` (2.8+ pulls in net-* gems that clash with the Ruby standard library before Ruby 3.1). Some gems declare a lower `required_ruby_version` than they really need, so after a `bundle update` always run the suite.
 - Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` (join rows get saved twice).
 - Framework defaults come from `config.load_defaults` in `config/application.rb`. Don't put framework settings in `config/initializers/`: gems load ActiveRecord/ActionController before initializers run, so those values are silently ignored. `belongs_to` is required by default; optional associations say `optional: true`.
 - Ad images are optional: guard `image_tag` with `if ….image.present?` (since Rails 5.1, `image_tag(nil)` raises).
