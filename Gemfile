@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.1.5'
+gem 'rails', '~> 7.2.3'
 gem 'sprockets-rails' # Rails 7 no longer adds the asset pipeline by default
 gem 'puma', '~> 6.4' # Ruby 3 no longer ships WEBrick
 gem 'bootsnap', '~> 1.4', require: false
@@ -17,7 +17,7 @@ group :test do
   gem 'simplecov', '~> 0.16.1',:require => false
   gem 'capybara', '~> 3.39'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'shoulda-matchers', '~> 5.3'
+  gem 'shoulda-matchers', '~> 6.4'
   gem 'database_cleaner-active_record', '~> 2.1'
   gem 'rails-controller-testing' # assigns / assert_template, extracted in Rails 5
 end
@@ -25,7 +25,7 @@ end
 
 group :development, :test do
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 6.1'
+  gem 'rspec-rails', '~> 7.1'
 end
 gem 'geocoder', '~> 1.8'
 gem 'gmaps4rails'

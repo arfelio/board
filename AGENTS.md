@@ -4,19 +4,19 @@ Message board app: users post advertisements (with images) in categories, others
 
 ## Stack
 
-- Ruby **3.2.11** (`.ruby-version`), Rails **7.1.6** (Zeitwerk autoloader), Bundler **2.3.27**, Puma
+- Ruby **3.3.13** (`.ruby-version`), Rails **7.2.4** (Zeitwerk autoloader), Bundler **2.3.27**, Puma
 - SQLite everywhere, production included (decided: no PostgreSQL)
 - Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), jQuery + `jquery_ujs` (remote forms, `method: :delete` links), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
 - Uploads: CarrierWave 2 + MiniMagick (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
-- Tests: rspec-rails **6.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test, no JS driver), FactoryBot 6.4, shoulda-matchers 5.3
+- Tests: rspec-rails **7.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test, no JS driver), FactoryBot 6.4, shoulda-matchers 6.5
 
 An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and update its status line when a stage lands.
 
 ## Setup (Apple Silicon)
 
 ```sh
-CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 3.2.11
+CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 3.3.13
 gem install bundler -v 2.3.27
 brew install imagemagick                                  # CLI used by mini_magick (ImageMagick 6 or 7)
 cp .env.example .env               # then fill in values (see Gotchas)
@@ -51,6 +51,7 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 - Zeitwerk loads `app/`: each file must define the constant its path implies (`app/models/foo_bar.rb` → `FooBar`). Check with `bin/rails zeitwerk:check`.
 - Run the suite with `RUBYOPT=-W:deprecated` to see Ruby and Rails deprecation warnings; there are currently none.
 - Factories build uploads with `Rack::Test::UploadedFile`: since Rails 6.1, `fixture_file_upload` only works inside test cases, not in factories.
+- `config.load_defaults 7.2` turns on YJIT, but only if Ruby was built with it: rbenv/ruby-build include YJIT only when Rust (`brew install rust`) is installed at build time. Without it the setting does nothing.
 - If `ruby -rsocket -e 1` fails after building Ruby, an extension silently failed to compile; check the "Following extensions are not compiled" section of the ruby-build log.
 - Framework defaults come from `config.load_defaults` in `config/application.rb`. Don't put framework settings in `config/initializers/`: gems load ActiveRecord/ActionController before initializers run, so those values are silently ignored. `belongs_to` is required by default; optional associations say `optional: true`.
 - Bootstrap 5 markup: inputs need `form-control` / `form-select` / `form-check-input` (nothing is styled by default); wrap forms in `.form-narrow`. Flash keys map to alert colours in `ApplicationHelper#flash_alert_class` (each alert also gets a `flash-<key>` class, used by specs). Pagination goes through `BootstrapLinkRenderer` (`app/lib/`), applied by `ApplicationHelper#will_paginate`.
