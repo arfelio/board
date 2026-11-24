@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 7.0.8'
+gem 'rails', '~> 7.1.5'
 gem 'sprockets-rails' # Rails 7 no longer adds the asset pipeline by default
 gem 'puma', '~> 6.4' # Ruby 3 no longer ships WEBrick
 gem 'bootsnap', '~> 1.4', require: false
@@ -10,7 +10,6 @@ gem 'devise', '~> 4.7'
 gem 'haml', '~> 5.2'
 gem 'bootstrap', '~> 5.3'
 gem 'will_paginate', '~> 3.3'
-gem 'concurrent-ruby', '1.3.4' # 1.3.5+ no longer requires logger, which breaks Rails < 7.1 at boot
 # Use sqlite3 as the database for Active Record
 
 group :test do
@@ -19,7 +18,7 @@ group :test do
   gem 'capybara', '~> 3.39'
   gem 'factory_bot_rails', '~> 6.2'
   gem 'shoulda-matchers', '~> 5.3'
-  gem 'database_cleaner', '~> 1.8' # 1.8+ keeps ar_internal_metadata when truncating
+  gem 'database_cleaner-active_record', '~> 2.1'
   gem 'rails-controller-testing' # assigns / assert_template, extracted in Rails 5
 end
 

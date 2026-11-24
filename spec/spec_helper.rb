@@ -8,14 +8,14 @@ require 'devise'
 
 require 'shoulda-matchers'
 require 'capybara/rspec'
-require 'database_cleaner'
+require 'database_cleaner/active_record'
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
-ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+ActiveRecord::Migration.check_all_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
   # ## Mock Framework
@@ -36,7 +36,7 @@ RSpec.configure do |config|
   # config.mock_with :rr
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
   config.include Devise::Test::ControllerHelpers, :type => :controller
   config.extend ControllerMacros, :type => :controller
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
