@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    env:
+      RAILS_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ImageMagick 6 (for rmagick)
+        run: sudo apt-get update && sudo apt-get install -y libmagickwand-dev
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: .ruby-version
+          bundler: 1.17.3
+          bundler-cache: true
+
+      - name: Set up database
+        run: bundle exec rake db:create db:schema:load
+
+      - name: Run specs
+        run: bundle exec rspec
