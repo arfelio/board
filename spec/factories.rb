@@ -26,6 +26,8 @@ FactoryBot.define do
     image {fixture_file_upload('spec/fixtures/files/image.jpg', 'image/jpg')}
   end
   factory :comment do
+    user
+    advertisement
     content { "Lorem ipsum" }
   end
 end

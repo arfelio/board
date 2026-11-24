@@ -24,3 +24,6 @@ coverage
 
 # Local environment variables (secrets)
 /.env
+
+# Precompiled assets (built on deploy, never committed)
+/public/assets
