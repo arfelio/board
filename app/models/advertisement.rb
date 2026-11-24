@@ -9,8 +9,7 @@ class Advertisement < ApplicationRecord
   #validates :remote_image_url, presence: true, if: "image.blank?"
   validates :user, presence: true
   resourcify
-  #mount_uploader :content, ContentUploader
-  #serialize :content, JSON
+
   # Case-insensitive substring search on title and content. Plain LIKE so it
   # works on both SQLite (dev/test) and PostgreSQL; % and _ in the query are
   # matched literally.

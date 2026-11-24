@@ -74,6 +74,23 @@ describe "advertisement index" do
     end
   end
 
+  # With many pages will_paginate collapses the middle into a gap ("…"), which
+  # BootstrapLinkRenderer renders as a disabled page item.
+  describe "pagination with many pages" do
+    before do
+      now = Time.current
+      Advertisement.insert_all(
+        Array.new(125) { |n| { user_id: alice.id, content: "Bulk ad #{n}", created_at: now, updated_at: now } }
+      )
+      visit advertisements_path
+    end
+
+    it { is_expected.to have_selector("ul.pagination li.page-item.disabled span.page-link", text: "…") }
+    it { is_expected.to have_link("13", href: advertisements_path(page: 13)) }
+    # Page 1 of 13 shows 1–9, then the gap, then 12 and 13
+    it { is_expected.not_to have_link("11", href: advertisements_path(page: 11)) }
+  end
+
   # Images are optional, and Rails 5.1+ asset helpers are stricter about the path
   # they are given (assets.unknown_asset_fallback = false).
   describe "an advertisement without an image" do

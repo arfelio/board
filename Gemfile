@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 8.0.3'
+gem 'rails', '~> 8.1.4'
 gem 'sprockets-rails' # Rails 7 no longer adds the asset pipeline by default
 gem 'puma', '~> 6.4' # Ruby 3 no longer ships WEBrick
 gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
-gem 'devise', '~> 4.7'
+gem 'devise', '~> 5.0'
 gem 'haml', '~> 5.2'
 gem 'bootstrap', '~> 5.3'
 gem 'will_paginate', '~> 4.0'
@@ -30,9 +30,9 @@ end
 gem 'geocoder', '~> 1.8'
 gem 'gmaps4rails'
 gem 'coffee-script' # compiles gmaps4rails's CoffeeScript assets; remove together with gmaps4rails
-gem 'carrierwave', '~> 2.2'
+gem 'carrierwave', '~> 3.1'
 # gem 'cloudinary'
-gem 'mini_magick', '~> 4.9'
+gem 'mini_magick', '~> 5.0'
 gem 'sqlite3', '~> 2.1'
 gem 'cancancan', '~> 3.5'
 gem 'rolify', '~> 6.0'

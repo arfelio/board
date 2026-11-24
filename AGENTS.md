@@ -4,11 +4,11 @@ Message board app: users post advertisements (with images) in categories, others
 
 ## Stack
 
-- Ruby **3.4.12** (`.ruby-version`), Rails **8.0.5** (Zeitwerk autoloader), Bundler **2.6.9** (ships with Ruby 3.4), Puma
+- Ruby **4.0.9** (`.ruby-version`), Rails **8.1.4** (Zeitwerk autoloader), Bundler **4.0.20** (ships with Ruby 4.0), Puma
 - SQLite everywhere, production included (decided: no PostgreSQL)
 - Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), jQuery + `jquery_ujs` (remote forms, `method: :delete` links), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
-- Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
-- Uploads: CarrierWave 2 + MiniMagick (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
+- Auth: Devise 5 (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
+- Uploads: CarrierWave 3 + MiniMagick 5 (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
 - Tests: rspec-rails **7.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test, no JS driver), FactoryBot 6.4, shoulda-matchers 6.5
 
 An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and update its status line when a stage lands.
@@ -16,8 +16,8 @@ An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and
 ## Setup (Apple Silicon)
 
 ```sh
-CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 3.4.12
-gem install bundler -v 2.6.9   # already the default bundler of Ruby 3.4.12
+CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 4.0.9
+gem install bundler -v 4.0.20  # already the default bundler of Ruby 4.0.9
 brew install imagemagick                                  # CLI used by mini_magick (ImageMagick 6 or 7)
 cp .env.example .env               # then fill in values (see Gotchas)
 bundle install
@@ -28,7 +28,8 @@ bundle install
 
 ```sh
 RAILS_ENV=test bin/rails db:create db:schema:load          # prepare test DB
-bundle exec rspec                                          # full suite (214 examples, 2 pending placeholders)
+bundle exec rspec                                          # full suite (218 examples, 2 pending placeholders; 100% line coverage)
+bin/ci                                                     # setup + zeitwerk:check + specs with eager loading, like GitHub CI (config/ci.rb)
 bin/rails db:seed                                          # dev data
 bundle exec rails s
 ```
@@ -46,6 +47,7 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 
 - `coffee-script` is only there because `gmaps4rails` ships its JavaScript as CoffeeScript (`//= require gmaps/google`); the app itself has no CoffeeScript. Remove both together.
 - After changing gems or Sprockets config, clear `tmp/cache` if assets behave oddly (stale Sprockets 3 cache entries caused "not declared to be precompiled" errors during the Sprockets 4 move).
+- Ruby 4.0 moved more libraries (e.g. `benchmark`) out of the default install: if boot fails with "cannot load such file -- X", update the gem that requires X or add `gem "X"` to the Gemfile.
 - Some gems declare a lower `required_ruby_version` than they really need, so after a `bundle update` always run the suite.
 - Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` (join rows get saved twice).
 - Zeitwerk loads `app/`: each file must define the constant its path implies (`app/models/foo_bar.rb` → `FooBar`). Check with `bin/rails zeitwerk:check`.
