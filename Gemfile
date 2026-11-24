@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.7'
+gem 'rails', '~> 7.0.8'
+gem 'sprockets-rails' # Rails 7 no longer adds the asset pipeline by default
 gem 'puma', '~> 6.4' # Ruby 3 no longer ships WEBrick
 gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
@@ -9,16 +10,15 @@ gem 'devise', '~> 4.7'
 gem 'haml', '~> 5.2'
 gem 'bootstrap', '~> 5.3'
 gem 'will_paginate', '~> 3.3'
-gem 'mail', '~> 2.7.1' # 2.8+ adds net-* gems that clash with the stdlib before Ruby 3.1; lift at Ruby 3.1
 gem 'concurrent-ruby', '1.3.4' # 1.3.5+ no longer requires logger, which breaks Rails < 7.1 at boot
 # Use sqlite3 as the database for Active Record
 
 group :test do
   gem 'simplecov-rcov'
   gem 'simplecov', '~> 0.16.1',:require => false
-  gem 'capybara', '~> 2.18'
+  gem 'capybara', '~> 3.39'
   gem 'factory_bot_rails', '~> 6.2'
-  gem 'shoulda-matchers', '~> 4.5'
+  gem 'shoulda-matchers', '~> 5.3'
   gem 'database_cleaner', '~> 1.8' # 1.8+ keeps ar_internal_metadata when truncating
   gem 'rails-controller-testing' # assigns / assert_template, extracted in Rails 5
 end
@@ -26,10 +26,11 @@ end
 
 group :development, :test do
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 4.1'
+  gem 'rspec-rails', '~> 6.1'
 end
 gem 'geocoder', '~> 1.8'
 gem 'gmaps4rails'
+gem 'coffee-script' # compiles gmaps4rails's CoffeeScript assets; remove together with gmaps4rails
 gem 'carrierwave', '~> 2.2'
 # gem 'cloudinary'
 gem 'mini_magick', '~> 4.9'
@@ -39,11 +40,9 @@ gem 'rolify', '~> 6.0'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '~> 2.1' # replaces sass-rails 5 / Ruby Sass (discontinued)
 gem 'RedCloth'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+# Compresses JavaScript assets in production (replaces the unmaintained uglifier)
+gem 'terser', '~> 1.1'
 
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 5.0'
 gem "faker"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # therubyracer removed: libv8 3.16 does not build on arm64; ExecJS uses Node.js instead

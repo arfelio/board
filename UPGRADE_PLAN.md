@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** Stage 5 done (Rails 6.1.7.10, Ruby 3.0.7, `config.load_defaults 6.1`, no deprecation warnings). Bootstrap 2 → 5.3 done (with Sass now compiled by `sassc-rails`). Next: Stage 6 (Rails 7.0, Ruby 3.1). Secrets stay in `secrets.yml` + `ENV`; moving to encrypted credentials is deferred with the other production work.
+**Status:** Stage 6 done (Rails 7.0.10, Ruby 3.1.7, `config.load_defaults 7.0`, Sprockets 4, no deprecation warnings). Bootstrap 5.3 in place. Next: Stage 7 (Rails 7.1, Ruby 3.2). Secrets stay in `secrets.yml` + `ENV`; moving to encrypted credentials is deferred with the other production work.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -33,7 +33,7 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 | 3 ✅ | 5.1 → 5.2 | 2.6 | Encrypted credentials (`config/credentials.yml.enc`) replace `secret_token.rb`; `bootsnap` |
 | 4 ✅ | 5.2 → 6.0 | 2.7 | **Zeitwerk autoloader**: file and constant names must match (check `app/controllers/users/`, `concerns`); fix the Ruby 2.7 keyword-argument warnings now |
 | 5 ✅ | 6.0 → 6.1 | **3.0** | **Ruby 3 keyword arguments** (the warnings from stage 4 become errors); gem updates that require Ruby 3 |
-| 6 | 6.1 → 7.0 | 3.1 | Sprockets becomes optional: keep `sprockets-rails` explicitly; Turbolinks → Turbo is optional; CoffeeScript and the Sass replacement must be done by now (see below) |
+| 6 ✅ | 6.1 → 7.0 | 3.1 | Sprockets becomes optional: keep `sprockets-rails` explicitly; Turbolinks → Turbo is optional; CoffeeScript and the Sass replacement must be done by now (see below) |
 | 7 | 7.0 → 7.1 | 3.2 | Config defaults; `config.load_defaults 7.1` |
 | 8 | 7.1 → 7.2 | 3.3 | Rails 7.2 requires Ruby 3.1+ |
 | 9 | 7.2 → 8.0 | 3.4 | Rails 8 requires Ruby 3.2+; Solid Queue / Solid Cache / Propshaft are optional |
@@ -57,10 +57,10 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | `devise` 3.5 | 4.x, then the latest | Stage 1 | |
 | ~~`carrierwave` 0.10~~ | CarrierWave 2.2 (done in stage 4); 3.x later | Stage 4 | **Done**; existing uploads keep working. Active Storage would need a data migration |
 | ~~`sass` / `sass-rails`~~ | `sassc-rails` (done with Bootstrap 5) | Stage 6 | **Done.** libsass/sassc is deprecated too; move to Dart Sass (`dartsass-sprockets` or `dartsass-rails`) later |
-| `coffee-rails` (5 `.js.coffee` files) | Plain JavaScript | Stage 6 | `decaffeinate` can convert them |
-| `uglifier` | `terser`, or no minifier (Propshaft) | Stage 6 | |
+| ~~`coffee-rails`~~ | Plain JavaScript | Stage 6 | **Done**: the 4 `.js.coffee` files were empty and are deleted. `coffee-script` stays only for gmaps4rails |
+| ~~`uglifier`~~ | `terser` | Stage 6 | **Done** |
 | `jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks` | Current versions, or remove if unused | Stage 6 | |
-| `gmaps4rails`, `underscore-rails`, `RedCloth` | Check usage; remove or replace | Stage 6 | gmaps4rails is unmaintained |
+| `gmaps4rails`, `underscore-rails`, `RedCloth` | Check usage; remove or replace | Open | The user-page map loads Google Maps JS v3.13 without an API key and a marker library from googlecode.com (shut down), so it cannot render. Removing gmaps4rails also removes `underscore-rails` and `coffee-script`. Decision pending |
 | `haml` 5, `geocoder`, `faker` | Latest compatible versions | Update at each stage | `cancancan` 3.7, `rolify` 6.0, `will_paginate` 3.3, `rspec-rails` 4.1 and `coffee-rails` 5.0 are already updated |
 | `rails_12factor` | Remove | Stage 1 | Built into Rails 5+ |
 | ~~`bootstrap-sass` 2.3~~, `bootstrap-will_paginate` | `bootstrap` 5.3 gem | Before stage 6 | **Done**: all views ported to Bootstrap 5 markup; custom will_paginate renderer |

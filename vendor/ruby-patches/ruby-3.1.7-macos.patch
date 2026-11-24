@@ -1,0 +1,11 @@
+--- a/ext/socket/extconf.rb	2026-11-24 18:49:05
++++ b/ext/socket/extconf.rb	2026-11-24 18:49:05
+@@ -652,7 +652,7 @@
+   end
+ 
+   hdr = "netinet6/in6.h"
+-  if /darwin/ =~ RUBY_PLATFORM and !try_compile(<<"SRC", nil, :werror=>true)
++  if /darwin/ =~ RUBY_PLATFORM and File.exist?("/usr/include/#{hdr}") and !try_compile(<<"SRC", nil, :werror=>true)
+ #include <netinet/in.h>
+ int t(struct in6_addr *addr) {return IN6_IS_ADDR_UNSPECIFIED(addr);}
+ SRC
