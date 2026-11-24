@@ -21,6 +21,7 @@ gem install bundler -v 1.17.3
 brew install imagemagick@6          # rmagick 2.16 does not work with ImageMagick 7
 PKG_CONFIG_PATH=/opt/homebrew/opt/imagemagick@6/lib/pkgconfig PATH=/opt/homebrew/opt/imagemagick@6/bin:$PATH \
   CFLAGS="-Wno-int-conversion -Wno-incompatible-pointer-types" gem install rmagick -v 2.16.0
+cp .env.example .env               # then fill in values (see Gotchas)
 bundle _1.17.3_ install
 ```
 
@@ -50,4 +51,4 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 - Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` in Rails 4.2.
 - `db/schema.rb` is generated; don't hand-edit or lint it.
 - `therubyracer` was removed on purpose; ExecJS uses Node.js.
-- Facebook OAuth credentials and `secret_key_base` are currently hardcoded in `config/initializers/` (step 0 of the upgrade plan moves them out). Don't add more secrets to the repo.
+- Secrets live in environment variables: `.env` locally (git-ignored, loaded by dotenv-rails), see `.env.example`. `SECRET_KEY_BASE` is read via `config/secrets.yml` (test has a fixed non-secret value, so CI needs no `.env`); Devise falls back to it. Never commit real secrets.
