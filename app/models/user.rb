@@ -1,37 +1,12 @@
 class User < ActiveRecord::Base
   #rolify
-  #before_save :set_provider
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,:recoverable, :rememberable,
-  :trackable, :validatable, :omniauthable, :omniauth_providers => [:facebook]
+  :trackable, :validatable
   #associations
   has_many :advertisement, dependent: :destroy
   has_many :comment, dependent: :destroy
-#logging from facebook
-  def self.from_omniauth(auth)
-    where(provider: auth.slice(:provider).provider, uid: auth.slice(:uid).uid)
-      .first_or_create do |user|    
-        user.email = auth.info.email
-        user.password = Devise.friendly_token[0,20]
-        user.login = auth.info.name
-        user.address = "1 Hacker Way"
-        user.city = "Menlo Park"
-        user.state = "California"
-        user.country = "United States"
-        user.zip = "94025"
-        user.bday = "February 4, 2004"
-        user.full_name = auth.info.name
-    end
-  end
-
-  def self.new_with_session(params, session)
-    super.tap do |user|
-      if data = session["devise.facebook_data"] && session["devise.facebook_data"]["extra"]["raw_info"]
-        user.email = data["email"] if user.email.blank?
-      end
-    end
-  end
 
   geocoded_by :full_address
   after_validation :geocode

@@ -18,8 +18,6 @@ describe User, type: :model do
     it { should respond_to(:bday) }
     it { should respond_to(:full_name) }
     it { should respond_to(:zip) }
-    it { should respond_to(:provider) }
-    it { should respond_to(:uid) }
     it { should respond_to(:latitude) }
     it { should respond_to(:longitude) }
   end

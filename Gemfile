@@ -5,7 +5,6 @@ gem 'rails', '4.2.11.3'
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 3.5'
 gem "haml"
-gem 'omniauth-facebook'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'will_paginate', '3.1.6'
 gem 'bootstrap-will_paginate', '0.0.9'

@@ -88,7 +88,7 @@ describe "user pages" do
     describe "with invalid information" do
       before { click_button "Sign in" }
 
-      it { should have_link('Sign in') }
+      it { should have_button('Sign in') }
       it { should have_selector('div.alert.alert-alert') }
     end
     describe "with valid information" do
@@ -123,23 +123,6 @@ describe "user pages" do
           expect(page).to have_selector('li', text: user.login)
         end
       end
-    end
-  end
-  describe 'with facebook oauth' do
-
-    context "valid oauth signin when facebook email doesn't exist" do
-      let(:oauth_user) { set_omniauth(:facebook) }
-      before do
-        login_with_omniauth(oauth_user.provider)
-      end
-      let(:user) { User.where(:provider => oauth_user.provider, :uid => oauth_user.uid).first }
-
-      specify { expect(user).not_to eq nil }
-      specify { expect(user.provider).to eq oauth_user.provider }
-      specify { expect(user.uid).to eq oauth_user.uid }
-      specify { expect(user.full_name).to eq oauth_user.info.name }
-      specify { expect(user.email).to eq oauth_user.info.email }
-      it { should have_content(user.login)}
     end
   end
 end
