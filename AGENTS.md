@@ -4,21 +4,21 @@ Message board app: users post advertisements (with images) in categories, others
 
 ## Stack
 
-- Ruby **3.0.7** (`.ruby-version`), Rails **6.1.7.10** (Zeitwerk autoloader), Bundler **2.3.27**, Puma
+- Ruby **3.1.7** (`.ruby-version`), Rails **7.0.10** (Zeitwerk autoloader), Bundler **2.3.27**, Puma
 - SQLite everywhere, production included (decided: no PostgreSQL)
-- Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), jQuery + `jquery_ujs` (remote forms, `method: :delete` links), CoffeeScript, Sprockets
+- Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), jQuery + `jquery_ujs` (remote forms, `method: :delete` links), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
 - Uploads: CarrierWave 2 + MiniMagick (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
-- Tests: rspec-rails **4.1** (`expect` / `is_expected` syntax), Capybara 2.18 (rack_test, no JS driver), FactoryBot 6.4, shoulda-matchers 4.5
+- Tests: rspec-rails **6.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test, no JS driver), FactoryBot 6.4, shoulda-matchers 5.3
 
 An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and update its status line when a stage lands.
 
 ## Setup (Apple Silicon)
 
 ```sh
-# Ruby 3.0 needs a small patch to build with current clang/macOS SDKs (bigdecimal [[maybe_unused]], socket in6.h path)
+# Ruby 3.1 needs a small patch on current macOS: its socket extension reads /usr/include/netinet6/in6.h, which no longer exists
 CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" \
-  rbenv install --patch 3.0.7 < vendor/ruby-patches/ruby-3.0.7-macos.patch
+  rbenv install --patch 3.1.7 < vendor/ruby-patches/ruby-3.1.7-macos.patch
 gem install bundler -v 2.3.27
 brew install imagemagick                                  # CLI used by mini_magick (ImageMagick 6 or 7)
 cp .env.example .env               # then fill in values (see Gotchas)
@@ -46,7 +46,9 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 
 ## Gotchas
 
-- **Gem pins in the Gemfile are deliberate**: `concurrent-ruby 1.3.4` (1.3.5+ stops requiring `logger`, so Rails < 7.1 fails at boot with `uninitialized constant ...LoggerThreadSafeLevel::Logger`), `database_cleaner ~> 1.8` (older versions truncate `ar_internal_metadata`, which breaks `db:schema:load` after a spec run) and `mail ~> 2.7.1` (2.8+ pulls in net-* gems that clash with the Ruby standard library before Ruby 3.1). Some gems declare a lower `required_ruby_version` than they really need, so after a `bundle update` always run the suite.
+- `coffee-script` is only there because `gmaps4rails` ships its JavaScript as CoffeeScript (`//= require gmaps/google`); the app itself has no CoffeeScript. Remove both together.
+- After changing gems or Sprockets config, clear `tmp/cache` if assets behave oddly (stale Sprockets 3 cache entries caused "not declared to be precompiled" errors during the Sprockets 4 move).
+- **Gem pins in the Gemfile are deliberate**: `concurrent-ruby 1.3.4` (1.3.5+ stops requiring `logger`, so Rails < 7.1 fails at boot with `uninitialized constant ...LoggerThreadSafeLevel::Logger`), `database_cleaner ~> 1.8` (older versions truncate `ar_internal_metadata`, which breaks `db:schema:load` after a spec run). Some gems declare a lower `required_ruby_version` than they really need, so after a `bundle update` always run the suite.
 - Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` (join rows get saved twice).
 - Zeitwerk loads `app/`: each file must define the constant its path implies (`app/models/foo_bar.rb` → `FooBar`). Check with `bin/rails zeitwerk:check`.
 - Run the suite with `RUBYOPT=-W:deprecated` to see Ruby and Rails deprecation warnings; there are currently none.
