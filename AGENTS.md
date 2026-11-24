@@ -5,10 +5,10 @@ Message board app: users post advertisements (with images) in categories, others
 ## Stack
 
 - Ruby **2.4.10** (`.ruby-version`), Rails **4.2.11.3**, Bundler **1.17.3**
-- SQLite in development and test; `config/database.yml` points production at PostgreSQL, but the `pg` gem is not in the Gemfile yet
+- SQLite everywhere, production included (decided: no PostgreSQL)
 - Views: Haml + Bootstrap 2 (`bootstrap-sass`), CoffeeScript, Sprockets
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan (`app/models/ability.rb`) + rolify
-- Uploads: CarrierWave + RMagick (local `public/uploads` in dev/test)
+- Uploads: CarrierWave + MiniMagick (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
 - Tests: RSpec **2.99** (old `should` syntax), Capybara 2.1 (rack_test, no JS driver), FactoryGirl
 
 An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and update its status line when a stage lands.
@@ -18,14 +18,11 @@ An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and
 ```sh
 CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 2.4.10
 gem install bundler -v 1.17.3
-brew install imagemagick@6          # rmagick 2.16 does not work with ImageMagick 7
-PKG_CONFIG_PATH=/opt/homebrew/opt/imagemagick@6/lib/pkgconfig PATH=/opt/homebrew/opt/imagemagick@6/bin:$PATH \
-  CFLAGS="-Wno-int-conversion -Wno-incompatible-pointer-types" gem install rmagick -v 2.16.0
+brew install imagemagick                                  # CLI used by mini_magick (ImageMagick 6 or 7)
 cp .env.example .env               # then fill in values (see Gotchas)
 bundle _1.17.3_ install
 ```
 
-rmagick ignores `--with-cflags`; it only reads the `CFLAGS` env var.
 
 ## Commands
 

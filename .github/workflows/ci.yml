@@ -13,8 +13,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install ImageMagick 6 (for rmagick)
-        run: sudo apt-get update && sudo apt-get install -y libmagickwand-dev
+      - name: Install ImageMagick (CLI used by mini_magick)
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
 
       - uses: ruby/setup-ruby@v1
         with:
