@@ -1,12 +1,14 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.7'
+gem 'rails', '~> 5.2.8'
+gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 4.7'
 gem 'haml', '~> 5.2'
 gem 'bootstrap-sass', '2.3.2.0'
-gem 'will_paginate', '3.1.6'
+gem 'will_paginate', '~> 3.3'
+gem 'mail', '~> 2.7.1' # 2.8+ adds net-* gems that clash with the stdlib before Ruby 3.1; lift at Ruby 3.1
 gem 'bootstrap-will_paginate', '0.0.9'
 # Use sqlite3 as the database for Active Record
 
