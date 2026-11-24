@@ -7,7 +7,7 @@ gem 'puma', '>= 7.2.1' # web server; 7.2.1 fixes the PROXY protocol advisories
 gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 5.0'
-gem 'haml', '~> 5.2'
+gem 'haml', '~> 7.5'
 gem 'bootstrap', '~> 5.3'
 gem 'will_paginate', '~> 4.0'
 # Use sqlite3 as the database for Active Record
