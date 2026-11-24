@@ -19,9 +19,9 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 ## Stage 0: Preparation (on Rails 4.2)
 
 - [x] **Remove hardcoded secrets.** `secret_key_base` now comes from `SECRET_KEY_BASE` (`.env` locally), and a new value was generated. The Facebook app was deactivated by Facebook, so Facebook login was removed instead of resetting its secret.
-- [ ] **Add tests for the main flows** before changing anything else: sign up and log in, creating, editing and deleting ads with an image upload, comments, pagination, and the permissions of each role (admin / moderator / user / guest, per `app/models/ability.rb`).
+- [x] **Add tests for the main flows** before changing anything else: sign up and log in, creating, editing and deleting ads with an image upload, comments, pagination, and the permissions of each role (admin / moderator / user / guest, per `app/models/ability.rb`).
 - [ ] Update the test tools:
-  - `rspec-rails` 2.99 → 3.9 (use `transpec` to convert `should` to `expect`)
+  - `rspec-rails` 2.99 → 3.9 (use `transpec` to convert `should` to `expect`); then replace `spec/support/ability_matchers.rb` with `require "cancan/matchers"`
   - `factory_girl_rails` → `factory_bot_rails`
   - `capybara` 2.1 → 2.18
   - `shoulda-matchers`: pin a version that works with Rails 4.2
