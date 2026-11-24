@@ -27,7 +27,7 @@ describe User, type: :model do
   context "associations" do
     it { should have_many(:comment) }
     it { should have_many(:advertisement) }
-    it { should have_and_belong_to_many(:role) }
+    it { should have_and_belong_to_many(:roles) }
   end
 
   context "validations" do
