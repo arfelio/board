@@ -18,11 +18,11 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 
 ## Stage 0: Preparation (on Rails 4.2)
 
-- [x] **Remove hardcoded secrets.** `secret_key_base` now comes from `SECRET_KEY_BASE` (`.env` locally), and a new value was generated. The Facebook app was deactivated by Facebook, so Facebook login was removed instead of resetting its secret.
-- [x] **Add tests for the main flows** before changing anything else: sign up and log in, creating, editing and deleting ads with an image upload, comments, pagination, and the permissions of each role (admin / moderator / user / guest, per `app/models/ability.rb`).
-- [x] Update the test tools: `rspec-rails` 3.9 (specs converted with `transpec`), `factory_bot_rails` 5.2, `capybara` 2.18, `shoulda-matchers` pinned to `~> 3.1`.
-- [x] Production database: **SQLite** (decided). `config/database.yml` production now uses SQLite; deploying it needs a persistent disk for `db/` and `public/uploads`. Rails 8 (stage 9) adds the tooling for SQLite in production.
-- [x] Replace `rmagick` with `mini_magick`. Only the ImageMagick CLI is needed now (6 or 7), with no native gem build.
+- ✅ **Remove hardcoded secrets.** `secret_key_base` now comes from `SECRET_KEY_BASE` (`.env` locally), and a new value was generated. The Facebook app was deactivated by Facebook, so Facebook login was removed instead of resetting its secret.
+- ✅ **Add tests for the main flows** before changing anything else: sign up and log in, creating, editing and deleting ads with an image upload, comments, pagination, and the permissions of each role (admin / moderator / user / guest, per `app/models/ability.rb`).
+- ✅ Update the test tools: `rspec-rails` 3.9 (specs converted with `transpec`), `factory_bot_rails` 5.2, `capybara` 2.18, `shoulda-matchers` pinned to `~> 3.1`.
+- ✅ Production database: **SQLite** (decided). `config/database.yml` production now uses SQLite; deploying it needs a persistent disk for `db/` and `public/uploads`. Rails 8 (stage 9) adds the tooling for SQLite in production.
+- ✅ Replace `rmagick` with `mini_magick`. Only the ImageMagick CLI is needed now (6 or 7), with no native gem build.
 
 ## Stages 1–10: Rails and Ruby versions
 
@@ -41,8 +41,8 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 
 ### Stage 1 follow-ups
 
-- [x] Rails 5.0 framework defaults switched on, each verified with a full spec run. They live in `config/application.rb`: values set in an initializer were applied too late (gems load ActiveRecord/ActionController first) and never took effect. `belongs_to` is now required; `Advertisement#category` and `Role#resource` are `optional: true`.
-- [x] Removed the precompiled assets committed in 2014 (`public/assets/`); the folder is git-ignored.
+- ✅ Rails 5.0 framework defaults switched on, each verified with a full spec run. They live in `config/application.rb`: values set in an initializer were applied too late (gems load ActiveRecord/ActionController first) and never took effect. `belongs_to` is now required; `Advertisement#category` and `Role#resource` are `optional: true`.
+- ✅ Removed the precompiled assets committed in 2014 (`public/assets/`); the folder is git-ignored.
 
 Deferred until production is in scope: `config.action_mailer.default_url_options` in `production.rb` (password reset emails need it).
 
@@ -59,10 +59,11 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | ~~`sass` / `sass-rails`~~ | `sassc-rails` (done with Bootstrap 5) | Stage 6 | **Done.** libsass/sassc is deprecated too; move to Dart Sass (`dartsass-sprockets` or `dartsass-rails`) later |
 | ~~`coffee-rails`~~ | Plain JavaScript | Stage 6 | **Done**: the 4 `.js.coffee` files were empty and are deleted. `coffee-script` stays only for gmaps4rails |
 | ~~`uglifier`~~ | `terser` | Stage 6 | **Done** |
-| `jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks` | Current versions, or remove if unused | Stage 6 | |
-| `gmaps4rails`, `underscore-rails`, `RedCloth` | Check usage; remove or replace | Open | The user-page map loads Google Maps JS v3.13 without an API key and a marker library from googlecode.com (shut down), so it cannot render. Removing gmaps4rails also removes `underscore-rails` and `coffee-script`. Decision pending |
-| `haml` 5, `geocoder`, `faker` | Latest compatible versions | Update at each stage | `cancancan` 3.7, `rolify` 6.0, `will_paginate` 4.0 and `rspec-rails` 7.1 are already updated |
-| `rails_12factor` | Remove | Stage 1 | Built into Rails 5+ |
+| ~~`jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks`~~ | Current versions | Stage 6 | **Done**: `jbuilder` 2.15 (categories JSON views), `jquery-rails` 4.6, `turbolinks` 5.2.1. `jquery-rails` and `turbolinks` go away with the front-end modernization |
+| ~~`RedCloth`~~ | Keep, update | | **Done**: 4.3.4 (fixes a ReDoS advisory); renders ad text |
+| `gmaps4rails`, `underscore-rails` | Remove (or replace the map) | Open | The user-page map loads Google Maps JS v3.13 without an API key and a marker library from googlecode.com (shut down), so it cannot render. Removing gmaps4rails also removes `underscore-rails` and `coffee-script`. Decision pending |
+| ~~`haml` 5, `geocoder`, `faker`~~ | Latest versions | | **Done**: `haml` 7.5 (rendered HTML identical to Haml 5), `geocoder` 1.8, `faker` 3.8 |
+| ~~`rails_12factor`~~ | Remove | Stage 1 | **Done** (built into Rails 5+) |
 | ~~`bootstrap-sass` 2.3~~, `bootstrap-will_paginate` | `bootstrap` 5.3 gem | Before stage 6 | **Done**: all views ported to Bootstrap 5 markup; custom will_paginate renderer |
 
 ## After stage 10: front-end modernization
