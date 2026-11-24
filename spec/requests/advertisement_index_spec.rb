@@ -72,4 +72,22 @@ describe "advertisement index" do
       it { is_expected.to have_selector("li.span4", count: 1) }
     end
   end
+
+  # Images are optional, and Rails 5.1+ asset helpers are stricter about the path
+  # they are given (assets.unknown_asset_fallback = false).
+  describe "an advertisement without an image" do
+    let!(:advertisement) { FactoryBot.create(:advertisement, user: alice, image: nil, content: "No picture here") }
+
+    describe "in the list" do
+      before { visit advertisements_path }
+
+      it { is_expected.to have_content("No picture here") }
+    end
+
+    describe "on its own page" do
+      before { visit advertisement_path(advertisement) }
+
+      it { is_expected.to have_content("No picture here") }
+    end
+  end
 end

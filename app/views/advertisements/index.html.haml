@@ -10,7 +10,7 @@
             %p
               %strong Title:
               = advertisement.title
-            = image_tag( advertisement.image.url)
+            = image_tag(advertisement.image.url) if advertisement.image.present?
             %div= advertisement.content
             %p= link_to "svsv", user_path(advertisement.user.id)
             %br
