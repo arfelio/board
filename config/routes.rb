@@ -4,8 +4,7 @@ Board::Application.routes.draw do
   resources :advertisements
   resources :comments
 
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks",
-    :registrations => "registrations" }, :path_prefix => 'my'
+  devise_for :users, :controllers => { :registrations => "registrations" }, :path_prefix => 'my'
   #get "users/profile"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -7,7 +7,7 @@ Message board app: users post advertisements (with images) in categories, others
 - Ruby **2.4.10** (`.ruby-version`), Rails **4.2.11.3**, Bundler **1.17.3**
 - SQLite in development and test; `config/database.yml` points production at PostgreSQL, but the `pg` gem is not in the Gemfile yet
 - Views: Haml + Bootstrap 2 (`bootstrap-sass`), CoffeeScript, Sprockets
-- Auth: Devise + omniauth-facebook. Authorization: CanCanCan (`app/models/ability.rb`) + rolify
+- Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan (`app/models/ability.rb`) + rolify
 - Uploads: CarrierWave + RMagick (local `public/uploads` in dev/test)
 - Tests: RSpec **2.99** (old `should` syntax), Capybara 2.1 (rack_test, no JS driver), FactoryGirl
 

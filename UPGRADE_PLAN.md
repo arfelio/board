@@ -18,8 +18,8 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 
 ## Stage 0: Preparation (on Rails 4.2)
 
-- [ ] **Remove hardcoded secrets.** The repo is public. Move the Facebook app ID/secret (`config/initializers/devise.rb`) and `secret_key_base` (`config/initializers/secret_token.rb`) into environment variables, then **rotate both**: they are in the git history.
-- [ ] **Add tests for the main flows** before changing anything else: sign up and log in (including the Facebook callback), creating, editing and deleting ads with an image upload, comments, pagination, and the permissions of each role (admin / moderator / user / guest, per `app/models/ability.rb`).
+- [x] **Remove hardcoded secrets.** `secret_key_base` now comes from `SECRET_KEY_BASE` (`.env` locally), and a new value was generated. The Facebook app was deactivated by Facebook, so Facebook login was removed instead of resetting its secret.
+- [ ] **Add tests for the main flows** before changing anything else: sign up and log in, creating, editing and deleting ads with an image upload, comments, pagination, and the permissions of each role (admin / moderator / user / guest, per `app/models/ability.rb`).
 - [ ] Update the test tools:
   - `rspec-rails` 2.99 → 3.9 (use `transpec` to convert `should` to `expect`)
   - `factory_girl_rails` → `factory_bot_rails`
@@ -58,7 +58,7 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | `uglifier` | `terser`, or no minifier (Propshaft) | Stage 6 | |
 | `jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks` | Current versions, or remove if unused | Stage 6 | |
 | `gmaps4rails`, `underscore-rails`, `RedCloth` | Check usage; remove or replace | Stage 6 | gmaps4rails is unmaintained |
-| `haml` 5, `cancancan` 1.x, `rolify`, `geocoder`, `will_paginate`, `omniauth-facebook`, `faker` | Latest compatible versions | Update at each stage | `omniauth` 2 needs POST-only auth requests (`omniauth-rails_csrf_protection`) |
+| `haml` 5, `cancancan` 1.x, `rolify`, `geocoder`, `will_paginate`, `faker` | Latest compatible versions | Update at each stage | |
 | `rails_12factor` | Remove | Stage 1 | Built into Rails 5+ |
 | `bootstrap-sass` 2.3 | Bootstrap 5 | **Separate project** | Rewrites the markup of every view; do it after stage 10 or on its own track |
 
@@ -66,5 +66,4 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 
 - **Test coverage** decides how safe each stage is. Don't skip the Stage 0 tests.
 - **Stages 4 and 5** (Zeitwerk, Ruby 3 keyword arguments) are the most likely to break code at runtime.
-- **Facebook login** can't be tested end-to-end in CI. Test it by hand after stages 1 and 5 and after any `omniauth` upgrade.
 - **Uploaded files:** changing CarrierWave or moving to Active Storage affects existing files in production storage. Plan the migration before deploying.
