@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20141119142932) do
 
-  create_table "advertisements", force: true do |t|
+  create_table "advertisements", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "image"
     t.text     "content"
@@ -23,13 +23,13 @@ ActiveRecord::Schema.define(version: 20141119142932) do
     t.integer  "category_id"
   end
 
-  create_table "categories", force: true do |t|
+  create_table "categories", force: :cascade do |t|
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "comments", force: true do |t|
+  create_table "comments", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "advertisement_id"
     t.text     "content"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 20141119142932) do
     t.datetime "updated_at"
   end
 
-  create_table "roles", force: true do |t|
+  create_table "roles", force: :cascade do |t|
     t.string   "name"
     t.integer  "resource_id"
     t.string   "resource_type"
@@ -48,7 +48,7 @@ ActiveRecord::Schema.define(version: 20141119142932) do
   add_index "roles", ["name", "resource_type", "resource_id"], name: "index_roles_on_name_and_resource_type_and_resource_id"
   add_index "roles", ["name"], name: "index_roles_on_name"
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
@@ -78,7 +78,7 @@ ActiveRecord::Schema.define(version: 20141119142932) do
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 
-  create_table "users_roles", id: false, force: true do |t|
+  create_table "users_roles", id: false, force: :cascade do |t|
     t.integer "user_id"
     t.integer "role_id"
   end

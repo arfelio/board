@@ -8,8 +8,6 @@ class User < ActiveRecord::Base
   #associations
   has_many :advertisement, dependent: :destroy
   has_many :comment, dependent: :destroy
-  #has_and_belongs_to_many :roles
-  has_and_belongs_to_many :role, :join_table => :users_roles
 #logging from facebook
   def self.from_omniauth(auth)
     where(provider: auth.slice(:provider).provider, uid: auth.slice(:uid).uid)
@@ -45,9 +43,9 @@ class User < ActiveRecord::Base
   #validations
   validates :address, :city, :country, :state, :bday, :full_name, :login,
             presence: true, length: { maximum: 150 }
-  validates :zip, presence: true, length: { maximum: 10 }, format: { with: /[-\d]/ }
+  validates :zip, presence: true, length: { maximum: 10 }, format: { with: /\A[-\d]+\z/ }
 
-  after_create :assign_user_role
+  before_create :assign_user_role
   rolify
 
 

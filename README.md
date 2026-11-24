@@ -1,5 +1,5 @@
 what is going on 
-[![Build Status](https://travis-ci.org/arfelio/board.svg?branch=master)](https://travis-ci.org/arfelio/board)
+[![CI](https://github.com/arfelio/board/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/arfelio/board/actions/workflows/ci.yml)
 
 
 Test Task Ruby
