@@ -25,8 +25,8 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
   - `factory_girl_rails` → `factory_bot_rails`
   - `capybara` 2.1 → 2.18
   - `shoulda-matchers`: pin a version that works with Rails 4.2
-- [ ] Decide on the production database: add `pg` and run CI against Postgres, or plan to use SQLite in production on Rails 8.
-- [ ] Replace `rmagick` with `mini_magick` (CarrierWave supports both). This removes the ImageMagick 6 setup and the special build flags.
+- [x] Production database: **SQLite** (decided). `config/database.yml` production now uses SQLite; deploying it needs a persistent disk for `db/` and `public/uploads`. Rails 8 (stage 9) adds the tooling for SQLite in production.
+- [x] Replace `rmagick` with `mini_magick`. Only the ImageMagick CLI is needed now (6 or 7), with no native gem build.
 
 ## Stages 1–10: Rails and Ruby versions
 
@@ -49,7 +49,7 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 
 | Current | Replace with | Deadline | Notes |
 |---|---|---|---|
-| `rmagick` 2.16 | `mini_magick` (or `image_processing` + vips) | Stage 0 | Removes the ImageMagick 6 / build-flag setup |
+| ~~`rmagick` 2.16~~ | `mini_magick` | Stage 0 | **Done** |
 | `rspec-rails` 2.99, `factory_girl_rails` | `rspec-rails` 3.9 → latest, `factory_bot_rails` | Stage 0 | |
 | `devise` 3.5 | 4.x, then the latest | Stage 1 | |
 | `carrierwave` 0.10 | CarrierWave 3.x, or Active Storage | Stage 4 | Active Storage needs a data migration for existing uploads |
