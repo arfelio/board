@@ -17,6 +17,8 @@ moderator = User.create(email:"moderator@mail.com",password:"password",password_
 	        country: Faker::Address.country, state: Faker::Address.state,
 	        bday: Date.today,full_name:Faker::Name.name,
 	        login: Faker::Lorem.word,zip: Faker::Address.zip ).save!
+User.find_by(email: "admin@mail.com").add_role(:admin)
+User.find_by(email: "moderator@mail.com").add_role(:moderator)
 15.times do
 	User.create(email: Faker::Internet.email,password:"password",password_confirmation:"password",
 	        address: Faker::Address.street_address,city: Faker::Address.city,
