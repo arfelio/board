@@ -4,6 +4,8 @@
 # Игнорирование дефолтной базы данных SQLite.
 /db/*.sqlite3
 /db/*.sqlite3-journal
+/db/*.sqlite3-shm
+/db/*.sqlite3-wal
 
 # Игнорирование всех логов и временных файлов.
 /log/*.log

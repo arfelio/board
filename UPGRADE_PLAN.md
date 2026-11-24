@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** Stage 6 done (Rails 7.0.10, Ruby 3.1.7, `config.load_defaults 7.0`, Sprockets 4, no deprecation warnings). Bootstrap 5.3 in place. Next: Stage 7 (Rails 7.1, Ruby 3.2). Secrets stay in `secrets.yml` + `ENV`; moving to encrypted credentials is deferred with the other production work.
+**Status:** Stage 7 done (Rails 7.1.6, Ruby 3.2.11, `config.load_defaults 7.1`, `config/secrets.yml` removed). Bootstrap 5.3 in place. Next: Stage 8 (Rails 7.2, Ruby 3.3). Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -34,7 +34,7 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 | 4 ✅ | 5.2 → 6.0 | 2.7 | **Zeitwerk autoloader**: file and constant names must match (check `app/controllers/users/`, `concerns`); fix the Ruby 2.7 keyword-argument warnings now |
 | 5 ✅ | 6.0 → 6.1 | **3.0** | **Ruby 3 keyword arguments** (the warnings from stage 4 become errors); gem updates that require Ruby 3 |
 | 6 ✅ | 6.1 → 7.0 | 3.1 | Sprockets becomes optional: keep `sprockets-rails` explicitly; Turbolinks → Turbo is optional; CoffeeScript and the Sass replacement must be done by now (see below) |
-| 7 | 7.0 → 7.1 | 3.2 | Config defaults; `config.load_defaults 7.1` |
+| 7 ✅ | 7.0 → 7.1 | 3.2 | Config defaults; `config.load_defaults 7.1` |
 | 8 | 7.1 → 7.2 | 3.3 | Rails 7.2 requires Ruby 3.1+ |
 | 9 | 7.2 → 8.0 | 3.4 | Rails 8 requires Ruby 3.2+; Solid Queue / Solid Cache / Propshaft are optional |
 | 10 | 8.0 → 8.1 | **4.0** | Final target. Check Ruby 4.0 support across all gems; stay on 3.4 if anything blocks |
