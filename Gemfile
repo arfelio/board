@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.6'
+gem 'rails', '~> 6.1.7'
+gem 'puma', '~> 6.4' # Ruby 3 no longer ships WEBrick
 gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
 gem 'devise', '~> 4.7'
@@ -28,7 +29,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails', '~> 4.1'
 end
-gem "geocoder"
+gem 'geocoder', '~> 1.8'
 gem 'gmaps4rails'
 gem 'carrierwave', '~> 2.2'
 # gem 'cloudinary'
