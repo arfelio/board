@@ -1,4 +1,3 @@
-include ActionDispatch::TestProcess
 FactoryBot.define do
   factory :user do
     sequence(:login)  { |n| "Person #{n}" }
@@ -23,7 +22,7 @@ FactoryBot.define do
   factory :advertisement do
     user 
     content { "lorem ipsum" }
-    image {fixture_file_upload('spec/fixtures/files/image.jpg', 'image/jpg')}
+    image { Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/files/image.jpg'), 'image/jpeg') }
   end
   factory :comment do
     user
