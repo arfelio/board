@@ -4,7 +4,7 @@ Message board app: users post advertisements (with images) in categories, others
 
 ## Stack
 
-- Ruby **3.3.13** (`.ruby-version`), Rails **7.2.4** (Zeitwerk autoloader), Bundler **2.3.27**, Puma
+- Ruby **3.4.12** (`.ruby-version`), Rails **8.0.5** (Zeitwerk autoloader), Bundler **2.6.9** (ships with Ruby 3.4), Puma
 - SQLite everywhere, production included (decided: no PostgreSQL)
 - Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), jQuery + `jquery_ujs` (remote forms, `method: :delete` links), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
@@ -16,8 +16,8 @@ An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and
 ## Setup (Apple Silicon)
 
 ```sh
-CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 3.3.13
-gem install bundler -v 2.3.27
+CFLAGS="-Wno-error=implicit-function-declaration -Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion" rbenv install 3.4.12
+gem install bundler -v 2.6.9   # already the default bundler of Ruby 3.4.12
 brew install imagemagick                                  # CLI used by mini_magick (ImageMagick 6 or 7)
 cp .env.example .env               # then fill in values (see Gotchas)
 bundle install

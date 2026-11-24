@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** Stage 8 done (Rails 7.2.4, Ruby 3.3.13, `config.load_defaults 7.2`, no deprecation warnings). Bootstrap 5.3 in place. Next: Stage 9 (Rails 8.0, Ruby 3.4). Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
+**Status:** Stage 9 done (Rails 8.0.5, Ruby 3.4.12, `config.load_defaults 8.0`, no deprecation warnings). Bootstrap 5.3 in place. Next: Stage 10 (Rails 8.1, Ruby 4.0), then the front-end modernization below. Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -36,7 +36,7 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 | 6 ✅ | 6.1 → 7.0 | 3.1 | Sprockets becomes optional: keep `sprockets-rails` explicitly; Turbolinks → Turbo is optional; CoffeeScript and the Sass replacement must be done by now (see below) |
 | 7 ✅ | 7.0 → 7.1 | 3.2 | Config defaults; `config.load_defaults 7.1` |
 | 8 ✅ | 7.1 → 7.2 | 3.3 | Rails 7.2 requires Ruby 3.1+ |
-| 9 | 7.2 → 8.0 | 3.4 | Rails 8 requires Ruby 3.2+; Solid Queue / Solid Cache / Propshaft are optional |
+| 9 ✅ | 7.2 → 8.0 | 3.4 | Rails 8 requires Ruby 3.2+; Solid Queue / Solid Cache / Propshaft are optional |
 | 10 | 8.0 → 8.1 | **4.0** | Final target. Check Ruby 4.0 support across all gems; stay on 3.4 if anything blocks |
 
 ### Stage 1 follow-ups
@@ -61,9 +61,41 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | ~~`uglifier`~~ | `terser` | Stage 6 | **Done** |
 | `jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks` | Current versions, or remove if unused | Stage 6 | |
 | `gmaps4rails`, `underscore-rails`, `RedCloth` | Check usage; remove or replace | Open | The user-page map loads Google Maps JS v3.13 without an API key and a marker library from googlecode.com (shut down), so it cannot render. Removing gmaps4rails also removes `underscore-rails` and `coffee-script`. Decision pending |
-| `haml` 5, `geocoder`, `faker` | Latest compatible versions | Update at each stage | `cancancan` 3.7, `rolify` 6.0, `will_paginate` 3.3, `rspec-rails` 4.1 and `coffee-rails` 5.0 are already updated |
+| `haml` 5, `geocoder`, `faker` | Latest compatible versions | Update at each stage | `cancancan` 3.7, `rolify` 6.0, `will_paginate` 4.0 and `rspec-rails` 7.1 are already updated |
 | `rails_12factor` | Remove | Stage 1 | Built into Rails 5+ |
 | ~~`bootstrap-sass` 2.3~~, `bootstrap-will_paginate` | `bootstrap` 5.3 gem | Before stage 6 | **Done**: all views ported to Bootstrap 5 markup; custom will_paginate renderer |
+
+## After stage 10: front-end modernization
+
+Sprockets keeps working on Rails 8, so the framework upgrade finishes on it. Changing the front end at the same time would make failures harder to trace. Once stage 10 is merged, move to the Rails 8 default front end in a few separate PRs.
+
+**Target:** Propshaft (serves and fingerprints files) + importmap-rails (JavaScript as ES modules, no Node) + dartsass-rails (Sass compiled by the Dart Sass binary) + Turbo.
+
+What it replaces today, with Sprockets bundling through `//= require`:
+
+| Today | After |
+|---|---|
+| Sprockets, `sprockets-rails` | Propshaft |
+| `sassc-rails` (libsass, deprecated) | `dartsass-rails`; Bootstrap 5 Sass from the `bootstrap` gem's stylesheets path or the npm package |
+| `jquery-rails` (`jquery`, `jquery_ujs`) | Turbo: `data-turbo-method` / `data-turbo-confirm` instead of `method:` / `data: { confirm: }` (9 places). The Ajax comment form and delete links (`remote: true` + `comments/*.js.erb`) become Turbo Stream responses. Drop jQuery if nothing else needs it |
+| `turbolinks` | Turbo (`turbo-rails`), its successor |
+| `bootstrap` gem's JS + `popper` | Bootstrap and Popper pinned from npm in `config/importmap.rb` |
+| `gmaps4rails`, `underscore-rails`, `coffee-script` | Removed, assuming the map is dropped (see the gem table: the map cannot render today) |
+
+Suggested PRs:
+1. **Turbo instead of `jquery_ujs` and Turbolinks**, still on Sprockets. This is the behaviour change, so review it on its own. The CSRF and comment specs cover the affected flows.
+2. **Remove the map** (gmaps4rails, Underscore, CoffeeScript), once that decision is made.
+3. **Switch the asset pipeline:** Sprockets → Propshaft + importmap + dartsass-rails. Compare before/after screenshots as for the Bootstrap 5 port.
+
+Not chosen: jsbundling/cssbundling (needs Node in development, CI and production) and Vite. Both are more tooling than this app needs.
+
+### Solid Queue, Solid Cache, Solid Cable
+
+Rails 8's database-backed versions of the queue, cache and Action Cable services. They fit the SQLite production decision because they need no Redis.
+
+- **Solid Queue:** add it when production comes into scope. The app has no background jobs, but several slow operations run inside web requests: Devise emails are sent immediately, geocoding calls an external API on every user validation, and image resizing runs during upload. Moving them to jobs needs a worker process (or Puma's `solid_queue` plugin), `config/queue.yml` and a separate queue database.
+- **Solid Cache:** not needed. The app has no caching (`Rails.cache` or `cache` blocks); add it only together with caching.
+- **Solid Cable:** not needed. There is no Action Cable or live updates. It becomes relevant only if, for example, new comments are broadcast with Turbo Streams.
 
 ## Risks
 
