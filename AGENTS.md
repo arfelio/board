@@ -28,7 +28,7 @@ bundle _1.17.3_ install
 
 ```sh
 RAILS_ENV=test bin/rails db:create db:schema:load          # prepare test DB
-bundle exec rspec                                          # full suite (207 examples, 2 pending placeholders)
+bundle exec rspec                                          # full suite (212 examples, 2 pending placeholders)
 bin/rails db:seed                                          # dev data
 bundle exec rails s
 ```
@@ -46,7 +46,8 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 
 - **Gem pins in the Gemfile are deliberate** (`nokogiri ~> 1.10.10`, `rails-html-sanitizer < 1.5`, `loofah < 2.19`, `tilt ~> 2.0.11`). They are the last versions that work with Ruby 2.4 / haml 5. Lift them only together with the Ruby/Rails bump that allows it.
 - Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` (join rows get saved twice).
-- `config/initializers/new_framework_defaults.rb` keeps Rails 4.2 behaviour for the new Rails 5.0 settings (e.g. `belongs_to` is not required). Flip them one at a time, each with a green CI run.
+- Rails 5.0 framework defaults are set in `config/application.rb`, not in an initializer: gems load ActiveRecord/ActionController before initializers run, so framework config set there is silently ignored. `belongs_to` is required by default; optional associations say `optional: true`.
+- The comment form is `remote: true`: its CSRF token comes from the `csrf-token` meta tag via jquery_ujs, not from a hidden field. Keep `csrf_meta_tags` in the layout.
 - A database created under Rails 4.2 needs `bin/rails db:environment:set RAILS_ENV=<env>` once before `db:schema:load` works.
 - `db/schema.rb` is generated; don't hand-edit or lint it.
 - `therubyracer` was removed on purpose; ExecJS uses Node.js.

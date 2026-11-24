@@ -1,6 +1,6 @@
 class Advertisement < ApplicationRecord
   has_many :comment, dependent: :destroy
-  belongs_to :category
+  belongs_to :category, optional: true
   belongs_to :user
   mount_uploader :image, ImageUploader
   validates :content, presence: true, length: { maximum: 1000 }
