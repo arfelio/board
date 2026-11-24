@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** Stage 9 done (Rails 8.0.5, Ruby 3.4.12, `config.load_defaults 8.0`, no deprecation warnings). Bootstrap 5.3 in place. Next: Stage 10 (Rails 8.1, Ruby 4.0), then the front-end modernization below. Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
+**Status:** All stages done: Rails 8.1.4, Ruby 4.0.9, `config.load_defaults 8.1`, no deprecation warnings. Bootstrap 5.3 in place. Next: the front-end modernization below. Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -37,7 +37,7 @@ Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.
 | 7 ✅ | 7.0 → 7.1 | 3.2 | Config defaults; `config.load_defaults 7.1` |
 | 8 ✅ | 7.1 → 7.2 | 3.3 | Rails 7.2 requires Ruby 3.1+ |
 | 9 ✅ | 7.2 → 8.0 | 3.4 | Rails 8 requires Ruby 3.2+; Solid Queue / Solid Cache / Propshaft are optional |
-| 10 | 8.0 → 8.1 | **4.0** | Final target. Check Ruby 4.0 support across all gems; stay on 3.4 if anything blocks |
+| 10 ✅ | 8.0 → 8.1 | **4.0** | Final target. Check Ruby 4.0 support across all gems; stay on 3.4 if anything blocks |
 
 ### Stage 1 follow-ups
 
@@ -54,8 +54,8 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 |---|---|---|---|
 | ~~`rmagick` 2.16~~ | `mini_magick` | Stage 0 | **Done** |
 | ~~`rspec-rails` 2.99, `factory_girl_rails`~~ | `rspec-rails` 3.9, `factory_bot_rails` 5.2 | Stage 0 | **Done.** Move on to `rspec-rails` 4+ / FactoryBot 6 once on Rails 5+ / Ruby 2.5+ |
-| `devise` 3.5 | 4.x, then the latest | Stage 1 | |
-| ~~`carrierwave` 0.10~~ | CarrierWave 2.2 (done in stage 4); 3.x later | Stage 4 | **Done**; existing uploads keep working. Active Storage would need a data migration |
+| ~~`devise` 3.5~~ | Devise 5.0 | Stage 10 | **Done**: 4.x in stage 1, 5.0 in stage 10 (4.9 used deprecated routing calls on Rails 8.1) |
+| ~~`carrierwave` 0.10~~ | CarrierWave 3.1 (2.2 in stage 4, 3.1 in stage 10) | Stage 10 | **Done**; existing uploads keep working. Active Storage would need a data migration |
 | ~~`sass` / `sass-rails`~~ | `sassc-rails` (done with Bootstrap 5) | Stage 6 | **Done.** libsass/sassc is deprecated too; move to Dart Sass (`dartsass-sprockets` or `dartsass-rails`) later |
 | ~~`coffee-rails`~~ | Plain JavaScript | Stage 6 | **Done**: the 4 `.js.coffee` files were empty and are deleted. `coffee-script` stays only for gmaps4rails |
 | ~~`uglifier`~~ | `terser` | Stage 6 | **Done** |
