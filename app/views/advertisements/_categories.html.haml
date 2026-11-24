@@ -1,5 +1,5 @@
 %h4 Categories
-%ul.nav.nav-stacked.nav-pills
-  %li{:class=>"#{'active' unless params[:category_id]}"}= link_to "All", advertisements_path
+%ul.nav.nav-pills.flex-column.mb-4
+  %li.nav-item= link_to "All", advertisements_path, class: ["nav-link", ("active" unless params[:category_id])]
   - @categories.each do |category|
-    %li{:class=>"#{category.id.to_s == params[:category_id] ? 'active' : ''}"}= link_to category.title, advertisements_path(:category_id => category.id)
+    %li.nav-item= link_to category.title, advertisements_path(category_id: category.id), class: ["nav-link", ("active" if category.id.to_s == params[:category_id])]

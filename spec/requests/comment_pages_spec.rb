@@ -39,7 +39,7 @@ describe "comment pages" do
         before { click_button "Leave comment" }
 
         it { is_expected.to have_content("Nice bike!") }
-        it { is_expected.to have_selector("div.alert.alert-notice", text: "You add a comment") }
+        it { is_expected.to have_selector("div.alert.alert-success.flash-notice", text: "You add a comment") }
         specify { expect(Comment.last.user).to eq author }
         specify { expect(Comment.last.advertisement).to eq advertisement }
       end
@@ -53,7 +53,7 @@ describe "comment pages" do
       describe "after submitting" do
         before { click_button "Leave comment" }
 
-        it { is_expected.to have_selector("div.alert.alert-alert", text: "Comment not added") }
+        it { is_expected.to have_selector("div.alert.alert-danger.flash-alert", text: "Comment not added") }
       end
     end
   end

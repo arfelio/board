@@ -6,7 +6,7 @@ Message board app: users post advertisements (with images) in categories, others
 
 - Ruby **3.0.7** (`.ruby-version`), Rails **6.1.7.10** (Zeitwerk autoloader), Bundler **2.3.27**, Puma
 - SQLite everywhere, production included (decided: no PostgreSQL)
-- Views: Haml + Bootstrap 2 (`bootstrap-sass`), CoffeeScript, Sprockets
+- Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), jQuery + `jquery_ujs` (remote forms, `method: :delete` links), CoffeeScript, Sprockets
 - Auth: Devise (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
 - Uploads: CarrierWave 2 + MiniMagick (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
 - Tests: rspec-rails **4.1** (`expect` / `is_expected` syntax), Capybara 2.18 (rack_test, no JS driver), FactoryBot 6.4, shoulda-matchers 4.5
@@ -53,6 +53,7 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 - Factories build uploads with `Rack::Test::UploadedFile`: since Rails 6.1, `fixture_file_upload` only works inside test cases, not in factories.
 - If `ruby -rsocket -e 1` fails after building Ruby, an extension silently failed to compile; check the "Following extensions are not compiled" section of the ruby-build log.
 - Framework defaults come from `config.load_defaults` in `config/application.rb`. Don't put framework settings in `config/initializers/`: gems load ActiveRecord/ActionController before initializers run, so those values are silently ignored. `belongs_to` is required by default; optional associations say `optional: true`.
+- Bootstrap 5 markup: inputs need `form-control` / `form-select` / `form-check-input` (nothing is styled by default); wrap forms in `.form-narrow`. Flash keys map to alert colours in `ApplicationHelper#flash_alert_class` (each alert also gets a `flash-<key>` class, used by specs). Pagination goes through `BootstrapLinkRenderer` (`app/lib/`), applied by `ApplicationHelper#will_paginate`.
 - Ad images are optional: guard `image_tag` with `if ….image.present?` (since Rails 5.1, `image_tag(nil)` raises).
 - The comment form is `remote: true`: its CSRF token comes from the `csrf-token` meta tag via jquery_ujs, not from a hidden field. Keep `csrf_meta_tags` in the layout.
 - A database created under Rails 4.2 needs `bin/rails db:environment:set RAILS_ENV=<env>` once before `db:schema:load` works.

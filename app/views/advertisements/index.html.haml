@@ -1,23 +1,23 @@
 .row
-  .span2
+  .col-md-3.col-lg-2
     = render "categories"
-  .span8
+  .col-md-9.col-lg-10
     %h4 Advertisements
-    %ul.thumbnails
+    .row.row-cols-1.row-cols-md-2.g-3.mb-4
       - @advertisements.each do |advertisement|
-        %li.span4
-          .thumbnail
-            %p
-              %strong Title:
-              = advertisement.title
-            = image_tag(advertisement.image.url) if advertisement.image.present?
-            %div= advertisement.content
-            %p= link_to "svsv", user_path(advertisement.user.id)
-            %br
-            - if can? :destroy, advertisement
-              = link_to "Delete", advertisement_path(advertisement),:method=>:delete, data: { confirm: 'Are you sure?' }, :class=> "btn btn-mini btn-danger"
-            - if can? :update, advertisement
-              = link_to "Edit", edit_advertisement_path(advertisement), :class=> "btn btn-mini"
-            = link_to "Show", advertisement_path(advertisement), :class=> "btn btn-mini"
+        .col.advertisement
+          .card.h-100
+            .card-body
+              %p.card-title
+                %strong Title:
+                = advertisement.title
+              = image_tag(advertisement.image.url, class: "img-fluid mb-2") if advertisement.image.present?
+              .card-text= advertisement.content
+              %p.mt-2.mb-0= link_to "svsv", user_path(advertisement.user.id)
+            .card-footer.bg-transparent
+              - if can? :destroy, advertisement
+                = link_to "Delete", advertisement_path(advertisement), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-sm btn-danger"
+              - if can? :update, advertisement
+                = link_to "Edit", edit_advertisement_path(advertisement), class: "btn btn-sm btn-outline-secondary"
+              = link_to "Show", advertisement_path(advertisement), class: "btn btn-sm btn-outline-secondary"
     = will_paginate @advertisements
-

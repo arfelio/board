@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** Stage 5 done (Rails 6.1.7.10, Ruby 3.0.7, `config.load_defaults 6.1`, no deprecation warnings). Next: Stage 6 (Rails 7.0, Ruby 3.1). Secrets stay in `secrets.yml` + `ENV`; moving to encrypted credentials is deferred with the other production work.
+**Status:** Stage 5 done (Rails 6.1.7.10, Ruby 3.0.7, `config.load_defaults 6.1`, no deprecation warnings). Bootstrap 2 → 5.3 done (with Sass now compiled by `sassc-rails`). Next: Stage 6 (Rails 7.0, Ruby 3.1). Secrets stay in `secrets.yml` + `ENV`; moving to encrypted credentials is deferred with the other production work.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -56,14 +56,14 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | ~~`rspec-rails` 2.99, `factory_girl_rails`~~ | `rspec-rails` 3.9, `factory_bot_rails` 5.2 | Stage 0 | **Done.** Move on to `rspec-rails` 4+ / FactoryBot 6 once on Rails 5+ / Ruby 2.5+ |
 | `devise` 3.5 | 4.x, then the latest | Stage 1 | |
 | ~~`carrierwave` 0.10~~ | CarrierWave 2.2 (done in stage 4); 3.x later | Stage 4 | **Done**; existing uploads keep working. Active Storage would need a data migration |
-| `sass` / `sass-rails` (Ruby Sass is discontinued) | `dartsass-rails` or `sassc-rails` | Stage 6 | |
+| ~~`sass` / `sass-rails`~~ | `sassc-rails` (done with Bootstrap 5) | Stage 6 | **Done.** libsass/sassc is deprecated too; move to Dart Sass (`dartsass-sprockets` or `dartsass-rails`) later |
 | `coffee-rails` (5 `.js.coffee` files) | Plain JavaScript | Stage 6 | `decaffeinate` can convert them |
 | `uglifier` | `terser`, or no minifier (Propshaft) | Stage 6 | |
 | `jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks` | Current versions, or remove if unused | Stage 6 | |
 | `gmaps4rails`, `underscore-rails`, `RedCloth` | Check usage; remove or replace | Stage 6 | gmaps4rails is unmaintained |
 | `haml` 5, `geocoder`, `faker` | Latest compatible versions | Update at each stage | `cancancan` 3.7, `rolify` 6.0, `will_paginate` 3.3, `rspec-rails` 4.1 and `coffee-rails` 5.0 are already updated |
 | `rails_12factor` | Remove | Stage 1 | Built into Rails 5+ |
-| `bootstrap-sass` 2.3 | Bootstrap 5 | **Separate project** | Rewrites the markup of every view; do it after stage 10 or on its own track |
+| ~~`bootstrap-sass` 2.3~~, `bootstrap-will_paginate` | `bootstrap` 5.3 gem | Before stage 6 | **Done**: all views ported to Bootstrap 5 markup; custom will_paginate renderer |
 
 ## Risks
 

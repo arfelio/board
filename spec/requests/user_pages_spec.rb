@@ -89,7 +89,7 @@ describe "user pages" do
       before { click_button "Sign in" }
 
       it { is_expected.to have_button('Sign in') }
-      it { is_expected.to have_selector('div.alert.alert-alert') }
+      it { is_expected.to have_selector('div.alert.alert-danger.flash-alert') }
     end
     describe "with valid information" do
       let(:user) { FactoryBot.create(:user) }

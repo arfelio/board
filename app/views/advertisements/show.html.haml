@@ -1,26 +1,20 @@
-%div.container
-  %h3 Advertisement
-  .row
-    .span9
-      =link_to "Back", :back
-      %p
-        %strong Title:
-        = @advertisement.title
-      = raw RedCloth.new(html_escape(@advertisement.content)).to_html
-      = image_tag(@advertisement.image.url) if @advertisement.image.present?
-      %br
-    .span3
-      -if can? :update, @advertisement
-        = link_to "Edit", edit_advertisement_path, :class => "btn btn-primary"
-      %br
-      -if can? :destroy, @advertisement
-        = link_to "Delete advertisement", advertisement_path, :method=>:delete, :class=>"btn btn-danger"
-      %br
-      - if can? :create, @comment
-        = render "comment_form"
-      %h5 Comments for this advertisement
-      %div#comments
-        = render "comments/comment"
-
-
-
+%h3 Advertisement
+.row
+  .col-md-8
+    = link_to "Back", :back
+    %p.mt-2
+      %strong Title:
+      = @advertisement.title
+    = raw RedCloth.new(html_escape(@advertisement.content)).to_html
+    = image_tag(@advertisement.image.url, class: "img-fluid") if @advertisement.image.present?
+  .col-md-4
+    .d-flex.gap-2.mb-3
+      - if can? :update, @advertisement
+        = link_to "Edit", edit_advertisement_path, class: "btn btn-primary"
+      - if can? :destroy, @advertisement
+        = link_to "Delete advertisement", advertisement_path, method: :delete, class: "btn btn-danger"
+    - if can? :create, @comment
+      = render "comment_form"
+    %h5.mt-4 Comments for this advertisement
+    #comments
+      = render "comments/comment"
