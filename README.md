@@ -16,6 +16,7 @@ It started in August 2014 as a Ruby on Rails test task, written on Rails 4.0 and
 | Views | Haml 7, Bootstrap 5.3, Turbo, Sprockets |
 | Authentication | Devise 5 (email and password) |
 | Authorization | CanCanCan 3 + rolify 6 |
+| Maps | Leaflet + OpenStreetMap tiles, geocoding with Nominatim (no API key) |
 | Image uploads | CarrierWave 3 + MiniMagick (ImageMagick) |
 | Tests | RSpec 7, Capybara 3 (Cuprite for browser specs), FactoryBot, shoulda-matchers |
 
@@ -46,11 +47,13 @@ The seed data comes with two accounts (password `password`):
 - `admin@mail.com`: administrator
 - `moderator@mail.com`: moderator
 
-Seeding needs an internet connection, because it downloads a sample image for the advertisements. It prints "Geocoding API's response was not valid JSON" for each user: no geocoding API key is configured, so users are saved without coordinates.
+Seeding needs an internet connection, because it downloads a sample image for the advertisements. Seeded users live in real European cities, so their profiles show a map.
+
+Addresses are geocoded with [Nominatim](https://nominatim.org/), OpenStreetMap's free geocoder, whenever a user's address changes. Its [usage policy](https://operations.osmfoundation.org/policies/nominatim/) asks apps to identify themselves: set `GEOCODER_USER_AGENT` in `.env` to your app's name and a contact address.
 
 ## Running the tests
 
-    bundle exec rspec        # the full suite (240 examples)
+    bundle exec rspec        # the full suite (254 examples)
     bin/ci                   # what CI runs: setup, Zeitwerk check, specs with eager loading
 
 The specs tagged `js: true` run in headless Google Chrome (through Cuprite), so Chrome or Chromium needs to be installed. A coverage report is written to `coverage/index.html` (100% line coverage). GitHub Actions runs the suite on every push to `master` and on every pull request, and `master` only accepts pull requests that pass it.
@@ -119,9 +122,10 @@ The seed data (`db/seeds.rb`) already creates `admin@mail.com` as an administrat
 
 ### Differences from the original task
 
+- **Maps:** OpenStreetMap (Leaflet and Nominatim) instead of Google Maps v3, whose 2014 setup no longer worked. The map is on the profile and edit-profile pages; the sign-up page has none, because there is no location until the account is saved.
+
 These gaps are known and will be covered a bit later:
 
-- **Maps:** the map uses Google Maps JavaScript v3.13 without an API key and a library that was hosted on googlecode.com (shut down in 2016), so it doesn't render. Whether to restore or remove it is still open in [UPGRADE_PLAN.md](UPGRADE_PLAN.md).
 - **Search:** covers an advertisement's title and text, not author, address or tags.
 - **Advertisement list:** shows the full text, not the first 160 characters.
 - **Social login** (Twitter, Facebook or Google, from a later version of the task) was removed: Facebook login stopped working when its app was deactivated.

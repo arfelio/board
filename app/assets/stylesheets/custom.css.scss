@@ -42,3 +42,9 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
 }
+
+// OpenStreetMap map on the profile pages (users/_map.html.haml)
+.user-map {
+  height: 400px;
+  max-width: 800px;
+}

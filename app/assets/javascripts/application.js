@@ -12,7 +12,6 @@
 //
 //= require popper
 //= require bootstrap
-//= require underscore
-//= require gmaps/google
+//= require leaflet
 //= require_tree .
 

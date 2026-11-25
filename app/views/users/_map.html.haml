@@ -1,0 +1,8 @@
+- if user.geocoded?
+  .user-map.border.rounded.mb-3{ data: { user_map: true, latitude: user.latitude, longitude: user.longitude,
+    label: user.full_address,
+    marker_icon: asset_path("leaflet/marker-icon.png"),
+    marker_icon_2x: asset_path("leaflet/marker-icon-2x.png"),
+    marker_shadow: asset_path("leaflet/marker-shadow.png") } }
+- else
+  %p.text-body-secondary.user-map-missing The location of this address could not be found, so there is no map.

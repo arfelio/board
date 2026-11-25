@@ -8,8 +8,12 @@ class User < ApplicationRecord
   has_many :advertisement, dependent: :destroy
   has_many :comment, dependent: :destroy
 
+  ADDRESS_FIELDS = %w[address city state country].freeze
+
+  # Look the coordinates up (Nominatim, see config/initializers/geocoder.rb) only
+  # when the address is new or has changed, not on every save.
   geocoded_by :full_address
-  after_validation :geocode
+  after_validation :geocode, if: :address_changed_for_geocoding?
 
   def full_address
     [address, city, state, country].compact.join(', ')
@@ -25,6 +29,10 @@ class User < ApplicationRecord
 
 
   private
+
+  def address_changed_for_geocoding?
+    full_address.present? && (ADDRESS_FIELDS & changed).any?
+  end
 
   def assign_user_role
     self.add_role "user"

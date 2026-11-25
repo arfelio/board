@@ -1,7 +1,3 @@
-%script{:type => "text/javascript",
-        :src  => "//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=geometry"}
-%script{:type => "text/javascript",
-        :src  => "//google-maps-utility-library-v3.googlecode.com/svn/tags/markerclustererplus/2.0.14/src/markerclusterer_packed.js"}
 .row
   .col-md-8
     %h4 Userinfo
@@ -24,26 +20,5 @@
           %td=@user.full_address
   .col-md-4
     = link_to "New advertisement", new_advertisement_path, class: "btn btn-primary btn-lg float-md-end"
-.mapcontainer
-  #map{style: "width: 100%; max-width: 800px; height: 400px;"}
-
-
-:javascript
-  handler = Gmaps.build('Google');
-  handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
-    markers = handler.addMarkers([
-      {
-        "lat": #{@user.latitude},
-        "lng": #{@user.longitude},
-        "picture": {
-          "url": "https://addons.cdn.mozilla.net/img/uploads/addon_icons/13/13028-64.png",
-          "width":  36,
-          "height": 36
-        },
-        "infowindow": "hello!"
-      }
-    ]);
-    handler.bounds.extendWith(markers);
-    handler.fitMapToBounds();
-  });
+= render "map", user: @user
 = link_to "All advertisements of this user", advertisements_path(user_id: @user.id), class: "btn btn-info"

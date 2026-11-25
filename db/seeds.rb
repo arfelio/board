@@ -6,26 +6,37 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-Role.create(name:"moderator").save
-Role.create(name:"admin").save
-admin = User.create(email:"admin@mail.com",password:"password",password_confirmation:"password",
-	        address: Faker::Address.street_address,city: Faker::Address.city,
-	        country: Faker::Address.country, state: Faker::Address.state,
-	        bday: Date.today,full_name:Faker::Name.name,
-	        login: Faker::Lorem.word,zip: Faker::Address.zip ).save!
-moderator = User.create(email:"moderator@mail.com",password:"password",password_confirmation:"password",	        address: Faker::Address.street_address,city: Faker::Address.city,
-	        country: Faker::Address.country, state: Faker::Address.state,
-	        bday: Date.today,full_name:Faker::Name.name,
-	        login: Faker::Lorem.word,zip: Faker::Address.zip ).save!
-User.find_by(email: 'admin@mail.com').add_role(:admin)
-User.find_by(email: 'moderator@mail.com').add_role(:moderator)
-15.times do
-	User.create(email: Faker::Internet.email,password:"password",password_confirmation:"password",
-	        address: Faker::Address.street_address,city: Faker::Address.city,
-	        country: Faker::Address.country, state: Faker::Address.state,
-	        bday: Date.today,full_name:Faker::Name.name,
-	        login: Faker::Lorem.word,zip: Faker::Address.zip ).save!
+# Users live in real cities with known coordinates, so their profile maps show
+# something. Seeding doesn't call the geocoder (Nominatim allows one request per
+# second, and Faker street addresses are made up): the lookup is stubbed to find
+# nothing, which keeps the coordinates given here.
+Geocoder.configure(lookup: :test)
+Geocoder::Lookup::Test.set_default_stub([])
+
+CITIES = [
+  { city: "Paris",     state: "Ile-de-France", country: "France",         latitude: 48.8566, longitude: 2.3522 },
+  { city: "Berlin",    state: "Berlin",        country: "Germany",        latitude: 52.5200, longitude: 13.4050 },
+  { city: "Madrid",    state: "Madrid",        country: "Spain",          latitude: 40.4168, longitude: -3.7038 },
+  { city: "Rome",      state: "Lazio",         country: "Italy",          latitude: 41.9028, longitude: 12.4964 },
+  { city: "Vienna",    state: "Vienna",        country: "Austria",        latitude: 48.2082, longitude: 16.3738 },
+  { city: "Amsterdam", state: "North Holland", country: "Netherlands",    latitude: 52.3676, longitude: 4.9041 },
+  { city: "Lisbon",    state: "Lisbon",        country: "Portugal",       latitude: 38.7223, longitude: -9.1393 },
+  { city: "London",    state: "England",       country: "United Kingdom", latitude: 51.5072, longitude: -0.1276 }
+].freeze
+
+def seed_user(email)
+  User.create!(CITIES.sample.merge(
+    email: email, password: "password", password_confirmation: "password",
+    address: Faker::Address.street_address, zip: Faker::Address.zip_code,
+    bday: Date.today, full_name: Faker::Name.name, login: Faker::Lorem.word))
 end
+
+Role.create!(name: "moderator")
+Role.create!(name: "admin")
+seed_user("admin@mail.com").add_role(:admin)
+seed_user("moderator@mail.com").add_role(:moderator)
+15.times { seed_user(Faker::Internet.unique.email) }
+
 categories = 7.times do
 	Category.create(title: Faker::Lorem.word ).save!
 end
