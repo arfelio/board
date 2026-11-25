@@ -16,7 +16,7 @@
               %p.mt-2.mb-0= link_to "svsv", user_path(advertisement.user.id)
             .card-footer.bg-transparent
               - if can? :destroy, advertisement
-                = link_to "Delete", advertisement_path(advertisement), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-sm btn-danger"
+                = delete_button "Delete", advertisement_path(advertisement), confirm: "Are you sure?"
               - if can? :update, advertisement
                 = link_to "Edit", edit_advertisement_path(advertisement), class: "btn btn-sm btn-outline-secondary"
               = link_to "Show", advertisement_path(advertisement), class: "btn btn-sm btn-outline-secondary"

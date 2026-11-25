@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** All stages done: Rails 8.1.4, Ruby 4.0.9, `config.load_defaults 8.1`, no deprecation warnings. Bootstrap 5.3 in place. Next: the front-end modernization below. Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
+**Status:** All stages done: Rails 8.1.4, Ruby 4.0.9, `config.load_defaults 8.1`, no deprecation warnings. Bootstrap 5.3 in place. Front-end modernization: PR 1 (Turbo) done; next is the map decision, then the asset pipeline switch. Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -59,7 +59,7 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | ~~`sass` / `sass-rails`~~ | `sassc-rails` (done with Bootstrap 5) | Stage 6 | **Done.** libsass/sassc is deprecated too; move to Dart Sass (`dartsass-sprockets` or `dartsass-rails`) later |
 | ~~`coffee-rails`~~ | Plain JavaScript | Stage 6 | **Done**: the 4 `.js.coffee` files were empty and are deleted. `coffee-script` stays only for gmaps4rails |
 | ~~`uglifier`~~ | `terser` | Stage 6 | **Done** |
-| ~~`jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks`~~ | Current versions | Stage 6 | **Done**: `jbuilder` 2.15 (categories JSON views), `jquery-rails` 4.6, `turbolinks` 5.2.1. `jquery-rails` and `turbolinks` go away with the front-end modernization |
+| ~~`jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks`~~ | Current versions | Stage 6 | **Done**: `jbuilder` 2.15 (categories JSON views), `jquery-rails` 4.6, `turbolinks` 5.2.1. Both replaced by `turbo-rails` in front-end PR 1 |
 | ~~`RedCloth`~~ | Keep, update | | **Done**: 4.3.4 (fixes a ReDoS advisory); renders ad text |
 | `gmaps4rails`, `underscore-rails` | Remove (or replace the map) | Open | The user-page map loads Google Maps JS v3.13 without an API key and a marker library from googlecode.com (shut down), so it cannot render. Removing gmaps4rails also removes `underscore-rails` and `coffee-script`. Decision pending |
 | ~~`haml` 5, `geocoder`, `faker`~~ | Latest versions | | **Done**: `haml` 7.5 (rendered HTML identical to Haml 5), `geocoder` 1.8, `faker` 3.8 |
@@ -78,13 +78,13 @@ What it replaces today, with Sprockets bundling through `//= require`:
 |---|---|
 | Sprockets, `sprockets-rails` | Propshaft |
 | `sassc-rails` (libsass, deprecated) | `dartsass-rails`; Bootstrap 5 Sass from the `bootstrap` gem's stylesheets path or the npm package |
-| `jquery-rails` (`jquery`, `jquery_ujs`) | Turbo: `data-turbo-method` / `data-turbo-confirm` instead of `method:` / `data: { confirm: }` (9 places). The Ajax comment form and delete links (`remote: true` + `comments/*.js.erb`) become Turbo Stream responses. Drop jQuery if nothing else needs it |
-| `turbolinks` | Turbo (`turbo-rails`), its successor |
+| ✅ `jquery-rails` (`jquery`, `jquery_ujs`) | Turbo. Delete links became `button_to` forms with `data-turbo-confirm` (they work without JavaScript and in rack_test specs). The Ajax comment form and delete buttons use Turbo Stream responses instead of `comments/*.js.erb`. jQuery is gone: nothing else needed it |
+| ✅ `turbolinks` | Turbo (`turbo-rails`), its successor |
 | `bootstrap` gem's JS + `popper` | Bootstrap and Popper pinned from npm in `config/importmap.rb` |
 | `gmaps4rails`, `underscore-rails`, `coffee-script` | Removed, assuming the map is dropped (see the gem table: the map cannot render today) |
 
 Suggested PRs:
-1. **Turbo instead of `jquery_ujs` and Turbolinks**, still on Sprockets. This is the behaviour change, so review it on its own. The CSRF and comment specs cover the affected flows.
+1. ✅ **Turbo instead of `jquery_ujs` and Turbolinks**, still on Sprockets. Failed forms answer 422 and DELETE redirects 303 (Devise too), as Turbo requires. Covered by request specs for those statuses and the Turbo Stream responses, and by `js: true` specs in headless Chrome (Cuprite) for confirmations, in-place comments and Turbo Drive.
 2. **Remove the map** (gmaps4rails, Underscore, CoffeeScript), once that decision is made.
 3. **Switch the asset pipeline:** Sprockets → Propshaft + importmap + dartsass-rails. Compare before/after screenshots as for the Bootstrap 5 port.
 

@@ -99,10 +99,10 @@ describe "advertisement pages" do
     end
 
     it "should delete advertisement" do
-      expect{ click_link('Delete advertisement')  }.to change(Advertisement,:count).by(-1)
+      expect{ click_button('Delete advertisement')  }.to change(Advertisement,:count).by(-1)
     end
     describe "after deleting advertisement" do
-      before { click_link("Delete advertisement") }
+      before { click_button("Delete advertisement") }
 
       it { is_expected.to have_content("Advertisement deleted")}
     end

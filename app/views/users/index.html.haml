@@ -5,7 +5,7 @@
       %span= user.full_name
       %span
         - if can? :destroy, user
-          = link_to "delete", user_path(user), method: :delete, class: "btn btn-sm btn-danger"
+          = delete_button "delete", user_path(user)
         - if can? :update, user
           = link_to "edit", edit_user_path(user), class: "btn btn-sm btn-outline-secondary"
         = link_to "show", user_path(user), class: "btn btn-sm btn-outline-secondary"

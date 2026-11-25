@@ -23,7 +23,7 @@ class UsersController < ApplicationController
       flash[:notice]="Success user created"
       redirect_to user_path(@user)
      else
-       render "new"
+       render "new", status: :unprocessable_content
     end
   end
 
@@ -33,7 +33,7 @@ class UsersController < ApplicationController
       flash[:notice] = "Profile updated"
       redirect_to user_path(@user)
     else
-      render 'edit'
+      render 'edit', status: :unprocessable_content
     end
   end
 
@@ -45,7 +45,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.destroy
     flash[:success] = "User deleted."
-    redirect_to users_url
+    redirect_to users_url, status: :see_other
   end
 
   private

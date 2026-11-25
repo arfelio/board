@@ -16,6 +16,7 @@ group :test do
   gem 'simplecov-rcov'
   gem 'simplecov', '~> 0.16.1',:require => false
   gem 'capybara', '~> 3.39'
+  gem 'cuprite', '~> 0.17' # headless Chrome driver for the `js: true` specs (Turbo)
   gem 'factory_bot_rails', '~> 6.2'
   gem 'shoulda-matchers', '~> 6.4'
   gem 'database_cleaner-active_record', '~> 2.1'
@@ -46,11 +47,8 @@ gem "faker"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # therubyracer removed: libv8 3.16 does not build on arm64; ExecJS uses Node.js instead
 gem 'underscore-rails'
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
-
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+# Turbo Drive (page navigation), Turbo Streams (comments) and data-turbo-confirm
+gem 'turbo-rails', '~> 2.0'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.5'

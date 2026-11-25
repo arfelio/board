@@ -13,11 +13,11 @@ It started in August 2014 as a Ruby on Rails test task, written on Rails 4.0 and
 | Ruby | 4.0.9 (`.ruby-version`) |
 | Rails | 8.1.4 |
 | Database | SQLite |
-| Views | Haml 7, Bootstrap 5.3, jQuery, Sprockets |
+| Views | Haml 7, Bootstrap 5.3, Turbo, Sprockets |
 | Authentication | Devise 5 (email and password) |
 | Authorization | CanCanCan 3 + rolify 6 |
 | Image uploads | CarrierWave 3 + MiniMagick (ImageMagick) |
-| Tests | RSpec 7, Capybara 3, FactoryBot, shoulda-matchers |
+| Tests | RSpec 7, Capybara 3 (Cuprite for browser specs), FactoryBot, shoulda-matchers |
 
 ## Running it locally
 
@@ -50,10 +50,10 @@ Seeding needs an internet connection, because it downloads a sample image for th
 
 ## Running the tests
 
-    bundle exec rspec        # the full suite (218 examples)
+    bundle exec rspec        # the full suite (240 examples)
     bin/ci                   # what CI runs: setup, Zeitwerk check, specs with eager loading
 
-A coverage report is written to `coverage/index.html` (100% line coverage). GitHub Actions runs the suite on every push to `master` and on every pull request, and `master` only accepts pull requests that pass it.
+The specs tagged `js: true` run in headless Google Chrome (through Cuprite), so Chrome or Chromium needs to be installed. A coverage report is written to `coverage/index.html` (100% line coverage). GitHub Actions runs the suite on every push to `master` and on every pull request, and `master` only accepts pull requests that pass it.
 
 ## Upgrade from Rails 4 to Rails 8
 
