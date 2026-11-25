@@ -2,7 +2,9 @@ source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 8.1.4'
-gem 'sprockets-rails' # Rails 7 no longer adds the asset pipeline by default
+gem 'propshaft' # asset pipeline: serves and fingerprints files from app/assets, app/javascript, vendor/javascript
+gem 'importmap-rails' # JavaScript as ES modules, pinned in config/importmap.rb (no Node)
+gem 'dartsass-rails' # compiles app/assets/stylesheets/application.scss with Dart Sass
 gem 'puma', '>= 7.2.1' # web server; 7.2.1 fixes the PROXY protocol advisories
 gem 'bootsnap', '~> 1.4', require: false
 gem 'dotenv-rails', '~> 2.7', groups: [:development, :test]
@@ -35,11 +37,7 @@ gem 'mini_magick', '~> 5.0'
 gem 'sqlite3', '~> 2.1'
 gem 'cancancan', '~> 3.5'
 gem 'rolify', '~> 6.0'
-# Use SCSS for stylesheets
-gem 'sassc-rails', '~> 2.1' # replaces sass-rails 5 / Ruby Sass (discontinued)
 gem 'RedCloth'
-# Compresses JavaScript assets in production (replaces the unmaintained uglifier)
-gem 'terser', '~> 1.1'
 
 gem "faker"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes

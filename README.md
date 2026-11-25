@@ -13,7 +13,8 @@ It started in August 2014 as a Ruby on Rails test task, written on Rails 4.0 and
 | Ruby | 4.0.9 (`.ruby-version`) |
 | Rails | 8.1.4 |
 | Database | SQLite |
-| Views | Haml 7, Bootstrap 5.3, Turbo, Sprockets |
+| Views | Haml 7, Bootstrap 5.3, Turbo |
+| Assets | Propshaft, importmap (no Node.js), Dart Sass |
 | Authentication | Devise 5 (email and password) |
 | Authorization | CanCanCan 3 + rolify 6 |
 | Maps | Leaflet + OpenStreetMap tiles, geocoding with Nominatim (no API key) |
@@ -26,11 +27,10 @@ You need:
 
 - Ruby 4.0.9 (for example with [rbenv](https://github.com/rbenv/rbenv): `rbenv install 4.0.9`)
 - ImageMagick, for resizing uploaded images
-- Node.js, which compiles the JavaScript assets
 
 On macOS:
 
-    brew install imagemagick node
+    brew install imagemagick
 
 Then:
 
@@ -40,7 +40,7 @@ Then:
     cp .env.example .env     # optional: SECRET_KEY_BASE is only needed in production
     bin/setup                # creates and seeds the database, then starts the server
 
-Open http://localhost:3000. Later, start the server with `bin/dev`.
+Open http://localhost:3000. Later, start it with `bin/dev`: it runs the server and rebuilds the CSS when a stylesheet changes (with [foreman](https://github.com/ddollar/foreman), which `bin/dev` installs if needed).
 
 The seed data comes with two accounts (password `password`):
 
@@ -65,12 +65,12 @@ In 2026 the app went from **Rails 4.0.9 on Ruby 2.3.8** to **Rails 8.1.4 on Ruby
 - **One stage at a time.** Rails was upgraded one minor version at a time (4.2, 5.0, 5.1 … 8.1), with Ruby raised in between. Each stage was its own pull request and had to pass the full test suite and CI before the next one started.
 - **Tests first.** Before any version bump, tests were added for the main flows: sign-up and sign-in, ads with images, comments, search, pagination and the permissions of each role. That took the suite from 123 to 218 examples and 100% line coverage.
 - **Security.** Secrets that were hardcoded in the repository moved to environment variables. Facebook login was removed, because its app had been deactivated. 224 Dependabot alerts were resolved.
-- **Front end.** Bootstrap 2 was replaced with Bootstrap 5.3. Ruby Sass and CoffeeScript were replaced with maintained tools.
+- **Front end.** Bootstrap 2 was replaced with Bootstrap 5.3, jQuery and Turbolinks with Turbo, and the broken Google map with OpenStreetMap. The asset pipeline moved from Sprockets to the Rails 8 defaults (Propshaft, importmap and Dart Sass), so Node.js is no longer needed.
 - **Bugs.** Several old bugs surfaced along the way and were fixed: search crashed, editing a comment could crash, ads without an image broke the list, and the zip code check accepted almost anything.
 
 The upgrade was done with the help of [Claude Code](https://claude.com/claude-code), which helped a lot and made it possible to do the whole upgrade in about half a day.
 
-[UPGRADE_PLAN.md](UPGRADE_PLAN.md) has the full plan with every stage, the gems that were replaced, and what's still planned: moving the front end to Turbo and Propshaft.
+[UPGRADE_PLAN.md](UPGRADE_PLAN.md) has the full plan with every stage, the gems that were replaced, and the front-end modernization that followed it.
 
 ## Original task (2014)
 

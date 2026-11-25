@@ -1,6 +1,6 @@
 # Upgrade plan: Rails 4.2 / Ruby 2.4 → Rails 8.1 / Ruby 4.0
 
-**Status:** All stages done: Rails 8.1.4, Ruby 4.0.9, `config.load_defaults 8.1`, no deprecation warnings. Bootstrap 5.3 in place. Front-end modernization: PR 1 (Turbo) and PR 2 (OpenStreetMap) done; next is the asset pipeline switch. Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
+**Status:** All stages done: Rails 8.1.4, Ruby 4.0.9, `config.load_defaults 8.1`, no deprecation warnings. Bootstrap 5.3 in place. Front-end modernization done: Turbo, OpenStreetMap, and Propshaft + importmap + dartsass-rails instead of Sprockets. Production reads `SECRET_KEY_BASE` from `ENV`; encrypted credentials are deferred with the other production work.
 
 Target: the latest releases as of November 2026, **Rails 8.1.4.1** and **Ruby 4.0.9**.
 
@@ -56,9 +56,9 @@ Each one can be its own PR. "Deadline" is the last stage it can wait for.
 | ~~`rspec-rails` 2.99, `factory_girl_rails`~~ | `rspec-rails` 3.9, `factory_bot_rails` 5.2 | Stage 0 | **Done.** Move on to `rspec-rails` 4+ / FactoryBot 6 once on Rails 5+ / Ruby 2.5+ |
 | ~~`devise` 3.5~~ | Devise 5.0 | Stage 10 | **Done**: 4.x in stage 1, 5.0 in stage 10 (4.9 used deprecated routing calls on Rails 8.1) |
 | ~~`carrierwave` 0.10~~ | CarrierWave 3.1 (2.2 in stage 4, 3.1 in stage 10) | Stage 10 | **Done**; existing uploads keep working. Active Storage would need a data migration |
-| ~~`sass` / `sass-rails`~~ | `sassc-rails` (done with Bootstrap 5) | Stage 6 | **Done.** libsass/sassc is deprecated too; move to Dart Sass (`dartsass-sprockets` or `dartsass-rails`) later |
+| ~~`sass` / `sass-rails`~~ | `sassc-rails` (done with Bootstrap 5) | Stage 6 | **Done.** libsass/sassc is deprecated too: replaced by `dartsass-rails` in front-end PR 3 |
 | ~~`coffee-rails`~~ | Plain JavaScript | Stage 6 | **Done**: the 4 `.js.coffee` files were empty and are deleted. `coffee-script` stayed only for gmaps4rails and went with it |
-| ~~`uglifier`~~ | `terser` | Stage 6 | **Done** |
+| ~~`uglifier`~~ | `terser` | Stage 6 | **Done**. Removed in front-end PR 3: Propshaft doesn't minify, and nothing needs ExecJS/Node any more |
 | ~~`jbuilder` 1.x, `jquery-rails` 3.x, `turbolinks`~~ | Current versions | Stage 6 | **Done**: `jbuilder` 2.15 (categories JSON views), `jquery-rails` 4.6, `turbolinks` 5.2.1. Both replaced by `turbo-rails` in front-end PR 1 |
 | ~~`RedCloth`~~ | Keep, update | | **Done**: 4.3.4 (fixes a ReDoS advisory); renders ad text |
 | ~~`gmaps4rails`, `underscore-rails`~~ | Leaflet + OpenStreetMap | Front-end PR 2 | **Done**: the Google Maps v3.13 map (no API key, marker library on the defunct googlecode.com) and the Google static map are replaced by Leaflet 1.9.4 with OpenStreetMap tiles. Geocoding uses Nominatim with an identifying User-Agent, only when the address changes. `underscore-rails` and `coffee-script` removed |
@@ -76,17 +76,17 @@ What it replaces today, with Sprockets bundling through `//= require`:
 
 | Today | After |
 |---|---|
-| Sprockets, `sprockets-rails` | Propshaft |
-| `sassc-rails` (libsass, deprecated) | `dartsass-rails`; Bootstrap 5 Sass from the `bootstrap` gem's stylesheets path or the npm package |
+| ✅ Sprockets, `sprockets-rails` | Propshaft |
+| ✅ `sassc-rails` (libsass, deprecated) | `dartsass-rails`; Bootstrap 5 Sass from the `bootstrap` gem's stylesheets path |
 | ✅ `jquery-rails` (`jquery`, `jquery_ujs`) | Turbo. Delete links became `button_to` forms with `data-turbo-confirm` (they work without JavaScript and in rack_test specs). The Ajax comment form and delete buttons use Turbo Stream responses instead of `comments/*.js.erb`. jQuery is gone: nothing else needed it |
 | ✅ `turbolinks` | Turbo (`turbo-rails`), its successor |
-| `bootstrap` gem's JS + `popper` | Bootstrap and Popper pinned from npm in `config/importmap.rb` |
-| ✅ `gmaps4rails`, `underscore-rails`, `coffee-script` | Leaflet (vendored for now; pin it from npm in `config/importmap.rb` in PR 3) with OpenStreetMap tiles |
+| ✅ `bootstrap` gem's JS + `popper` | Pinned in `config/importmap.rb` to the files the `bootstrap` and `popper_js` gems ship (UMD builds, as Bootstrap's README suggests for importmap), so nothing is downloaded and they update with the gems |
+| ✅ `gmaps4rails`, `underscore-rails`, `coffee-script` | Leaflet (vendored in `vendor/javascript`, pinned in `config/importmap.rb`) with OpenStreetMap tiles |
 
 Suggested PRs:
 1. ✅ **Turbo instead of `jquery_ujs` and Turbolinks**, still on Sprockets. Failed forms answer 422 and DELETE redirects 303 (Devise too), as Turbo requires. Covered by request specs for those statuses and the Turbo Stream responses, and by `js: true` specs in headless Chrome (Cuprite) for confirmations, in-place comments and Turbo Drive.
 2. ✅ **Map on OpenStreetMap** instead of Google Maps: Leaflet + Nominatim; gmaps4rails, Underscore and CoffeeScript removed.
-3. **Switch the asset pipeline:** Sprockets → Propshaft + importmap + dartsass-rails. Compare before/after screenshots as for the Bootstrap 5 port.
+3. ✅ **Switch the asset pipeline:** Sprockets → Propshaft + importmap + dartsass-rails; `sassc-rails` and `terser` removed, so no Node.js. Screenshots of 17 pages (guest and admin) before and after are identical within a 1% colour tolerance; the only differences are Dart Sass's more precise colour maths (one RGB unit on some text and focus rings).
 
 Not chosen: jsbundling/cssbundling (needs Node in development, CI and production) and Vite. Both are more tooling than this app needs.
 
