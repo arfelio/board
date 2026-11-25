@@ -1,0 +1,7 @@
+// Entry point for dartsass-rails: compiled to app/assets/builds/application.css
+// (`bin/dev` watches it, `bin/rails dartsass:build` builds it once).
+// "bootstrap" is the bootstrap gem's Sass source and "leaflet" is
+// vendor/assets/stylesheets/leaflet.css (load paths in config/initializers/dartsass.rb).
+@import "leaflet";
+@import "bootstrap";
+@import "custom";

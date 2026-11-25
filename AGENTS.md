@@ -6,9 +6,10 @@ Message board app: users post advertisements (with images) in categories, others
 
 - Ruby **4.0.9** (`.ruby-version`), Rails **8.1.4** (Zeitwerk autoloader), Bundler **4.0.20** (ships with Ruby 4.0), Puma
 - SQLite everywhere, production included (decided: no PostgreSQL)
-- Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), Turbo (`turbo-rails`: Turbo Drive, Turbo Streams for comments, `data-turbo-confirm`; no jQuery), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
+- Views: Haml + Bootstrap **5.3** (`bootstrap` gem: Sass and JS), Turbo (`turbo-rails`: Turbo Drive, Turbo Streams for comments, `data-turbo-confirm`; no jQuery)
+- Assets: Propshaft (serves and fingerprints), importmap-rails (JS as ES modules from `app/javascript`, pins in `config/importmap.rb`), dartsass-rails (`app/assets/stylesheets/application.scss` → `app/assets/builds/application.css`). No Node.js
 - Auth: Devise 5 (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
-- Maps: Leaflet 1.9.4 (vendored in `vendor/assets`, marker images in `app/assets/images/leaflet/`) with OpenStreetMap tiles; geocoding with the `geocoder` gem through Nominatim (OpenStreetMap, no API key)
+- Maps: Leaflet 1.9.4 (vendored: `vendor/javascript/leaflet.js`, `vendor/assets/stylesheets/leaflet.css`, marker images in `app/assets/images/leaflet/`) with OpenStreetMap tiles; geocoding with the `geocoder` gem through Nominatim (OpenStreetMap, no API key)
 - Uploads: CarrierWave 3 + MiniMagick 5 (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
 - Tests: rspec-rails **7.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test; `js: true` specs use Cuprite with headless Chrome), FactoryBot 6.4, shoulda-matchers 6.5
 
@@ -32,7 +33,7 @@ RAILS_ENV=test bin/rails db:create db:schema:load          # prepare test DB
 bundle exec rspec                                          # full suite (254 examples, 2 pending placeholders; 100% line coverage; needs Chrome)
 bin/ci                                                     # setup + zeitwerk:check + specs with eager loading, like GitHub CI (config/ci.rb)
 bin/rails db:seed                                          # dev data
-bundle exec rails s
+bin/dev                                                    # server + Sass watcher (foreman, Procfile.dev)
 ```
 
 Seeded logins (password `password`): `admin@mail.com` (admin), `moderator@mail.com` (moderator).
@@ -48,7 +49,9 @@ Seeding places users in real cities with fixed coordinates and doesn't call the 
 
 - Nominatim's usage policy: at most one request per second and a User-Agent that identifies the app (`GEOCODER_USER_AGENT`, see `config/initializers/geocoder.rb`); requests without one are refused, which geocoder reports as "response was not valid JSON". Users are geocoded only when an address field changes. Don't geocode in loops (seeds, imports): set coordinates directly. Specs stub the lookup (`spec/support/geocoder.rb`), and `js: true` specs block every URL outside the app, so no tiles are downloaded.
 - Maps (`users/_map.html.haml` + `app/assets/javascripts/user_map.js`) are drawn on `turbo:load` and removed on `turbo:before-cache`; without that, a page restored from Turbo's cache shows a second map. The popup sets the address with `textContent`, because it is user input.
-- After changing gems or Sprockets config, clear `tmp/cache` if assets behave oddly (stale Sprockets 3 cache entries caused "not declared to be precompiled" errors during the Sprockets 4 move).
+- CSS is a build: `app/assets/builds/application.css` is git-ignored. `bin/dev` watches the Sass, `bin/rails dartsass:build` builds it once, `assets:precompile` builds it for production, and the specs build it before the suite (`spec/support/assets.rb`). Plain `bin/rails s` doesn't, so styles go stale or the stylesheet is missing.
+- Sass load paths: the Sass sources are excluded from Propshaft (`config/initializers/assets.rb`), which also removes them from dartsass-rails' load paths, so `config/initializers/dartsass.rb` adds Bootstrap's and `vendor/assets/stylesheets` back. It also silences Bootstrap 5.3's Dart Sass deprecation warnings.
+- Bootstrap, Popper and Leaflet are UMD builds served as modules: they set `window.bootstrap`, `window.Popper` and `window.L`. Popper must be imported before Bootstrap (`app/javascript/application.js`). Bootstrap and Popper come from the `bootstrap` / `popper_js` gems, so they update with them.
 - Ruby 4.0 moved more libraries (e.g. `benchmark`) out of the default install: if boot fails with "cannot load such file -- X", update the gem that requires X or add `gem "X"` to the Gemfile.
 - Some gems declare a lower `required_ruby_version` than they really need, so after a `bundle update` always run the suite.
 - Roles come from rolify: the association is `roles` / `role_ids` (there is no `role`). The default `user` role is assigned in `before_create`; moving it to `after_create` breaks user creation with `role_ids` (join rows get saved twice).
@@ -63,8 +66,6 @@ Seeding places users in real cities with fixed coordinates and doesn't call the 
 - Turbo submits every form with fetch. A form that fails validation must render with `status: :unprocessable_content` (422), or Turbo won't show it; redirects after DELETE use `status: :see_other`. Devise is set up the same way (`config.responder` in `config/initializers/devise.rb`).
 - DELETE actions are `button_to` forms (`ApplicationHelper#delete_button`, with `confirm:` for `data-turbo-confirm`), not `link_to … data-turbo-method`: rack_test can't follow Turbo method links, and forms work without JavaScript.
 - Comments are added and deleted with Turbo Streams (`comments/*.turbo_stream.erb`, targets `#flash`, `#comment_form`, `#comments`, `comment_<id>`); without JavaScript the same actions redirect. Keep `csrf_meta_tags` in the layout (Turbo reads it).
-- `turbo.js` is an ES module: the layout loads it with `javascript_include_tag "turbo", type: "module"`, separately from the Sprockets `application.js` bundle.
 - A database created under Rails 4.2 needs `bin/rails db:environment:set RAILS_ENV=<env>` once before `db:schema:load` works.
 - `db/schema.rb` is generated; don't hand-edit or lint it.
-- `therubyracer` was removed on purpose; ExecJS uses Node.js.
 - Secrets live in environment variables (`.env` locally, git-ignored, loaded by dotenv-rails; see `.env.example`). Since Rails 7.1 there is no `config/secrets.yml`: development and test generate their own `secret_key_base`, and production reads `ENV["SECRET_KEY_BASE"]`. Devise uses the same key (`config.secret_key` in `config/initializers/devise.rb`). Never commit real secrets.
