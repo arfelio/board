@@ -8,6 +8,7 @@ describe "comment pages" do
   let(:author)         { FactoryBot.create(:user) }
   let(:other_user)     { FactoryBot.create(:user) }
   let(:advertisement)  { FactoryBot.create(:advertisement, user: other_user) }
+  let(:destroy_button) { "form[action='#{comment_path(comment)}'] button" }
 
   after(:each) { Warden.test_reset! }
 
@@ -19,7 +20,7 @@ describe "comment pages" do
     it { is_expected.to have_content("Visible comment") }
     it { is_expected.not_to have_button("Leave comment") }
     it { is_expected.not_to have_link("Edit", href: edit_comment_path(comment)) }
-    it { is_expected.not_to have_link("Destroy") }
+    it { is_expected.not_to have_button("Destroy") }
   end
 
   describe "adding a comment" do
@@ -67,7 +68,7 @@ describe "comment pages" do
     end
 
     it { is_expected.to have_link("Edit", href: edit_comment_path(comment)) }
-    it { is_expected.to have_link("Destroy", href: comment_path(comment)) }
+    it { is_expected.to have_selector(destroy_button) }
 
     describe "editing" do
       before do
@@ -92,7 +93,7 @@ describe "comment pages" do
     end
 
     it "can be deleted" do
-      expect { click_link "Destroy", href: comment_path(comment) }.to change(Comment, :count).by(-1)
+      expect { find(destroy_button).click }.to change(Comment, :count).by(-1)
     end
   end
 
@@ -106,7 +107,7 @@ describe "comment pages" do
       end
 
       it { is_expected.not_to have_link("Edit", href: edit_comment_path(comment)) }
-      it { is_expected.not_to have_link("Destroy", href: comment_path(comment)) }
+      it { is_expected.not_to have_selector(destroy_button) }
 
       describe "opening the edit page directly" do
         before { visit edit_comment_path(comment) }
@@ -126,7 +127,7 @@ describe "comment pages" do
       it { is_expected.to have_link("Edit", href: edit_comment_path(comment)) }
 
       it "can delete it" do
-        expect { click_link "Destroy", href: comment_path(comment) }.to change(Comment, :count).by(-1)
+        expect { find(destroy_button).click }.to change(Comment, :count).by(-1)
       end
     end
   end

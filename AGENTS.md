@@ -6,10 +6,10 @@ Message board app: users post advertisements (with images) in categories, others
 
 - Ruby **4.0.9** (`.ruby-version`), Rails **8.1.4** (Zeitwerk autoloader), Bundler **4.0.20** (ships with Ruby 4.0), Puma
 - SQLite everywhere, production included (decided: no PostgreSQL)
-- Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), jQuery + `jquery_ujs` (remote forms, `method: :delete` links), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
+- Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), Turbo (`turbo-rails`: Turbo Drive, Turbo Streams for comments, `data-turbo-confirm`; no jQuery), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
 - Auth: Devise 5 (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
 - Uploads: CarrierWave 3 + MiniMagick 5 (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
-- Tests: rspec-rails **7.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test, no JS driver), FactoryBot 6.4, shoulda-matchers 6.5
+- Tests: rspec-rails **7.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test; `js: true` specs use Cuprite with headless Chrome), FactoryBot 6.4, shoulda-matchers 6.5
 
 An upgrade to current Rails/Ruby is planned in stages. See `UPGRADE_PLAN.md` and update its status line when a stage lands.
 
@@ -28,7 +28,7 @@ bundle install
 
 ```sh
 RAILS_ENV=test bin/rails db:create db:schema:load          # prepare test DB
-bundle exec rspec                                          # full suite (218 examples, 2 pending placeholders; 100% line coverage)
+bundle exec rspec                                          # full suite (240 examples, 2 pending placeholders; 100% line coverage; needs Chrome)
 bin/ci                                                     # setup + zeitwerk:check + specs with eager loading, like GitHub CI (config/ci.rb)
 bin/rails db:seed                                          # dev data
 bundle exec rails s
@@ -58,7 +58,10 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 - Framework defaults come from `config.load_defaults` in `config/application.rb`. Don't put framework settings in `config/initializers/`: gems load ActiveRecord/ActionController before initializers run, so those values are silently ignored. `belongs_to` is required by default; optional associations say `optional: true`.
 - Bootstrap 5 markup: inputs need `form-control` / `form-select` / `form-check-input` (nothing is styled by default); wrap forms in `.form-narrow`. Flash keys map to alert colours in `ApplicationHelper#flash_alert_class` (each alert also gets a `flash-<key>` class, used by specs). Pagination goes through `BootstrapLinkRenderer` (`app/lib/`), applied by `ApplicationHelper#will_paginate`.
 - Ad images are optional: guard `image_tag` with `if ….image.present?` (since Rails 5.1, `image_tag(nil)` raises).
-- The comment form is `remote: true`: its CSRF token comes from the `csrf-token` meta tag via jquery_ujs, not from a hidden field. Keep `csrf_meta_tags` in the layout.
+- Turbo submits every form with fetch. A form that fails validation must render with `status: :unprocessable_content` (422), or Turbo won't show it; redirects after DELETE use `status: :see_other`. Devise is set up the same way (`config.responder` in `config/initializers/devise.rb`).
+- DELETE actions are `button_to` forms (`ApplicationHelper#delete_button`, with `confirm:` for `data-turbo-confirm`), not `link_to … data-turbo-method`: rack_test can't follow Turbo method links, and forms work without JavaScript.
+- Comments are added and deleted with Turbo Streams (`comments/*.turbo_stream.erb`, targets `#flash`, `#comment_form`, `#comments`, `comment_<id>`); without JavaScript the same actions redirect. Keep `csrf_meta_tags` in the layout (Turbo reads it).
+- `turbo.js` is an ES module: the layout loads it with `javascript_include_tag "turbo", type: "module"`, separately from the Sprockets `application.js` bundle.
 - A database created under Rails 4.2 needs `bin/rails db:environment:set RAILS_ENV=<env>` once before `db:schema:load` works.
 - `db/schema.rb` is generated; don't hand-edit or lint it.
 - `therubyracer` was removed on purpose; ExecJS uses Node.js.

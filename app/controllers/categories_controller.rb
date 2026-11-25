@@ -31,7 +31,7 @@ class CategoriesController < ApplicationController
         format.html { redirect_to @category, notice: 'Category was successfully created.' }
         format.json { render action: 'show', status: :created, location: @category }
       else
-        format.html { render action: 'new' }
+        format.html { render action: 'new', status: :unprocessable_content }
         format.json { render json: @category.errors, status: :unprocessable_content }
       end
     end
@@ -45,7 +45,7 @@ class CategoriesController < ApplicationController
         format.html { redirect_to @category, notice: 'Category was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html { render action: 'edit', status: :unprocessable_content }
         format.json { render json: @category.errors, status: :unprocessable_content }
       end
     end
@@ -56,7 +56,7 @@ class CategoriesController < ApplicationController
   def destroy
     @category.destroy
     respond_to do |format|
-      format.html { redirect_to categories_url }
+      format.html { redirect_to categories_url, status: :see_other }
       format.json { head :no_content }
     end
   end

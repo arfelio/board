@@ -26,7 +26,7 @@ class AdvertisementsController < ApplicationController
       flash[:success] = "Success! Advertisement created"
       redirect_to @advertisement
     else
-      render 'new'
+      render 'new', status: :unprocessable_content
     end
   end
 
@@ -44,14 +44,14 @@ class AdvertisementsController < ApplicationController
       flash[:success] = "Advertisement updated"
       redirect_to @advertisement
     else
-      render 'edit'
+      render 'edit', status: :unprocessable_content
     end
   end
 
   def destroy
     Advertisement.find(params[:id]).destroy
     flash[:success] = "Advertisement deleted."
-    redirect_to advertisements_path
+    redirect_to advertisements_path, status: :see_other
   end
 
   private

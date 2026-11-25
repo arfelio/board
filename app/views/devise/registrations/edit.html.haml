@@ -51,5 +51,5 @@
 
   %h3.mt-5 Cancel my account
   %p Unhappy?
-  = button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: "btn btn-outline-danger"
+  = delete_button "Cancel my account", registration_path(resource_name), confirm: "Are you sure?", button_class: "btn btn-outline-danger"
   .mt-3= link_to "Back", :back

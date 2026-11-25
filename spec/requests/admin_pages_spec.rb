@@ -101,7 +101,7 @@ describe "admin add and manage users pages" do
     let(:adminuser) { FactoryBot.create(:admin) }
     let!(:user) { FactoryBot.create(:user) }
     let!(:advertisement) { FactoryBot.create(:advertisement, user: user) }
-    let(:delete_link) { "a[href='#{user_path(user)}'][data-method='delete']" }
+    let(:delete_link) { "form[action='#{user_path(user)}'] input[name='_method'][value='delete'] ~ button" }
     after(:each) { Warden.test_reset! }
 
     describe "as admin" do

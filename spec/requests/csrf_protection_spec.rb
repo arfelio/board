@@ -26,13 +26,20 @@ describe "CSRF protection" do
     click_button "Sign in"
     expect(page).to have_content("Signed in successfully.")
 
-    # The comment form is `remote: true`, so Rails leaves the token out of the form and
-    # jquery_ujs sends the page's csrf-token meta tag as a header. rack_test runs no
-    # JavaScript, so do the same by hand.
+    # Turbo submits the form as it is, with its hidden authenticity_token field.
     visit advertisement_path(advertisement)
-    page.driver.header("X-CSRF-Token", find('meta[name="csrf-token"]', visible: false)[:content])
+    expect(page).to have_selector("#comment_form input[name='authenticity_token']", visible: false)
     fill_in "comment_content", with: "Token check"
     expect { click_button "Leave comment" }.to change(Comment, :count).by(1)
+  end
+
+  it "accepts a delete button (button_to form)" do
+    comment = FactoryBot.create(:comment, user: user, advertisement: advertisement)
+    login_as(user, scope: :user)
+    visit advertisement_path(advertisement)
+    expect { find("form[action='#{comment_path(comment)}'] button").click }.to change(Comment, :count).by(-1)
+  ensure
+    Warden.test_reset!
   end
 
   it "rejects a POST without a token" do

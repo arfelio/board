@@ -1,5 +1,5 @@
 - for comment in @advertisement.comment
-  .card.mb-2{ class: "comment#{comment.id}" }
+  .card.mb-2{ id: dom_id(comment) }
     .card-body.p-2
       .content= comment.content
       - if can?(:update, comment) || can?(:destroy, comment)
@@ -7,4 +7,4 @@
           - if can? :update, comment
             = link_to "Edit", edit_comment_path(comment), class: "btn btn-sm btn-primary"
           - if can? :destroy, comment
-            = link_to "Destroy", comment_path(comment), method: :delete, remote: true, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger"
+            = delete_button "Destroy", comment_path(comment), confirm: "Are you sure?"
