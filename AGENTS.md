@@ -8,6 +8,7 @@ Message board app: users post advertisements (with images) in categories, others
 - SQLite everywhere, production included (decided: no PostgreSQL)
 - Views: Haml + Bootstrap **5.3** (`bootstrap` gem, compiled by `sassc-rails`), Turbo (`turbo-rails`: Turbo Drive, Turbo Streams for comments, `data-turbo-confirm`; no jQuery), Sprockets 4 (entry points in `app/assets/config/manifest.js`), terser for production JS
 - Auth: Devise 5 (email + password only; Facebook login was removed). Authorization: CanCanCan 3 (`app/models/ability.rb`) + rolify 6
+- Maps: Leaflet 1.9.4 (vendored in `vendor/assets`, marker images in `app/assets/images/leaflet/`) with OpenStreetMap tiles; geocoding with the `geocoder` gem through Nominatim (OpenStreetMap, no API key)
 - Uploads: CarrierWave 3 + MiniMagick 5 (local `public/uploads` in dev/test); needs the ImageMagick CLI (`brew install imagemagick`)
 - Tests: rspec-rails **7.1** (`expect` / `is_expected` syntax), Capybara 3.40 (rack_test; `js: true` specs use Cuprite with headless Chrome), FactoryBot 6.4, shoulda-matchers 6.5
 
@@ -28,14 +29,14 @@ bundle install
 
 ```sh
 RAILS_ENV=test bin/rails db:create db:schema:load          # prepare test DB
-bundle exec rspec                                          # full suite (240 examples, 2 pending placeholders; 100% line coverage; needs Chrome)
+bundle exec rspec                                          # full suite (254 examples, 2 pending placeholders; 100% line coverage; needs Chrome)
 bin/ci                                                     # setup + zeitwerk:check + specs with eager loading, like GitHub CI (config/ci.rb)
 bin/rails db:seed                                          # dev data
 bundle exec rails s
 ```
 
 Seeded logins (password `password`): `admin@mail.com` (admin), `moderator@mail.com` (moderator).
-Seeding prints "Geocoding API's response was not valid JSON": geocoder has no API key configured; users still save, without coordinates.
+Seeding places users in real cities with fixed coordinates and doesn't call the geocoder; it downloads one sample image, so it needs the internet.
 
 ## Workflow
 
@@ -45,7 +46,8 @@ Seeding prints "Geocoding API's response was not valid JSON": geocoder has no AP
 
 ## Gotchas
 
-- `coffee-script` is only there because `gmaps4rails` ships its JavaScript as CoffeeScript (`//= require gmaps/google`); the app itself has no CoffeeScript. Remove both together.
+- Nominatim's usage policy: at most one request per second and a User-Agent that identifies the app (`GEOCODER_USER_AGENT`, see `config/initializers/geocoder.rb`); requests without one are refused, which geocoder reports as "response was not valid JSON". Users are geocoded only when an address field changes. Don't geocode in loops (seeds, imports): set coordinates directly. Specs stub the lookup (`spec/support/geocoder.rb`), and `js: true` specs block every URL outside the app, so no tiles are downloaded.
+- Maps (`users/_map.html.haml` + `app/assets/javascripts/user_map.js`) are drawn on `turbo:load` and removed on `turbo:before-cache`; without that, a page restored from Turbo's cache shows a second map. The popup sets the address with `textContent`, because it is user input.
 - After changing gems or Sprockets config, clear `tmp/cache` if assets behave oddly (stale Sprockets 3 cache entries caused "not declared to be precompiled" errors during the Sprockets 4 move).
 - Ruby 4.0 moved more libraries (e.g. `benchmark`) out of the default install: if boot fails with "cannot load such file -- X", update the gem that requires X or add `gem "X"` to the Gemfile.
 - Some gems declare a lower `required_ruby_version` than they really need, so after a `bundle update` always run the suite.

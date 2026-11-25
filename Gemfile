@@ -29,8 +29,6 @@ group :development, :test do
   gem 'rspec-rails', '~> 7.1'
 end
 gem 'geocoder', '~> 1.8'
-gem 'gmaps4rails'
-gem 'coffee-script' # compiles gmaps4rails's CoffeeScript assets; remove together with gmaps4rails
 gem 'carrierwave', '~> 3.1'
 # gem 'cloudinary'
 gem 'mini_magick', '~> 5.0'
@@ -46,7 +44,6 @@ gem 'terser', '~> 1.1'
 gem "faker"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # therubyracer removed: libv8 3.16 does not build on arm64; ExecJS uses Node.js instead
-gem 'underscore-rails'
 # Turbo Drive (page navigation), Turbo Streams (comments) and data-turbo-confirm
 gem 'turbo-rails', '~> 2.0'
 
